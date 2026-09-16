@@ -1,0 +1,9 @@
+Flask==3.0.3
+Flask-SQLAlchemy==3.1.1
+Flask-Migrate==4.0.7
+Flask-Login==0.6.3
+Werkzeug==3.0.3
+Pillow==10.4.0
+
+# Optional but recommended for AI disease detection
+# tensorflow>=2.13.0
