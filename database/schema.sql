@@ -12,14 +12,16 @@ CREATE TABLE farm (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     owner_id INTEGER NOT NULL REFERENCES user(id),
     name TEXT NOT NULL,
-    location TEXT NOT NULL
+    location TEXT NOT NULL,
+    image_path TEXT
 );
 
 CREATE TABLE crop (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     farm_id INTEGER NOT NULL REFERENCES farm(id),
     crop_type TEXT NOT NULL,
-    planting_date DATE
+    planting_date DATE,
+    image_path TEXT
 );
 
 CREATE TABLE scan (
@@ -39,7 +41,8 @@ CREATE TABLE listing (
     harvest_date DATE NOT NULL,
     quantity FLOAT NOT NULL,
     price FLOAT NOT NULL,
-    availability_status TEXT NOT NULL DEFAULT 'available'
+    availability_status TEXT NOT NULL DEFAULT 'available',
+    image_path TEXT
 );
 
 CREATE TABLE reservation (
