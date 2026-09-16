@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AgroSphere helps farmers detect crop disease, manage farms, and reach better markets.">
+  <title>AgroSphere | Smarter farming starts here</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <div class="shell nav-wrap">
+      <a class="brand" href="{{ url_for('public.landing') }}" aria-label="AgroSphere home">
+        <span class="brand-mark" aria-hidden="true">+</span>
+        <span>Agro<span>Sphere</span></span>
+      </a>
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a href="#how-it-works">How it works</a>
+        <a href="#features">Features</a>
+        <a href="#market-access">Market access</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="login-link" href="{{ url_for('auth.login') }}">Log in</a>
+        <a class="button button-small" href="{{ url_for('auth.register') }}">Get started</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero shell" id="home">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="status-dot"></span> Intelligent tools for everyday farming</p>
+        <h1>Protect every leaf.<br><em>Grow every harvest.</em></h1>
+        <p class="hero-lede">AgroSphere brings crop health, farm management, and market access together so farmers can make better decisions in less time.</p>
+        <div class="hero-actions">
+          <a class="button" href="{{ url_for('auth.register') }}">Start with AgroSphere <span aria-hidden="true">&#8594;</span></a>
+          <a class="text-button" href="#how-it-works">See how it works <span aria-hidden="true">&#8595;</span></a>
+        </div>
+        <div class="proof-row" aria-label="AgroSphere highlights">
+          <div><strong>AI</strong><span>crop insights</span></div>
+          <div><strong>24/7</strong><span>farm visibility</span></div>
+          <div><strong>1</strong><span>connected platform</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="image-frame">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDczSTlKqjf529UUzwwesQvrC7fagBJVS4UBiuEwGAvFZprNAU8YmM23dVWPAEZnrBT9nG3U-aLJjeGLp9ouBCp3XBNAWCY9_Au56uNARwEnErJz8A0J2OS0C91RR9w1lnnIyKpHJrnS1AgANaiIsaAmgaQUIAhEtZJnSBK4FVSNTWHYP_VxqE6bjQs1aJYRSUA7C6x6UDgDy_15p8gyzlgXmTLTwTYzlK7zAUhDGt-Ks0rsJ8x8fjdPA" alt="Farmer using a phone to inspect crops">
+          <div class="image-wash"></div>
+          <div class="scan-card">
+            <span class="scan-icon">&#10003;</span>
+            <span><strong>Crop scan ready</strong><small>Upload a leaf photo to begin</small></span>
+          </div>
+        </div>
+        <div class="diagnostic-card"><span class="warning-icon">!</span><span><strong>Early detection matters</strong><small>Spot disease before it spreads</small></span></div>
+      </div>
+    </section>
+
+    <section class="section pale" id="how-it-works">
+      <div class="shell">
+        <div class="section-heading"><p class="eyebrow">Simple by design</p><h2>From field photo to next step.</h2><p>Useful guidance should feel as natural as working the soil.</p></div>
+        <div class="steps">
+          <article><span class="step-number">01</span><h3>Capture</h3><p>Take a clear photo of a leaf or crop that needs attention.</p></article>
+          <article><span class="step-number">02</span><h3>Understand</h3><p>AI identifies likely disease signals and records the result.</p></article>
+          <article><span class="step-number">03</span><h3>Act</h3><p>Use a practical recommendation and keep your farm history organized.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="shell feature-layout">
+        <div class="section-heading left"><p class="eyebrow">One place for the whole farm</p><h2>Good growing needs more than one tool.</h2><p>AgroSphere connects the decisions that happen before, during, and after the harvest.</p></div>
+        <div class="feature-grid">
+          <article class="feature-card featured"><span class="feature-symbol">&#10022;</span><h3>AI disease detection</h3><p>Turn a crop image into a clearer diagnosis and a recommended next step.</p></article>
+          <article class="feature-card"><span class="feature-symbol">&#9638;</span><h3>Farm management</h3><p>Keep farms, crops, planting dates, and scan history together.</p></article>
+          <article class="feature-card"><span class="feature-symbol">&#8599;</span><h3>Market access</h3><p>List produce, discover availability, and connect with buyers.</p></article>
+          <article class="feature-card"><span class="feature-symbol">&#9825;</span><h3>Community support</h3><p>Make space for practical knowledge shared between farmers.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta shell" id="market-access">
+      <div><p class="eyebrow">Built for the next harvest</p><h2>Make your farm decisions visible.</h2></div>
+      <a class="button button-light" href="{{ url_for('auth.register') }}">Create your account <span aria-hidden="true">&#8594;</span></a>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="shell footer-wrap"><a class="brand" href="{{ url_for('public.landing') }}"><span class="brand-mark">+</span><span>Agro<span>Sphere</span></span></a><p>Smart agriculture, grounded in real work.</p></div></footer>
+</body>
+</html>

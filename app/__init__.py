@@ -39,6 +39,7 @@ def create_app(config_object: str = "config.DevelopmentConfig") -> Flask:
 
 def register_blueprints(app: Flask) -> None:
     """Registers one blueprint per feature area (Application Tier route groups)."""
+    from app.routes.public_routes import public_bp
     from app.routes.auth_routes import auth_bp
     from app.routes.dashboard_routes import dashboard_bp
     from app.routes.farm_routes import farm_bp
@@ -48,6 +49,7 @@ def register_blueprints(app: Flask) -> None:
     from app.routes.community_routes import community_bp
     from app.routes.admin_routes import admin_bp
 
+    app.register_blueprint(public_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(farm_bp)
