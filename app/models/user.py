@@ -20,6 +20,7 @@ ROLE_FARMER = "farmer"
 ROLE_BUYER = "buyer"
 ROLE_ADMIN = "admin"
 VALID_ROLES = (ROLE_FARMER, ROLE_BUYER, ROLE_ADMIN)
+REGISTRABLE_ROLES = (ROLE_FARMER, ROLE_BUYER)
 
 
 class User(UserMixin, db.Model):

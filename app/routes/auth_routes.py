@@ -8,7 +8,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 
 from app.extensions import db
-from app.models.user import User, VALID_ROLES
+from app.models.user import User, REGISTRABLE_ROLES
 from app.utils.validators import require_fields
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
@@ -45,7 +45,7 @@ def register():
         role = request.form.get("role") or ""
 
         missing = require_fields(request.form, ["name", "email", "password", "role"])
-        if missing or role not in VALID_ROLES:
+        if missing or role not in REGISTRABLE_ROLES:
             flash("Please complete all fields with a valid role.", "danger")
             return render_template("auth/register.html")
 

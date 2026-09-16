@@ -110,6 +110,20 @@ flask run
 - AI model files and inference logic are stored in the `ai_model` and `app/ai` areas.
 - Static assets and templates are organized under the `app/static` and `app/templates` folders.
 
+## Admin Account
+
+Admin accounts are provisioned separately and cannot be created through public registration. Set the administrator password in the environment and run:
+
+On Windows PowerShell:
+
+```powershell
+$env:AGROSPHERE_ADMIN_PASSWORD = "your-admin-password"
+python database/create_admin.py
+Remove-Item Env:AGROSPHERE_ADMIN_PASSWORD
+```
+
+The default administrator email is `ndifondavidkenei@gmail.com`. Public registration is limited to farmer and buyer roles.
+
 ## Purpose
 
 This project is intended as a practical agricultural technology platform for smart farm monitoring, crop disease intervention, and digital market access. It is structured to support academic, demo, and development use cases.

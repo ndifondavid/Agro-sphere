@@ -1,4 +1,5 @@
 from datetime import date, datetime, timedelta
+import os
 import sys
 from pathlib import Path
 
@@ -10,11 +11,16 @@ from app.extensions import db
 from app.models import Crop, Farm, Listing, Message, Reservation, Scan, User
 
 RECORD_COUNT = 20
+ADMIN_EMAIL = os.environ.get("AGROSPHERE_ADMIN_EMAIL", "ndifondavidkenei@gmail.com")
+ADMIN_PASSWORD = os.environ.get("AGROSPHERE_ADMIN_PASSWORD")
 
 
 def seed_database():
     app = create_app()
     with app.app_context():
+        if not ADMIN_PASSWORD:
+            raise RuntimeError("Set AGROSPHERE_ADMIN_PASSWORD before seeding the database.")
+
         tables = (User, Farm, Crop, Scan, Listing, Reservation, Message)
         existing = {model.__tablename__: model.query.count() for model in tables}
         if any(existing.values()):
@@ -31,11 +37,11 @@ def seed_database():
             else:
                 role = "admin"
             user = User(
-                name=f"AgroSphere User {index}",
-                email=f"user{index}@agrosphere.test",
+                name="System Administrator" if role == "admin" else f"AgroSphere User {index}",
+                email=ADMIN_EMAIL if role == "admin" else f"user{index}@agrosphere.test",
                 role=role,
             )
-            user.set_password("Password123!")
+            user.set_password(ADMIN_PASSWORD if role == "admin" else "Password123!")
             users.append(user)
         db.session.add_all(users)
         db.session.flush()
