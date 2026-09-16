@@ -5,6 +5,7 @@ CROP table (SDS Section 4.2.3 / 4.2.4).
     farm_id        INTEGER FK -> FARM.id, NOT NULL
     crop_type      TEXT NOT NULL
     planting_date  DATE
+    image_path     TEXT
 
 An index on crop.farm_id speeds up loading a farm's crop list (SDS Section 4.2.5).
 Every Scan is linked to a Crop, not directly to a User (FR-2.4).
@@ -19,6 +20,7 @@ class Crop(db.Model):
     farm_id = db.Column(db.Integer, db.ForeignKey("farm.id"), nullable=False, index=True)
     crop_type = db.Column(db.Text, nullable=False)
     planting_date = db.Column(db.Date, nullable=True)
+    image_path = db.Column(db.Text, nullable=True)
 
     scans = db.relationship("Scan", backref="crop", lazy=True, cascade="all, delete-orphan")
 

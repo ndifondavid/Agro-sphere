@@ -8,6 +8,7 @@ LISTING table (SDS Section 4.2.3 / 4.2.4).
     quantity              FLOAT NOT NULL
     price                 FLOAT NOT NULL
     availability_status   TEXT NOT NULL DEFAULT 'available'
+    image_path            TEXT
 
 Per Design Constraint (SDS Section 8): no payment or transaction fields exist
 here - only availability status is tracked. An index on availability_status
@@ -32,6 +33,7 @@ class Listing(db.Model):
     availability_status = db.Column(
         db.Text, nullable=False, default=STATUS_AVAILABLE, index=True
     )
+    image_path = db.Column(db.Text, nullable=True)
 
     reservations = db.relationship(
         "Reservation", backref="listing", lazy=True, cascade="all, delete-orphan"
