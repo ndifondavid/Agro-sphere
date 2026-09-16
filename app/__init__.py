@@ -26,6 +26,9 @@ def create_app(config_object: str = "config.DevelopmentConfig") -> Flask:
     login_manager.init_app(app)
     login_manager.login_view = "auth.login"
 
+    # Import models before create_all so SQLAlchemy knows every SDS table.
+    from app import models  # noqa: F401
+
     register_blueprints(app)
 
     with app.app_context():
