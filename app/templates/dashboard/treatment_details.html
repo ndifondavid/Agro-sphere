@@ -477,8 +477,8 @@
         </div>
 
         <nav class="top-nav" aria-label="Farmer navigation">
-          <a href="/dashboard/" class="nav-link">Dashboard</a>
-          <a href="/scan/" class="nav-link active">History</a>
+          <a href="{{ url_for('dashboard.index') }}" class="nav-link">Dashboard</a>
+          <a href="{{ url_for('scan.history') }}" class="nav-link active">History</a>
           <a href="#" class="nav-link">Settings</a>
         </nav>
 

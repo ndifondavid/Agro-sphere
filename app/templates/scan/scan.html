@@ -24,8 +24,9 @@
         </div>
 
         <nav class="top-nav" aria-label="Top navigation">
-          <a href="/dashboard/">Dashboard</a>
-          <a href="/scan/" class="active">Scans</a>
+          <a href="{{ url_for('dashboard.index') }}">Dashboard</a>
+          <a href="{{ url_for('farm.list_farms') }}">Farms</a>
+          <a href="{{ url_for('scan.scan_leaf') }}" class="active">Scans</a>
           <a href="#">History</a>
           <a href="#">Settings</a>
         </nav>
@@ -42,6 +43,26 @@
           <p>Upload a plant photo to detect diseases instantly</p>
 
           <form class="scan-form" method="POST" action="{{ url_for('scan.scan_leaf') }}" enctype="multipart/form-data">
+            <label class="crop-select-wrap" for="crop_id">
+              <span>Select crop</span>
+              <select id="crop_id" name="crop_id" required>
+                {% for crop in crops %}
+                  <option value="{{ crop.id }}" {% if scan and scan.crop_id == crop.id %}selected{% endif %}>{{ crop.crop_type }} — {{ crop.farm.name }}</option>
+                {% endfor %}
+              </select>
+            </label>
+
+            <div class="scan-context-card">
+              <div>
+                <span class="context-label">Selected farm</span>
+                <strong>{% if crops %}{{ crops[0].farm.name }}{% else %}No farm created{% endif %}</strong>
+              </div>
+              <div>
+                <span class="context-label">Crop type</span>
+                <strong>{% if crops %}{{ crops[0].crop_type }}{% else %}Create a crop{% endif %}</strong>
+              </div>
+            </div>
+
             <div class="drop-zone" id="dropZone" role="button" tabindex="0" aria-label="Upload image">
               <input id="photoInput" type="file" name="photo" accept="image/*" capture="environment" />
               <div class="upload-icon" aria-hidden="true">
@@ -77,7 +98,16 @@
                   <path d="M9.5 12.5c.9-3 2.8-5.3 5.7-6.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
                 </svg>
               </div>
-              <h3>{{ scan.predicted_disease if scan else 'Leaf Blight — Bacterial' }}</h3>
+              <div>
+                <div class="result-kicker">Farm and crop summary</div>
+                <h3>{{ scan.predicted_disease if scan else 'Leaf Blight — Bacterial' }}</h3>
+              </div>
+            </div>
+
+            <div class="farm-summary-mini">
+              <span><strong>Farm:</strong> {% if crops %}{{ crops[0].farm.name }}{% else %}Not assigned{% endif %}</span>
+              <span><strong>Crop:</strong> {% if crops %}{{ crops[0].crop_type }}{% else %}No crop{% endif %}</span>
+              <span><strong>Scan date:</strong> {% if scan %}{{ scan.timestamp.strftime('%b %d, %Y') }}{% else %}Pending{% endif %}</span>
             </div>
 
             <div class="result-section">
@@ -112,7 +142,7 @@
             <a href="{{ url_for('dashboard.treatment_details') }}" class="view-treatment-btn">View treatment details</a>
 
             <div class="bottom-actions">
-              <button type="button" class="save-btn">Save to History</button>
+              <a href="{{ url_for('scan.history') }}" class="save-btn">Save to History</a>
               <button type="button" class="export-btn">Export Report</button>
             </div>
           </div>
