@@ -29,7 +29,7 @@ def scan_leaf():
     crops = [c for f in current_user.farms for c in f.crops]
 
     if request.method == "POST":
-        crop_id = request.form.get("crop_id")
+        crop_id = request.form.get("crop_id") or (crops[0].id if crops else None)
         photo = request.files.get("photo")
 
         # --- Input validation branch (FR-3.5) ---
@@ -78,9 +78,9 @@ def scan_leaf():
         db.session.add(scan)
         db.session.commit()
 
-        return render_template("scan/result.html", scan=scan, crop=crop)
+        return render_template("scan/scan.html", crops=crops, scan=scan, crop=crop)
 
-    return render_template("scan/scan.html", crops=crops)
+    return render_template("scan/scan.html", crops=crops, scan=None)
 
 
 @scan_bp.route("/history")
