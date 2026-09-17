@@ -41,7 +41,7 @@
             <div class="profile-frame">
               <img src="{{ url_for('static', filename='images/profile-avatar.svg') }}" alt="Profile picture" />
             </div>
-            <span>Profile</span>
+            <span>{{ current_user.name }}</span>
           </div>
 
           <a class="new-scan-btn" href="/scan/" style="display:inline-flex;align-items:center;justify-content:center;">+ New Scan</a>
