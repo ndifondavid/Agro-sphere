@@ -1,19 +1,19 @@
 :root {
-  --bg: #eef0ee;
+  --bg: #eef4ef;
   --panel: #f7f7f6;
-  --panel-alt: #edf3ff;
+  --panel-alt: #edf9f3;
   --card: #ffffff;
-  --stroke: #cfe3f5;
-  --stroke-strong: #7db4df;
-  --brand: #0b6ac6;
-  --brand-deep: #0a4c9d;
-  --brand-soft: #dfeeff;
-  --heading: #1c2f3d;
-  --muted: #5f6c7f;
-  --text: #1b2430;
+  --stroke: #d5ecdf;
+  --stroke-strong: #88c8a3;
+  --brand: #1a8f5f;
+  --brand-deep: #136d4b;
+  --brand-soft: #e5f7ee;
+  --heading: #1d2d2a;
+  --muted: #5c6a64;
+  --text: #1b2a25;
   --success: #49b274;
-  --shadow: rgba(21, 59, 92, 0.12);
-  --rule: rgba(20, 48, 77, 0.12);
+  --shadow: rgba(16, 87, 55, 0.12);
+  --rule: rgba(20, 74, 56, 0.12);
 }
 
 * { box-sizing: border-box; }
@@ -44,10 +44,10 @@ button, input { font: inherit; }
   justify-content: space-between;
   gap: 24px;
   background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(14, 60, 90, 0.06);
+  border: 1px solid rgba(18, 109, 75, 0.06);
   border-radius: 18px;
   padding: 20px 26px 20px 24px;
-  box-shadow: 0 8px 18px rgba(10, 51, 75, 0.04);
+  box-shadow: 0 8px 18px rgba(20, 87, 61, 0.04);
 }
 
 .brand {
@@ -63,7 +63,7 @@ button, input { font: inherit; }
   border-radius: 14px;
   display: grid;
   place-items: center;
-  background: rgba(19, 73, 144, 0.06);
+  background: rgba(26, 143, 95, 0.06);
 }
 
 .brand-mark svg {
@@ -116,16 +116,24 @@ button, input { font: inherit; }
 }
 
 .profile-chip {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--brand), var(--brand-deep));
-  color: white;
-  display: grid;
-  place-items: center;
-  font-size: 1.02rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 6px;
+  border-radius: 999px;
+  background: rgba(26, 143, 95, 0.12);
+  border: 1px solid rgba(19, 109, 75, 0.18);
+  color: var(--brand-deep);
   font-weight: 700;
-  box-shadow: 0 8px 18px rgba(17, 71, 138, 0.2);
+  box-shadow: 0 8px 18px rgba(17, 71, 138, 0.08);
+}
+
+.profile-chip img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
 }
 
 .scan-layout {
@@ -176,7 +184,7 @@ button, input { font: inherit; }
   gap: 18px;
   border: 2px dashed var(--stroke-strong);
   border-radius: 18px;
-  background: rgba(190, 220, 255, 0.12);
+  background: rgba(160, 225, 190, 0.12);
   padding: 30px 20px;
   text-align: center;
   cursor: pointer;
@@ -186,7 +194,7 @@ button, input { font: inherit; }
 .drop-zone:hover,
 .drop-zone.dragover {
   border-color: var(--brand);
-  background: rgba(180, 214, 255, 0.18);
+  background: rgba(155, 214, 182, 0.18);
   transform: translateY(-1px);
 }
 
@@ -292,9 +300,9 @@ button, input { font: inherit; }
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(115, 163, 220, 0.14);
+  background: rgba(91, 184, 136, 0.14);
   color: var(--brand-deep);
-  border: 1px solid rgba(95, 128, 202, 0.25);
+  border: 1px solid rgba(50, 147, 99, 0.25);
   border-radius: 999px;
   padding: 8px 14px;
   font-size: 1.02rem;
@@ -314,8 +322,8 @@ button, input { font: inherit; }
 
 .result-card {
   border-radius: 24px;
-  background: rgba(194, 228, 255, 0.16);
-  border: 1px solid rgba(109, 150, 215, 0.2);
+  background: rgba(195, 240, 214, 0.16);
+  border: 1px solid rgba(74, 164, 110, 0.2);
   padding: 22px 22px 18px;
 }
 
@@ -332,7 +340,7 @@ button, input { font: inherit; }
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  background: rgba(168, 215, 255, 0.26);
+  background: rgba(190, 236, 210, 0.26);
   color: var(--brand);
 }
 
@@ -430,8 +438,8 @@ button, input { font: inherit; }
   display: flex;
   align-items: center;
   gap: 12px;
-  background: rgba(149, 194, 255, 0.14);
-  border: 1px solid rgba(111, 151, 219, 0.22);
+  background: rgba(165, 222, 190, 0.14);
+  border: 1px solid rgba(76, 164, 119, 0.22);
   border-radius: 14px;
   padding: 16px 18px;
   color: var(--heading);
@@ -443,7 +451,7 @@ button, input { font: inherit; }
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: rgba(98, 146, 235, 0.12);
+  background: rgba(97, 185, 138, 0.12);
   color: var(--brand-deep);
   flex-shrink: 0;
 }
@@ -453,8 +461,8 @@ button, input { font: inherit; }
   margin-top: 16px;
   min-height: 54px;
   padding: 14px 18px;
-  background: rgba(42, 115, 206, 0.06);
-  border: 1px solid rgba(27, 98, 205, 0.3);
+  background: rgba(26, 143, 95, 0.06);
+  border: 1px solid rgba(19, 109, 75, 0.3);
   color: var(--brand-deep);
   font-size: 1.06rem;
   font-weight: 800;

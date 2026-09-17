@@ -38,3 +38,12 @@ def index():
         total_farms=len(farms),
         total_scans=len(recent_scans),
     )
+
+
+@dashboard_bp.route("/treatment-details")
+@login_required
+def treatment_details():
+    if not current_user.is_farmer():
+        return "Access denied: farmer account required.", 403
+
+    return render_template("dashboard/treatment_details.html", farmer_name=current_user.name)
