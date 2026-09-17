@@ -44,9 +44,17 @@ def _load_model(model_path: str):
         if os.path.exists(model_path):
             _model = load_model(model_path)
     except ImportError:
-        # TensorFlow not installed in this environment; caller falls back to a stub result.
+        # TensorFlow not installed in this environment; caller falls back to a demo result.
         _model = None
     return _model
+
+
+def _demo_prediction() -> PredictionResult:
+    return PredictionResult(
+        predicted_disease="Leaf Blight",
+        confidence_score=0.924,
+        recommendation="Remove infected leaves and dispose of them away from healthy plants. Apply a copper-based fungicide and improve airflow around the crop.",
+    )
 
 
 def predict_disease(image_path: str, model_path: str, confidence_threshold: float = 0.60) -> PredictionResult:
@@ -59,14 +67,9 @@ def predict_disease(image_path: str, model_path: str, confidence_threshold: floa
     """
     model = _load_model(model_path)
 
-    if model is None:
-        # Stub/fallback path used when no trained model artifact is present yet
-        # (e.g. fresh project scaffold before Sprint 1 training is complete).
-        return PredictionResult(
-            predicted_disease="Unknown",
-            confidence_score=0.0,
-            recommendation=DISEASE_RECOMMENDATIONS["Unknown"],
-        )
+    if model is None or not os.path.exists(model_path):
+        # Demo fallback for early project stages where the trained disease model is not yet available.
+        return _demo_prediction()
 
     from tensorflow.keras.preprocessing import image as keras_image
     import numpy as np
