@@ -1,0 +1,296 @@
+:root {
+  --green-900: #0b4b3b;
+  --green-800: #0a5f48;
+  --green-700: #0d7b5b;
+  --green-600: #13a370;
+  --green-500: #59d39c;
+  --green-100: #ecfff6;
+  --white: #ffffff;
+  --panel-bg: #f4f7f5;
+  --field-bg: #f8faf9;
+  --line: rgba(12, 72, 58, 0.12);
+  --text: #183c34;
+  --muted: rgba(24, 60, 52, 0.72);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #e7ece9;
+  color: var(--text);
+}
+
+a { color: inherit; text-decoration: none; }
+button, input { font: inherit; }
+
+.auth-shell {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 28px 16px;
+}
+
+.auth-card {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  width: min(860px, 92vw);
+  min-height: 530px;
+  background: linear-gradient(180deg, #1cb878 0%, #0f8259 100%);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 18px 30px rgba(10, 71, 53, 0.18);
+}
+
+.auth-intro {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 42px 28px 30px;
+  color: var(--white);
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0));
+}
+
+.auth-intro::before,
+.auth-intro::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.auth-intro::before {
+  width: 180px;
+  height: 180px;
+  right: -36px;
+  top: -30px;
+}
+
+.auth-intro::after {
+  width: 140px;
+  height: 140px;
+  left: -42px;
+  bottom: -26px;
+}
+
+.intro-badge {
+  position: relative;
+  z-index: 1;
+  align-self: flex-start;
+  margin-bottom: 20px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.auth-intro h2 {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 10px;
+  font-size: clamp(2rem, 2.8vw, 3rem);
+  line-height: 1.1;
+}
+
+.auth-intro p {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  max-width: 280px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.auth-panel {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 0;
+  padding: 22px 22px 18px;
+  box-shadow: none;
+}
+
+.auth-back-row {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+
+.back-link {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--green-800);
+  text-decoration: none;
+}
+
+.back-link:hover { text-decoration: underline; }
+
+.auth-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.tab-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  width: 100%;
+  max-width: 220px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(24, 60, 52, 0.72);
+}
+
+.tab--active {
+  color: var(--text);
+}
+
+.tab--active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -8px;
+  height: 3px;
+  background: var(--green-700);
+  border-radius: 999px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-title {
+  margin: 9px 0 2px;
+  text-align: center;
+  font-size: 2.0rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.field-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 52px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--field-bg);
+  padding: 8px 10px;
+}
+
+.field-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--green-700);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.field-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.field-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.field-box label {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.field-box input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  padding: 0;
+}
+
+.field-box input::placeholder {
+  color: rgba(24, 60, 52, 0.52);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.primary-btn {
+  width: 100%;
+  height: 42px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(180deg, var(--green-700), var(--green-600));
+  color: var(--white);
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 12px 18px rgba(12, 123, 91, 0.2);
+  cursor: pointer;
+}
+
+@media (max-width: 780px) {
+  .auth-card {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-intro {
+    padding: 28px 22px 18px;
+  }
+
+  .auth-intro p {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .auth-shell {
+    padding: 14px 10px;
+  }
+
+  .auth-panel {
+    padding: 16px 16px 16px;
+  }
+
+  .form-title {
+    font-size: 1.7rem;
+  }
+}

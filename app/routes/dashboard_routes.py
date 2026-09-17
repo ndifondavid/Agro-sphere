@@ -16,7 +16,10 @@ dashboard_bp = Blueprint("dashboard", __name__, url_prefix="/dashboard")
 @dashboard_bp.route("/")
 @login_required
 def index():
-    farms = Farm.query.filter_by(owner_id=current_user.id).all() if current_user.is_farmer() else []
+    if not current_user.is_farmer():
+        return "Access denied: farmer account required.", 403
+
+    farms = Farm.query.filter_by(owner_id=current_user.id).all()
     farm_ids = [f.id for f in farms]
     crop_ids = [c.id for f in farms for c in f.crops]
     recent_scans = (
