@@ -21,7 +21,25 @@ farm_bp = Blueprint("farm", __name__, url_prefix="/farms")
 @roles_required("farmer")
 def list_farms():
     farms = Farm.query.filter_by(owner_id=current_user.id).all()
-    return render_template("dashboard/farms.html", farms=farms)
+    farm_cards = []
+    for farm in farms:
+        crop_names = [crop.crop_type for crop in farm.crops]
+        first_crop = crop_names[0] if crop_names else "No crop added yet"
+        if len(farm.crops) == 0:
+            status = "Needs setup"
+            health_style = "neutral"
+        else:
+            status = "Healthy"
+            health_style = "healthy"
+        farm_cards.append({
+            "farm": farm,
+            "crop_name": first_crop,
+            "crop_count": len(farm.crops),
+            "status": status,
+            "status_class": health_style,
+            "location": farm.location,
+        })
+    return render_template("dashboard/farms.html", farms=farm_cards)
 
 
 @farm_bp.route("/new", methods=["GET", "POST"])

@@ -26,7 +26,16 @@ scan_bp = Blueprint("scan", __name__, url_prefix="/scan")
 @login_required
 @roles_required("farmer")
 def scan_leaf():
-    crops = [c for f in current_user.farms for c in f.crops]
+    farms = current_user.farms
+    crops = [c for f in farms for c in f.crops]
+
+    if not farms:
+        flash("Create a farm before scanning a crop.", "warning")
+        return redirect(url_for("farm.create_farm"))
+
+    if not crops:
+        flash("Add at least one crop to your farm before scanning.", "warning")
+        return redirect(url_for("farm.list_farms"))
 
     if request.method == "POST":
         crop_id = request.form.get("crop_id") or (crops[0].id if crops else None)

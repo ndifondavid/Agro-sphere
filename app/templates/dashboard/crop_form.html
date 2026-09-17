@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Crop</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+    <style>
+      body { background: #edf4ef; }
+      .section-shell {
+        max-width: 760px;
+        margin: 60px auto;
+        background: #fff;
+        border-radius: 24px;
+        box-shadow: 0 18px 48px rgba(14, 72, 52, 0.12);
+        padding: 32px 28px;
+      }
+      h1 { margin: 0 0 8px; color: #143a2d; font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -0.05em; }
+      p { color: #5d6e6a; margin: 0 0 22px; }
+      form { display: grid; gap: 18px; }
+      label { display: grid; gap: 8px; color: #21473e; font-weight: 700; }
+      input { border: 1px solid #d8e1dc; border-radius: 12px; padding: 14px 16px; font-size: 1rem; background: #f9faf9; }
+      .form-actions { display: flex; justify-content: space-between; gap: 12px; margin-top: 10px; }
+      .primary-btn, .secondary-btn { border-radius: 12px; padding: 12px 18px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+      .primary-btn { background: linear-gradient(180deg, #0f7a59, #0f5d43); color: white; border: none; }
+      .secondary-btn { background: #edf5ef; color: #0d5f43; border: 1px solid rgba(15, 93, 67, 0.1); }
+    </style>
+  </head>
+  <body>
+    <div class="topbar-strip" style="max-width: 760px; margin: 24px auto 0; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 0 6px; font-weight: 700; color: #1c4b3d;">
+      <a href="{{ url_for('dashboard.index') }}" style="color: #0f6a4e; text-decoration: none;">Dashboard</a>
+      <span>›</span>
+      <a href="{{ url_for('farm.list_farms') }}" style="color: #0f6a4e; text-decoration: none;">Farms</a>
+    </div>
+
+    <div class="section-shell">
+      <h1>Add Crop</h1>
+      <p>Attach a crop to your farm so that scan results can be saved and tracked properly.</p>
+
+      <form method="POST" action="{{ url_for('farm.create_crop', farm_id=farm.id) }}">
+        <label>
+          Crop Type
+          <input type="text" name="crop_type" placeholder="e.g. Tomatoes" required />
+        </label>
+
+        <label>
+          Planting Date
+          <input type="date" name="planting_date" />
+        </label>
+
+        <div class="form-actions">
+          <a href="{{ url_for('farm.list_farms') }}" class="secondary-btn">Back to Farms</a>
+          <button type="submit" class="primary-btn">Save Crop</button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
