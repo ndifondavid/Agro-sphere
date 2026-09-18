@@ -1,227 +1,423 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AgroSphere | Smarter Farming Starts Here</title>
-    <meta name="description" content="AgroSphere helps farmers detect crop disease early, monitor field health, and connect with buyers through a smarter agricultural platform." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}" />
-  </head>
-  <body>
-    <header class="site-header">
-      <div class="container nav-wrap">
-        <a href="{{ url_for('public.landing') }}" class="brand" aria-label="AgroSphere home">
-          <span class="brand-mark">✦</span>
-          <span>Agro<span>Sphere</span></span>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AgroSphere - Modern Agricultural Intelligence</title>
+<!-- Tailwind CSS CDN with forms and container-queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              200: '#bbf7d0',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+<!-- BEGIN: Custom Styles -->
+<style data-purpose="custom-animations">
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 0.9; transform: scale(1.03); }
+    }
+    .animate-pulse-subtle {
+      animation: pulseGlow 4s ease-in-out infinite;
+    }
+    .scan-reticle {
+      box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.8), 0 0 20px rgba(34, 197, 94, 0.3);
+    }
+  </style>
+<!-- END: Custom Styles -->
+</head>
+<body class="bg-white text-slate-800 antialiased font-sans selection:bg-brand-100 selection:text-brand-900">
+<!-- BEGIN: MainHeader -->
+<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100 transition-all duration-200" data-purpose="navigation-header">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+<!-- Brand Logo -->
+<a aria-label="AgroSphere Home" class="flex items-center gap-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500 rounded-lg p-1" href="{{ url_for('public.landing') }}">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-700 to-brand-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
+<!-- Leaf / Sprout Icon -->
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" viewbox="0 0 24 24">
+<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
+<path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
+</svg>
+</div>
+<span class="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-1">
+          Agro<span class="text-brand-700">Sphere</span>
+</span>
+</a>
+<!-- Desktop Navigation Links -->
+<nav aria-label="Main Navigation" class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+<a class="text-brand-700 hover:text-brand-800 transition-colors" href="#home">Home</a>
+<a class="hover:text-slate-900 transition-colors" href="#how-it-works">How It Works</a>
+<a class="hover:text-slate-900 transition-colors" href="#features">Disease Detection</a>
+<a class="hover:text-slate-900 transition-colors" href="#tools">Farm Tools</a>
+</nav>
+<!-- CTA & Auth Buttons -->
+<div class="flex items-center gap-4">
+<a class="hidden sm:inline-block text-sm font-medium text-slate-600 hover:text-slate-900 px-3 py-2 transition-colors" href="{{ url_for('auth.login') }}">
+          Login
         </a>
-
-        <nav class="desktop-nav" aria-label="Main navigation">
-          <a href="#home">Home</a>
-          <a href="#how-it-works">How it works</a>
-          <a href="#solutions">Solutions</a>
-          <a href="#impact">Impact</a>
-        </nav>
-
-        <div class="nav-actions">
-          <a href="{{ url_for('auth.login') }}" class="login-link">Login</a>
-          <a href="{{ url_for('auth.register') }}" class="button button-small">Get started</a>
-        </div>
-      </div>
-    </header>
-
-    <main>
-      <section class="hero" id="home">
-        <div class="container hero-grid">
-          <div class="hero-copy">
-            <p class="eyebrow"><span class="status-dot"></span> Precision farming with AI</p>
-            <h1>Better crops start with <em>smarter decisions.</em></h1>
-            <p class="hero-lede">
-              AgroSphere helps farmers detect crop disease early, monitor field health in real time,
-              and turn healthy harvests into stronger market opportunities.
+<a class="inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-brand-700 hover:bg-brand-800 text-white font-medium text-sm transition-all duration-200 shadow-sm hover:shadow-md hover:shadow-brand-800/20 focus:ring-2 focus:ring-brand-700 focus:ring-offset-2" href="{{ url_for('auth.register') }}">
+          Get Started
+        </a>
+</div>
+</div>
+</header>
+<!-- END: MainHeader -->
+<main>
+<!-- BEGIN: HeroSection -->
+<section class="relative pt-8 pb-20 lg:pt-16 lg:pb-28 overflow-hidden" data-purpose="hero-section" id="home">
+<!-- Subtle organic background aura -->
+<div class="absolute top-0 right-1/4 -translate-y-12 w-96 h-96 bg-brand-100/60 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+<div class="absolute bottom-10 left-10 w-80 h-80 bg-emerald-50 rounded-full blur-2xl -z-10 pointer-events-none"></div>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+<!-- Hero Left Column: Copy & CTAs -->
+<div class="lg:col-span-6 flex flex-col items-start text-left">
+<!-- Eyebrow Badge from Option 4 -->
+<div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 border border-brand-200 text-brand-700 text-xs font-semibold tracking-wider uppercase mb-6 shadow-sm">
+<span class="w-2 h-2 rounded-full bg-brand-500 animate-ping"></span>
+              AI PLANT DISEASE DETECTION
+            </div>
+<!-- Main Heading -->
+<h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-tight leading-[1.12] mb-6">
+              Scan. Detect. <br class="hidden sm:inline"/>
+<span class="text-brand-700">Save Your Crops.</span>
+</h1>
+<!-- Subheading description -->
+<p class="text-lg sm:text-xl text-slate-600 leading-relaxed max-w-xl mb-8 font-normal">
+              Get instant disease detection, real-time insights, and expert treatment recommendations with just a photo.
             </p>
-
-            <div class="hero-actions">
-              <a href="{{ url_for('auth.register') }}" class="button">Scan a crop</a>
-              <a href="#how-it-works" class="text-button">See how it works</a>
-            </div>
-
-            <div class="proof-row" id="impact">
-              <div>
-                <strong>12k+</strong>
-                <span>leaf scans</span>
-              </div>
-              <div>
-                <strong>95%</strong>
-                <span>target accuracy</span>
-              </div>
-              <div>
-                <strong>48 hrs</strong>
-                <span>faster response</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="hero-visual" aria-label="Farmer inspecting crops with mobile app">
-            <div class="image-frame">
-              <div class="scan-stage">
-                <span class="scan-orbit orbit-one"></span>
-                <span class="scan-orbit orbit-two"></span>
-
-                <div class="phone-shell" aria-hidden="true">
-                  <div class="phone-speaker"></div>
-                  <div class="phone-screen">
-                    <img src="https://images.unsplash.com/photo-1464226184884-fa52ac9d3f55?auto=format&fit=crop&w=700&q=80" alt="Crop health dashboard on a phone" />
-                    <div class="scan-reticle"><i></i><b>Scan in progress</b></div>
-                    <div class="phone-status"><span>Plant health</span><strong>Healthy</strong></div>
+<!-- CTA Button Group -->
+<div class="flex flex-wrap items-center gap-4 w-full sm:w-auto mb-12">
+<a class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-brand-700 hover:bg-brand-800 text-white font-medium text-base transition-all duration-200 shadow-md shadow-brand-700/25 hover:shadow-lg hover:shadow-brand-800/30 group" href="{{ url_for('auth.register') }}">
+<svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+                Scan a Leaf
+              </a>
+<a class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-medium text-base transition-all duration-200 hover:border-slate-400 shadow-sm" href="#demo">
+<svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+                Watch Demo
+              </a>
+</div>
+</div>
+<!-- Hero Right Column: Farmer Visual with Contextual Glass Cards -->
+<div class="lg:col-span-6 relative flex justify-center lg:justify-end">
+<!-- Main visual container -->
+<div class="relative w-full max-w-lg lg:max-w-none rounded-3xl p-3 bg-gradient-to-b from-slate-100 to-slate-200/60 shadow-2xl border border-slate-100">
+<div class="relative rounded-2xl overflow-hidden aspect-[4/3] sm:aspect-[16/11] bg-slate-100">
+<img alt="A happy smiling modern African farmer wearing a straw hat and denim shirt in a sunlit lush green agricultural farm field holding a modern smartphone inspecting crops" class="w-full h-full object-cover object-center" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDczSTlKqjf529UUzwwesQvrC7fagBJVS4UBiuEwGAvFZprNAU8YmM23dVWPAEZnrBT9nG3U-aLJjeGLp9ouBCp3XBNAWCY9_Au56uNARwEnErJz8A0J2OS0C91RR9w1lnnIyKpHJrnS1AgANaiIsaAmgaQUIAhEtZJnSBK4FVSNTWHYP_VxqE6bjQs1aJYRSUA7C6x6UDgDy_15p8gyzlgXmTLTwTYzlK7zAUhDGt-Ks0rsJ8x8fjdPA"/>
+<!-- Subtle Gradient Overlay -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none"></div>
+<!-- Floating Bottom Live Card -->
+<div class="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md p-3.5 rounded-xl border border-white/60 shadow-lg flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div>
+<div class="text-xs font-semibold text-slate-900">Live Crop Telemetry</div>
+<div class="text-[11px] text-slate-500">Real-time field scan active</div>
+</div>
+</div>
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-brand-100 text-brand-800">
+                    98% Confidence
+                  </span>
+</div>
+</div>
+<!-- Floating Diagnostic Notification Tag (Top Right) -->
+<div class="absolute -top-4 -right-4 sm:top-6 sm:-right-6 bg-white rounded-2xl p-4 shadow-xl border border-slate-100 flex items-center gap-3 max-w-xs animate-bounce-slow">
+<div class="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 shrink-0">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div>
+<p class="text-xs font-bold text-slate-900">Diagnostic Detected</p>
+<p class="text-[11px] text-slate-500">Early Stage Blight • 2 fields flagged</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: HeroSection -->
+<!-- BEGIN: HowItWorksSection -->
+<section class="py-20 bg-slate-50/75 border-y border-slate-200/60" data-purpose="how-it-works-flow" id="how-it-works">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<!-- Header -->
+<div class="text-center max-w-2xl mx-auto mb-16">
+<h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">How It Works</h2>
+<p class="mt-3 text-base sm:text-lg text-slate-600">Get accurate results in just 3 simple steps.</p>
+</div>
+<!-- 3 Step Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+<!-- Step 1 -->
+<div class="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col items-center text-center relative group">
+<div class="w-16 h-16 rounded-2xl bg-brand-50 border border-brand-100 flex items-center justify-center text-brand-700 mb-6 group-hover:scale-105 group-hover:bg-brand-100 transition-all duration-200">
+<!-- Camera Icon -->
+<svg class="w-8 h-8" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<h3 class="text-xl font-bold text-slate-900 mb-2">1. Take a Photo</h3>
+<p class="text-sm text-slate-600 leading-relaxed max-w-xs">
+              Snap a clear picture of the affected leaf or crop stem using any mobile phone.
+            </p>
+</div>
+<!-- Step 2 -->
+<div class="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col items-center text-center relative group">
+<div class="w-16 h-16 rounded-2xl bg-brand-50 border border-brand-100 flex items-center justify-center text-brand-700 mb-6 group-hover:scale-105 group-hover:bg-brand-100 transition-all duration-200">
+<!-- AI Neural / Scan Chip Icon -->
+<svg class="w-8 h-8" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<h3 class="text-xl font-bold text-slate-900 mb-2">2. AI Analysis</h3>
+<p class="text-sm text-slate-600 leading-relaxed max-w-xs">
+              Our model detects the disease using advanced deep learning trained on millions of crop samples.
+            </p>
+</div>
+<!-- Step 3 -->
+<div class="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col items-center text-center relative group">
+<div class="w-16 h-16 rounded-2xl bg-brand-50 border border-brand-100 flex items-center justify-center text-brand-700 mb-6 group-hover:scale-105 group-hover:bg-brand-100 transition-all duration-200">
+<!-- Prescription / Checkmark Icon -->
+<svg class="w-8 h-8" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<h3 class="text-xl font-bold text-slate-900 mb-2">3. Get Results</h3>
+<p class="text-sm text-slate-600 leading-relaxed max-w-xs">
+              Receive instant diagnosis and agronomic treatment recommendations tailored to your region.
+            </p>
+</div>
+</div>
+</div>
+</section>
+<!-- END: HowItWorksSection -->
+<!-- BEGIN: PowerfulFeaturesSection -->
+<section class="py-20 lg:py-28 bg-white" data-purpose="features-and-diagnostic-showcase" id="features">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<!-- Section Header -->
+<div class="max-w-3xl mb-16">
+<span class="text-xs font-bold tracking-widest text-brand-700 uppercase mb-2 block">Primary capability</span>
+<h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+            Detect disease before it spreads
+          </h2>
+<p class="mt-4 text-lg text-slate-600">
+            Start with a leaf photo, receive an AI result, and use the recommendation to decide what to do next.
+          </p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<!-- Left Column: Feature List Cards -->
+<div class="lg:col-span-5 space-y-4" id="tools">
+<!-- Feature Item 1 -->
+<div class="p-5 rounded-2xl border border-brand-200/80 bg-brand-50/40 hover:bg-brand-50 transition-all duration-150 flex items-start gap-4">
+<div class="w-12 h-12 rounded-xl bg-brand-700 text-white flex items-center justify-center shrink-0 shadow-sm shadow-brand-700/20">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div>
+<h3 class="text-base font-bold text-slate-900">AI Disease Detection</h3>
+<p class="text-sm text-slate-600 mt-1">Identify diseases early with high accuracy and granular infection severity mapping.</p>
+</div>
+</div>
+<!-- Feature Item 2 -->
+<div class="p-5 rounded-2xl border border-slate-100 bg-white hover:border-slate-200 hover:shadow-sm transition-all duration-150 flex items-start gap-4">
+<div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center shrink-0">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div>
+<h3 class="text-base font-bold text-slate-900">Farm Management</h3>
+<p class="text-sm text-slate-600 mt-1">Track your fields, parcel rotations, irrigation milestones, and crop yield over time.</p>
+</div>
+</div>
+<!-- Feature Item 3 -->
+<div class="p-5 rounded-2xl border border-slate-100 bg-white hover:border-slate-200 hover:shadow-sm transition-all duration-150 flex items-start gap-4">
+<div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center shrink-0">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div>
+<h3 class="text-base font-bold text-slate-900">Scan history</h3>
+<p class="text-sm text-slate-600 mt-1">Review previous scan results and recommendations as your farm record grows.</p>
+</div>
+</div>
+<!-- Feature Item 4 -->
+<div class="p-5 rounded-2xl border border-slate-100 bg-white hover:border-slate-200 hover:shadow-sm transition-all duration-150 flex items-start gap-4">
+<div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center shrink-0">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div>
+<h3 class="text-base font-bold text-slate-900">Market access</h3>
+<p class="text-sm text-slate-600 mt-1">After managing your crops, list available produce for buyers to discover.</p>
+</div>
+</div>
+</div>
+<!-- Right Column: Diseased Leaf Card + AI Scan Overlay from Option 4 -->
+<div class="lg:col-span-7">
+<div class="bg-slate-50 border border-slate-200/80 rounded-3xl p-4 sm:p-6 shadow-xl">
+<!-- Top bar for scan component -->
+<div class="flex items-center justify-between pb-4 border-b border-slate-200">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-red-400 inline-block"></span>
+<span class="w-3 h-3 rounded-full bg-amber-400 inline-block"></span>
+<span class="w-3 h-3 rounded-full bg-brand-500 inline-block"></span>
+<span class="ml-2 text-xs font-semibold text-slate-500 uppercase tracking-wide">AI Diagnostic Scanner v2.4</span>
+</div>
+<div class="text-xs font-medium text-slate-500 bg-white px-2.5 py-1 rounded-md border border-slate-200">
+                  Target: Solanum lycopersicum
+                </div>
+</div>
+<!-- Content Split inside Card -->
+<div class="mt-6 grid grid-cols-1 sm:grid-cols-12 gap-6 items-center">
+<!-- Leaf Image with Reticle Scanner Box -->
+<div class="sm:col-span-6 relative rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-inner group">
+<img alt="Close up of a diseased green plant leaf with visible yellow-brown fungal blight spots" class="w-full aspect-square object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwqx5uFZ-blaB4_K904VIoP57e8ExUun5h1oYd_xE5cy8HUNWQ6cR87M5PyUpI6YBNme98qH20ExMZqMJcroAguZrT-4-fzAOn9kDMv2iGdkXS03pCvg2FiXtfo9i2NEzieQ81iYQZrNPfybA38ayd8VahCvB-BMr5Eyrz3NI6S8NroY_-ORfBg1MO4l11C2gbdsbXPvofOM9TsI7NI6BfCIPwF4HWYJ-o8rzajje-DsG7Ib0l_7wWnw"/>
+<!-- AI Scanning Reticle Box -->
+<div class="absolute inset-8 rounded-xl scan-reticle pointer-events-none flex flex-col justify-between p-2">
+<div class="flex justify-between">
+<span class="w-4 h-4 border-t-2 border-l-2 border-brand-500"></span>
+<span class="w-4 h-4 border-t-2 border-r-2 border-brand-500"></span>
+</div>
+<!-- Central Reticle Status -->
+<div class="text-center">
+<span class="inline-block bg-brand-600/90 text-white text-[10px] font-mono px-2 py-0.5 rounded-full shadow">
+                        TARGET DETECTED [90%]
+                      </span>
+</div>
+<div class="flex justify-between">
+<span class="w-4 h-4 border-b-2 border-l-2 border-brand-500"></span>
+<span class="w-4 h-4 border-b-2 border-r-2 border-brand-500"></span>
+</div>
+</div>
+<!-- Live Analyzing Banner -->
+<div class="absolute bottom-2 inset-x-2 bg-slate-950/80 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-center text-xs flex items-center justify-center gap-2">
+<svg class="w-3.5 h-3.5 animate-spin text-brand-400" fill="none" viewbox="0 0 24 24">
+<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+<path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" fill="currentColor"></path>
+</svg>
+<span>Instant Results Generated</span>
+</div>
+</div>
+<!-- Diagnostic Result Details -->
+<div class="sm:col-span-6 flex flex-col justify-center">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold w-fit mb-2">
+<svg class="w-3.5 h-3.5 text-amber-600" fill="currentColor" viewbox="0 0 20 20">
+<path clip-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" fill-rule="evenodd"></path>
+</svg>
+                    Fungal Disease
                   </div>
-                </div>
-              </div>
-
-              <div class="diagnostic-card">
-                <span class="warning-icon">!</span>
-                <div>
-                  <strong>2 fields flagged</strong>
-                  <small>Action recommended</small>
-                </div>
-              </div>
-
-              <div class="scan-card">
-                <span class="scan-icon">✓</span>
-                <div>
-                  <strong>Live crop telemetry</strong>
-                  <small>98% confidence</small>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="status-bar">
-        <div class="container status-grid">
-          <div>Farmers</div>
-          <div>Buyers</div>
-          <div>Field agronomists</div>
-          <div>Cooperatives</div>
-        </div>
-      </section>
-
-      <section class="section pale" id="how-it-works">
-        <div class="container">
-          <div class="section-heading">
-            <p class="eyebrow centered"><span class="status-dot"></span> How it works</p>
-            <h2>From photo to action in three steps.</h2>
-            <p>Simple, fast, and practical for everyday farm decisions.</p>
-          </div>
-
-          <div class="steps">
-            <article>
-              <div class="step-number">01</div>
-              <h3>Capture a crop image</h3>
-              <p>Take a quick photo of a leaf, stem, or plant using your phone while working in the field.</p>
-            </article>
-
-            <article>
-              <div class="step-number">02</div>
-              <h3>Run AI diagnosis</h3>
-              <p>AgroSphere analyzes the image to detect possible diseases and estimate confidence levels.</p>
-            </article>
-
-            <article>
-              <div class="step-number">03</div>
-              <h3>Act with confidence</h3>
-              <p>Receive treatment guidance, protect your crop earlier, and keep your harvest healthier.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="solutions">
-        <div class="container">
-          <div class="section-heading left">
-            <p class="eyebrow"><span class="status-dot"></span> Built for real farm work</p>
-            <h2>Everything you need to protect your field.</h2>
-          </div>
-
-          <div class="feature-layout">
-            <div class="feature-grid">
-              <article class="feature-card featured">
-                <div class="feature-symbol">✦</div>
-                <h3>AI disease detection</h3>
-                <p>Identify common crop issues early using image-based diagnosis and results you can trust.</p>
-              </article>
-
-              <article class="feature-card">
-                <div class="feature-symbol">◎</div>
-                <h3>Smart farm tracking</h3>
-                <p>Monitor crop health over time and keep a digital record of what changed in your fields.</p>
-              </article>
-
-              <article class="feature-card">
-                <div class="feature-symbol">↗</div>
-                <h3>Better market visibility</h3>
-                <p>List healthy produce to buyers and turn verified crop quality into stronger sales outcomes.</p>
-              </article>
-
-              <article class="feature-card">
-                <div class="feature-symbol">✓</div>
-                <h3>Guided actions</h3>
-                <p>Get treatment insight and next steps that help you respond early before the problem spreads.</p>
-              </article>
-            </div>
-
-            <div class="panel-demo">
-              <div class="mini-window">
-                <div class="mini-head">
-                  <span></span><span></span><span></span>
-                  <strong>AgroSphere diagnosis</strong>
-                </div>
-
-                <div class="mini-body">
-                  <div class="leaf-visual">
-                    <div class="leaf-shape"></div>
-                  </div>
-
-                  <div class="mini-panel-content">
-                    <span class="pill warning">Fungal disease</span>
-                    <h3>Tomato blight</h3>
-                    <p>Detected with 94% confidence.</p>
-                    <ul>
-                      <li>Apply copper spray</li>
-                      <li>Remove infected leaves</li>
-                      <li>Improve airflow and spacing</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section cta-wrap">
-        <div class="container cta">
-          <h2>Ready to grow smarter?</h2>
-          <a href="{{ url_for('auth.register') }}" class="button button-light">Start free</a>
-        </div>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div class="container footer-wrap">
-        <div class="brand footer-brand" aria-label="AgroSphere footer brand">
-          <span class="brand-mark">✦</span>
-          <span>Agro<span>Sphere</span></span>
-        </div>
-
-        <p>Healthy farms. Smarter decisions. Better harvests.</p>
-      </div>
-    </footer>
-  </body>
-</html>
+<!-- Disease Title & Confidence -->
+<h4 class="text-xl font-extrabold text-slate-950 leading-tight">
+                    Tomato Early Blight
+                  </h4>
+<p class="text-xs text-brand-700 font-semibold mt-0.5">
+                    (90% confidence match)
+                  </p>
+<hr class="my-4 border-slate-200"/>
+<!-- Recommended Treatment Checklist -->
+<div>
+<h5 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2.5">
+                      Recommended Treatment:
+                    </h5>
+<ul class="space-y-2 text-xs sm:text-sm text-slate-700">
+<li class="flex items-start gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-brand-600 mt-2 shrink-0"></span>
+<span>Use <strong>copper-based fungicide</strong> spray at 7-10 day intervals.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-brand-600 mt-2 shrink-0"></span>
+<span><strong>Remove infected lower leaves</strong> to prevent spores from splashing upward.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-brand-600 mt-2 shrink-0"></span>
+<span><strong>Maintain proper row spacing</strong> to ensure adequate air circulation.</span>
+</li>
+</ul>
+</div>
+<!-- Treatment Action CTA -->
+<div class="mt-6">
+<a class="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-brand-700 hover:bg-brand-800 text-white font-semibold text-xs sm:text-sm transition-colors shadow-sm" href="#treatment">
+                      View Treatment Details
+                      <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: PowerfulFeaturesSection -->
+<!-- BEGIN: CallToActionBanner -->
+<section class="py-16 bg-gradient-to-r from-brand-900 to-brand-800 text-white relative overflow-hidden" data-purpose="cta-banner">
+<!-- Background subtle patterns -->
+<div class="absolute -right-10 -bottom-10 w-64 h-64 bg-white/5 rounded-full blur-2xl pointer-events-none"></div>
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+<h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">
+          Ready to grow smarter?
+        </h2>
+<p class="text-brand-100 text-base sm:text-lg max-w-2xl mx-auto mb-8">
+          Create an account, create a farm, add crops, upload crop images, and get disease detection.
+        </p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+<a class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white text-brand-900 font-bold text-sm sm:text-base hover:bg-slate-100 transition-colors shadow-lg" href="{{ url_for('auth.register') }}">
+            Start Free Diagnosis
+          </a>
+</div>
+</div>
+</section>
+<!-- END: CallToActionBanner -->
+</main>
+<section class="py-8 bg-slate-50 border-t border-slate-200 text-center" data-purpose="illustrative-metrics">
+<p class="text-xs text-slate-500">Illustrative placeholders for the final product version</p>
+<div class="mt-3 flex flex-wrap justify-center gap-x-8 gap-y-2 text-xs text-slate-500">
+<span><strong class="text-slate-700">50K+</strong> active farmers</span>
+<span><strong class="text-slate-700">95%</strong> target accuracy</span>
+<span><strong class="text-slate-700">200+</strong> crop types</span>
+<span><strong class="text-slate-700">24/7</strong> availability goal</span>
+</div>
+</section>
+<!-- BEGIN: MainFooter -->
+<footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800" data-purpose="page-footer">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex flex-col md:flex-row items-center justify-between gap-6">
+<!-- Brand & Copyright -->
 <div class="flex items-center gap-3">
 <div class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white font-bold text-sm">
             C
@@ -233,8 +429,29 @@
 <div class="flex flex-wrap items-center gap-6 text-xs sm:text-sm">
 <a class="hover:text-white transition-colors" href="#how-it-works">How it works</a>
 <a class="hover:text-white transition-colors" href="#features">Disease detection</a>
+<a class="hover:text-white transition-colors" href="#about-us">About us</a>
+<a class="hover:text-white transition-colors" href="#contact-us">Contact us</a>
 <a class="hover:text-white transition-colors" href="{{ url_for('auth.register') }}">Register</a>
 </div>
+</div>
+
+<div class="mt-10 grid gap-8 md:grid-cols-2 max-w-5xl mx-auto items-start text-sm text-slate-300">
+  <div id="about-us" class="rounded-2xl border border-slate-700/80 bg-slate-800/50 p-5 shadow-sm">
+    <h3 class="text-base font-semibold text-white mb-3">About us</h3>
+    <p class="leading-relaxed text-slate-400">
+      AgroSphere helps farmers detect crop diseases early, manage their farms more effectively,
+      and make better decisions with AI-powered field insights and crop monitoring tools.
+    </p>
+  </div>
+
+  <div id="contact-us" class="rounded-2xl border border-slate-700/80 bg-slate-800/50 p-5 shadow-sm">
+    <h3 class="text-base font-semibold text-white mb-3">Contact us</h3>
+    <div class="space-y-2 text-slate-400 leading-relaxed">
+      <p><span class="font-medium text-slate-200">Email:</span> support@agrosphere.com</p>
+      <p><span class="font-medium text-slate-200">Phone:</span> +250 788 000 000</p>
+      <p><span class="font-medium text-slate-200">Location:</span> Kigali, Rwanda</p>
+    </div>
+  </div>
 </div>
 </div>
 </footer>
