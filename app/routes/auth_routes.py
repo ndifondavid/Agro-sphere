@@ -18,14 +18,11 @@ def login():
 
         user = User.query.filter_by(email=email).first()
         if user and user.check_password(password):
-            if user.is_buyer():
-                logout_user()
-                flash("Buyer access is restricted. Please use a farmer or admin account.", "warning")
-                return redirect(url_for("public.landing"))
-
             login_user(user)
             flash("Login successful", "success")
 
+            if user.is_buyer():
+                return redirect(url_for("marketplace.browse"))
             if user.is_farmer():
                 return redirect(url_for("dashboard.index"))
             if user.is_admin():

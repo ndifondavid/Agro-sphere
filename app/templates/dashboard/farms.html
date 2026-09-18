@@ -52,7 +52,10 @@
             <h1>Farms Management</h1>
             <p class="farm-subtitle">Monitor and manage all your farms in one place • {{ farms|length }} total farms • 210.8 ha managed</p>
           </div>
-          <a class="add-farm-btn" href="{{ url_for('farm.create_farm') }}">+ Add Farm</a>
+          <div class="farm-page-actions">
+            <a class="market-listing-btn" href="{{ url_for('marketplace.create_listing') }}">List Crop to Market</a>
+            <a class="add-farm-btn" href="{{ url_for('farm.create_farm') }}">+ Add Farm</a>
+          </div>
         </div>
 
         <div class="farm-search-row">
