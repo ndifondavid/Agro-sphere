@@ -5,9 +5,11 @@ Crop Marketplace routes (FR-6.x; SDS Section 6.4 - Marketplace Browse Screen).
 follow-on step after a reservation, not mandatory (FR-7.1).
 No payment fields exist on Listing/Reservation (Design Constraint, Section 8).
 """
+import os
+import uuid
 from datetime import datetime
 
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
 from flask_login import login_required, current_user
 
 from app.extensions import db
@@ -16,6 +18,7 @@ from app.models.farm import Farm
 from app.models.listing import Listing, STATUS_AVAILABLE, STATUS_RESERVED
 from app.models.reservation import Reservation
 from app.utils.decorators import roles_required
+from app.utils.validators import allowed_image_file, is_within_max_size
 
 marketplace_bp = Blueprint("marketplace", __name__, url_prefix="/marketplace")
 
@@ -50,6 +53,7 @@ def create_listing():
         harvest_date = request.form.get("harvest_date")
         quantity = request.form.get("quantity")
         price = request.form.get("price")
+        photo = request.files.get("photo")
 
         if not all([farm_id, crop_id, harvest_date, quantity, price]):
             flash("All listing fields are required.", "danger")
@@ -67,13 +71,32 @@ def create_listing():
             flash("Choose a valid farm and crop.", "danger")
             return render_template("marketplace/listing_form.html", farms=farms)
 
+        image_path = None
+        if photo and photo.filename:
+            allowed_ext = current_app.config["ALLOWED_IMAGE_EXTENSIONS"]
+            if not allowed_image_file(photo.filename, allowed_ext):
+                flash("Unsupported file type. Please upload a PNG or JPG image.", "danger")
+                return render_template("marketplace/listing_form.html", farms=farms)
+
+            if not is_within_max_size(photo, current_app.config["MAX_CONTENT_LENGTH"]):
+                flash("Image is too large.", "danger")
+                return render_template("marketplace/listing_form.html", farms=farms)
+
+            upload_dir = current_app.config["UPLOAD_FOLDER"]
+            os.makedirs(upload_dir, exist_ok=True)
+            ext = photo.filename.rsplit(".", 1)[1].lower()
+            stored_name = f"{uuid.uuid4().hex}.{ext}"
+            stored_path = os.path.join(upload_dir, stored_name)
+            photo.save(stored_path)
+            image_path = os.path.join("images", "uploads", stored_name)
+
         listing = Listing(
             farmer_id=current_user.id,
             crop_type=crop.crop_type,
             harvest_date=harvest_date_obj,
             quantity=float(quantity),
             price=float(price),
-            image_path=request.form.get("image_path") or None,
+            image_path=image_path,
         )
         db.session.add(listing)
         db.session.commit()

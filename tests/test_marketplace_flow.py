@@ -1,7 +1,10 @@
+import io
+
 from app import create_app
 from app.extensions import db
 from app.models.crop import Crop
 from app.models.farm import Farm
+from app.models.listing import Listing
 from app.models.user import User
 
 
@@ -58,12 +61,17 @@ def test_farmer_can_create_market_listing_visible_to_buyers():
                 "quantity": "120",
                 "price": "500",
                 "harvest_date": "2024-10-15",
+                "photo": (io.BytesIO(b"fake image data"), "tomato.jpg"),
             },
             follow_redirects=True,
         )
 
         assert response.status_code == 200
         assert b"Listing created" in response.data or b"Tomatoes" in response.data
+
+        saved_listing = Listing.query.order_by(Listing.id.desc()).first()
+        assert saved_listing is not None
+        assert saved_listing.image_path and saved_listing.image_path.endswith(".jpg")
 
     with app.test_client() as buyer_client:
         buyer_login = buyer_client.post(
