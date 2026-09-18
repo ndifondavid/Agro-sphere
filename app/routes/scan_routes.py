@@ -26,6 +26,9 @@ scan_bp = Blueprint("scan", __name__, url_prefix="/scan")
 @login_required
 @roles_required("farmer")
 def scan_leaf():
+    if current_user.is_buyer():
+        flash("Buyer accounts do not have access to scan tools.", "warning")
+        return redirect(url_for("public.landing"))
     farms = current_user.farms
     crops = [c for f in farms for c in f.crops]
 

@@ -20,6 +20,9 @@ farm_bp = Blueprint("farm", __name__, url_prefix="/farms")
 @login_required
 @roles_required("farmer")
 def list_farms():
+    if current_user.is_buyer():
+        flash("Buyer accounts do not have access to the farms dashboard.", "warning")
+        return redirect(url_for("public.landing"))
     farms = Farm.query.filter_by(owner_id=current_user.id).all()
     farm_cards = []
     for farm in farms:

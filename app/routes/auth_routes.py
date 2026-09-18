@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import login_user
+from flask_login import login_user, logout_user
 
 from app.models.user import User
 
@@ -18,6 +18,11 @@ def login():
 
         user = User.query.filter_by(email=email).first()
         if user and user.check_password(password):
+            if user.is_buyer():
+                logout_user()
+                flash("Buyer access is restricted. Please use a farmer or admin account.", "warning")
+                return redirect(url_for("public.landing"))
+
             login_user(user)
             flash("Login successful", "success")
 

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AgroSphere | Settings</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+  </head>
+  <body class="dashboard-body">
+    <div class="dashboard-shell">
+      <header class="topbar">
+        <div class="brand" aria-label="CropCare AI brand">
+          <div class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+              <path d="M31.8 7.5c5.8 7.3 4 16.8-2.3 22.3-4.8 4.2-10.4 6.1-14.2 10.5-4.8 5.8-4.7 15.2 1.4 20.4 7.3 6.1 18.5 5.1 24.7-2.4 6.1-7.3 5.9-17.4 1.2-24.4C37.3 25.9 31.6 17.6 31.8 7.5Z" fill="rgba(255,255,255,0.18)"/>
+              <path d="M32 8c3.3 4.9 2.3 10.8-1.8 15.1-4.2 4.4-10.1 6.1-15.6 9.3-5.8 3.5-9.1 9.8-8.7 16.3.4 7.2 6.3 13.1 13.5 13.1 7.7 0 13.8-6.1 13.8-13.8 0-9.4-7.7-16.8-13.5-19.5C22.3 23.8 17.7 18.5 17.7 12.8c0-1.7.3-3.3.9-4.8 2 3.2 5 5.6 8.6 7.1 4.7 1.9 10.1 2.2 14.3.7L32 8Z" fill="#E8FFF2"/>
+              <path d="M41.8 19.8c5.7 1.8 8.7 7.7 7.6 13.4-1 5.4-5.9 9.7-11.6 10-4.7.2-9.4-2.1-11.5-6.1-2.7-5.1-1.7-12.1 3.2-15.8 3.1-2.4 7.6-3 12.3-1.5Z" fill="#D9F9E7"/>
+              <path d="M22.4 23.2c2.8-4 7.3-6.6 12.3-7.3" stroke="#0E6B4E" stroke-width="3" stroke-linecap="round"/>
+              <path d="M19.5 35.2c7.5-3.3 15.9-3.3 23.3 0" stroke="#0E6B4E" stroke-width="3" stroke-linecap="round"/>
+              <path d="M26.3 46.8c5.4 4.5 12.2 4.6 17.7 0" stroke="#0E6B4E" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="49.2" cy="22.2" r="4.5" fill="#E5FFF0"/>
+              <circle cx="20.3" cy="40.8" r="3.4" fill="#E5FFF0"/>
+              <circle cx="39.1" cy="48.7" r="2.8" fill="#E5FFF0"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <span class="brand-title">AgroSphere</span>
+            <small>Smart Plant Disease Detection Platform</small>
+          </div>
+        </div>
+
+        <div class="top-actions">
+          <button class="icon-button" type="button" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 10-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5m6 0a3 3 0 0 1-6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="notification-dot">3</span>
+          </button>
+
+          <div class="profile-pill" aria-label="Profile">
+            <div class="profile-frame">
+              <span>{{ current_user.name[0].upper() }}</span>
+            </div>
+            <span>{{ current_user.name }}</span>
+          </div>
+
+          <a class="new-scan-btn" href="{{ url_for('scan.scan_leaf') }}" style="display:inline-flex;align-items:center;justify-content:center;">+ New Scan</a>
+        </div>
+      </header>
+
+      <div class="content-grid">
+        <aside class="sidebar" aria-label="Sidebar navigation">
+          <nav class="menu">
+            <a href="{{ url_for('dashboard.index') }}" class="menu-item">
+              <span class="menu-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 12.2 12 5l7.5 7.2M7 10.8V19h10v-8.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              Overview
+            </a>
+            <a href="{{ url_for('farm.list_farms') }}" class="menu-item">
+              <span class="menu-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 10.5 12 3l9 7.5V19a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1v-8.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              Farms
+            </a>
+            <a href="{{ url_for('scan.scan_leaf') }}" class="menu-item">
+              <span class="menu-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 7.5h16M4 12h8m-8 4.5h12M18 12.5l2.5 2.5m-2.5 0 2.5-2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              Scan
+            </a>
+            <a href="{{ url_for('dashboard.notifications') }}" class="menu-item">
+              <span class="menu-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3.5a8.5 8.5 0 0 1 8.5 8.5v5.5a1 1 0 0 1-1 1H4.5a1 1 0 0 1-1-1V12A8.5 8.5 0 0 1 12 3.5Zm0 0v5m-3.5-2.5h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              Notifications
+            </a>
+            <a href="{{ url_for('dashboard.settings') }}" class="menu-item active">
+              <span class="menu-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v4m0 10v4m9-9h-4M7 12H3m16.2 6.2-2.8-2.8M9.6 9.6 6.8 6.8m0 10.4 2.8-2.8m6.8-6.8-2.8 2.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              </span>
+              Settings
+            </a>
+            <a href="{{ url_for('dashboard.help_page') }}" class="menu-item">
+              <span class="menu-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9.1 9.2a3 3 0 1 1 5.8 1.4c-.9 1.4-2.8 1.9-3.8 3.3-.4.6-.4 1.1-.4 1.9M12 17.5h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              Help
+            </a>
+          </nav>
+
+          <div class="plan-box">
+            <span>Plan: Pro • 45 farms</span>
+            <button type="button">Upgrade</button>
+          </div>
+        </aside>
+
+        <main class="main-panel settings-content">
+          <div class="settings-header-row">
+            <div>
+              <h1>Settings</h1>
+              <p>Manage your account, farm, and notification preferences</p>
+            </div>
+            <button class="primary-green-button" type="button">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12.5 9.5 17 19 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Save changes
+            </button>
+          </div>
+
+          <div class="settings-tabs" aria-label="Settings sections">
+            <button type="button" class="settings-tab active">Profile</button>
+            <button type="button" class="settings-tab">Security</button>
+            <a href="{{ url_for('dashboard.notifications') }}" class="settings-tab settings-tab-link">Notifications</a>
+            <button type="button" class="settings-tab">Farm Preferences</button>
+          </div>
+
+          <section class="settings-card">
+            <div class="settings-section-header">
+              <h2>Profile</h2>
+              <p>Update your personal information and profile details</p>
+            </div>
+
+            <div class="profile-layout">
+              <div class="profile-photo-block">
+                <div class="profile-photo">{{ current_user.name[0].upper() }}</div>
+                <div class="upload-copy">
+                  <h3>Upload photo</h3>
+                  <p>JPG, PNG or GIF. Max 2MB.</p>
+                </div>
+                <div class="photo-actions">
+                  <button type="button" class="secondary-action">Upload new</button>
+                  <button type="button" class="secondary-action">Remove</button>
+                </div>
+              </div>
+
+              <div class="settings-form-grid">
+                <label class="form-field">
+                  <span>Full name</span>
+                  <input type="text" value="{{ current_user.name }}" />
+                </label>
+
+                <label class="form-field">
+                  <span>Email address</span>
+                  <input type="email" value="{{ current_user.email }}" />
+                </label>
+
+                <label class="form-field">
+                  <span>Phone number</span>
+                  <input type="tel" value="+1 (415) 555-0192" />
+                </label>
+
+                <label class="form-field">
+                  <span>Farm location</span>
+                  <input type="text" value="Napa Valley, California, USA" />
+                </label>
+
+                <label class="form-field form-field-wide">
+                  <span>Language</span>
+                  <select>
+                    <option selected>English</option>
+                    <option>Spanish</option>
+                    <option>French</option>
+                    <option>Pidgin</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+          </section>
+
+          <div class="settings-footer">
+            <div class="warn-banner">
+              <span class="info-badge">i</span>
+              <p>Your profile is private and only visible to your farm team members.</p>
+            </div>
+            <div class="footer-actions">
+              <button type="button" class="secondary-button">Cancel</button>
+              <button type="button" class="primary-green-button">Save changes</button>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>
