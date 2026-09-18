@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AgroSphere | Help & Support</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+  </head>
+  <body class="dashboard-body help-page-body">
+    <div class="help-shell">
+      <header class="help-topbar">
+        <div class="help-brand">
+          <div class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+              <path d="M31.8 7.5c5.8 7.3 4 16.8-2.3 22.3-4.8 4.2-10.4 6.1-14.2 10.5-4.8 5.8-4.7 15.2 1.4 20.4 7.3 6.1 18.5 5.1 24.7-2.4 6.1-7.3 5.9-17.4 1.2-24.4C37.3 25.9 31.6 17.6 31.8 7.5Z" fill="rgba(255,255,255,0.18)"/>
+              <path d="M32 8c3.3 4.9 2.3 10.8-1.8 15.1-4.2 4.4-10.1 6.1-15.6 9.3-5.8 3.5-9.1 9.8-8.7 16.3.4 7.2 6.3 13.1 13.5 13.1 7.7 0 13.8-6.1 13.8-13.8 0-9.4-7.7-16.8-13.5-19.5C22.3 23.8 17.7 18.5 17.7 12.8c0-1.7.3-3.3.9-4.8 2 3.2 5 5.6 8.6 7.1 4.7 1.9 10.1 2.2 14.3.7L32 8Z" fill="#E8FFF2"/>
+              <path d="M41.8 19.8c5.7 1.8 8.7 7.7 7.6 13.4-1 5.4-5.9 9.7-11.6 10-4.7.2-9.4-2.1-11.5-6.1-2.7-5.1-1.7-12.1 3.2-15.8 3.1-2.4 7.6-3 12.3-1.5Z" fill="#D9F9E7"/>
+              <path d="M22.4 23.2c2.8-4 7.3-6.6 12.3-7.3" stroke="#0E6B4E" stroke-width="3" stroke-linecap="round"/>
+              <path d="M19.5 35.2c7.5-3.3 15.9-3.3 23.3 0" stroke="#0E6B4E" stroke-width="3" stroke-linecap="round"/>
+              <path d="M26.3 46.8c5.4 4.5 12.2 4.6 17.7 0" stroke="#0E6B4E" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="49.2" cy="22.2" r="4.5" fill="#E5FFF0"/>
+              <circle cx="20.3" cy="40.8" r="3.4" fill="#E5FFF0"/>
+              <circle cx="39.1" cy="48.7" r="2.8" fill="#E5FFF0"/>
+            </svg>
+          </div>
+          <div class="help-brand-text">AgroSphere</div>
+        </div>
+
+        <div class="help-top-actions">
+          <button class="help-icon-button" type="button" aria-label="Search">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="m16 16 4 4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
+          </button>
+          <button class="help-icon-button" type="button" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 10-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5m6 0a3 3 0 0 1-6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="notification-dot">1</span>
+          </button>
+          <div class="help-profile">
+            <div class="help-profile-badge">AG</div>
+            <span>Alex Grower</span>
+            <svg class="caret" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+      </header>
+
+      <div class="help-layout">
+        <aside class="help-sidebar">
+          <nav class="help-menu">
+            <a href="{{ url_for('dashboard.index') }}" class="help-menu-item">
+              <span class="help-menu-icon">
+                <svg viewBox="0 0 24 24"><path d="M4.5 12.2 12 5l7.5 7.2M7 10.8V19h10v-8.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              Dashboard
+            </a>
+            <a href="#" class="help-menu-item">
+              <span class="help-menu-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 21s-7-4.35-7-10a4 4 0 0 1 7-2.65A4 4 0 0 1 19 11c0 5.65-7 10-7 10Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              Fields
+            </a>
+            <a href="#" class="help-menu-item">
+              <span class="help-menu-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 3.5c-2.3 2.4-4 5.4-4 8.4a4 4 0 1 0 8 0c0-3-1.7-6-4-8.4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              Crops
+            </a>
+            <a href="#" class="help-menu-item">
+              <span class="help-menu-icon">
+                <svg viewBox="0 0 24 24"><path d="M4 7.5h16M4 12h8m-8 4.5h12M18 12.5l2.5 2.5m-2.5 0 2.5-2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              Scans
+            </a>
+            <a href="#" class="help-menu-item">
+              <span class="help-menu-icon">
+                <svg viewBox="0 0 24 24"><path d="M7 18V9m5 9V5m5 13v-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </span>
+              Analytics
+            </a>
+            <a href="{{ url_for('dashboard.settings') }}" class="help-menu-item">
+              <span class="help-menu-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 3v4m0 10v4m9-9h-4M7 12H3m16.2 6.2-2.8-2.8M9.6 9.6 6.8 6.8m0 10.4 2.8-2.8m6.8-6.8-2.8 2.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              </span>
+              Settings
+            </a>
+            <a href="{{ url_for('dashboard.help_page') }}" class="help-menu-item active">
+              <span class="help-menu-icon">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9.1 9.2a3 3 0 1 1 5.8 1.4c-.9 1.4-2.8 1.9-3.8 3.3-.4.6-.4 1.1-.4 1.9M12 17.5h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              Help & Support
+            </a>
+          </nav>
+
+          <div class="help-user-card">
+            <div class="help-avatar">JD</div>
+            <div class="help-user-meta">
+              <div class="help-user-name">Jordan Davis</div>
+              <div class="help-user-email">jordan@agrosphere.ai</div>
+            </div>
+            <span class="help-menu-more">•••</span>
+          </div>
+        </aside>
+
+        <main class="help-main">
+          <div class="help-header-row">
+            <h1>Help &amp; Support</h1>
+            <div class="help-header-actions">
+              <button type="button" class="help-inline-btn">
+                <svg viewBox="0 0 24 24"><path d="M12 5.5A6.5 6.5 0 0 0 5.5 12v2.5a1.5 1.5 0 0 0 1.5 1.5h1.2l1.6 2.3a1 1 0 0 0 1.6 0l1.6-2.3h1.1a1.5 1.5 0 0 0 1.5-1.5V12A6.5 6.5 0 0 0 12 5.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                View Status
+              </button>
+              <button type="button" class="help-primary-btn">
+                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                New Support Ticket
+              </button>
+            </div>
+          </div>
+
+          <p class="help-subtitle">Find answers, get help, and learn how to make the most of AgroSphere</p>
+
+          <div class="help-search">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <input type="text" value="Search for help... e.g. \"how to export scan data\"" aria-label="Search help" />
+          </div>
+
+          <div class="help-grid">
+            <div class="help-panel qa-panel">
+              <div class="section-title-row">
+                <span class="section-badge">?</span>
+                <h2>Frequently Asked Questions</h2>
+              </div>
+
+              <div class="faq-item faq-featured">
+                <div class="faq-question-row">
+                  <h3>How do I upload a new crop scan?</h3>
+                  <span class="chevron">⌄</span>
+                </div>
+                <p>
+                  Go to the Scans page from the sidebar, then click the <strong>+ New Scan</strong>
+                  button on the top right, upload an image, drag and drop, or connect a device.
+                  Processing usually takes 1–3 minutes and results will appear in your dashboard.
+                </p>
+              </div>
+
+              <div class="faq-item faq-collapsed">
+                <div class="faq-question-row">
+                  <h3>Why is my scan processing taking longer than usual?</h3>
+                  <span class="chevron">›</span>
+                </div>
+              </div>
+
+              <div class="faq-item faq-collapsed">
+                <div class="faq-question-row">
+                  <h3>How do I invite team members to my workspace?</h3>
+                  <span class="chevron">›</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="help-panel videos-panel">
+              <div class="section-title-row">
+                <span class="section-badge video-badge">▶</span>
+                <h2>Video Tutorials</h2>
+              </div>
+
+              <div class="video-item">
+                <div class="video-thumb thumb-one"></div>
+                <div class="video-copy">
+                  <h3>Getting Started with AgroSphere</h3>
+                  <p>5:24 • Basics &amp; Overview</p>
+                </div>
+              </div>
+
+              <div class="video-item">
+                <div class="video-thumb thumb-two"></div>
+                <div class="video-copy">
+                  <h3>Crop Disease Detection Walkthrough</h3>
+                  <p>8:12 • Advanced Features</p>
+                </div>
+              </div>
+
+              <div class="video-item">
+                <div class="video-thumb thumb-three"></div>
+                <div class="video-copy">
+                  <h3>Exporting Analytics Reports</h3>
+                  <p>4:37 • Data &amp; Exports</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="help-panel support-panel">
+              <div class="section-title-row">
+                <span class="section-badge support-badge">✉</span>
+                <h2>Contact Support</h2>
+              </div>
+
+              <form class="support-form">
+                <div class="support-field-row">
+                  <label>
+                    <span>Name</span>
+                    <input type="text" value="Jordan Davis" />
+                  </label>
+                  <label>
+                    <span>Email</span>
+                    <input type="email" value="you@company.com" />
+                  </label>
+                </div>
+
+                <label>
+                  <span>Subject</span>
+                  <input type="text" value="What do you need help with?" />
+                </label>
+
+                <label>
+                  <span>Message</span>
+                  <textarea>Describe your issue in detail... Our team will get back to you as soon as possible.</textarea>
+                </label>
+
+                <button type="button" class="submit-btn">
+                  <svg viewBox="0 0 24 24"><path d="M4 12.5 18 4l-3.4 15-4.3-5.5L4 12.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Submit Request
+                </button>
+              </form>
+
+              <p class="support-note">We typically respond within 2 hours during business hours • Mon–Fri, 9am–6pm UTC</p>
+            </div>
+
+            <div class="help-panel whats-app-panel">
+              <div class="section-title-row">
+                <span class="section-badge whatsapp-badge">✆</span>
+                <h2>WhatsApp Support</h2>
+              </div>
+
+              <div class="whatsapp-row">
+                <div class="whatsapp-pill">
+                  <span class="whatsapp-icon">✆</span>
+                  <span>Chat with our team instantly on WhatsApp</span>
+                </div>
+                <div class="whatsapp-actions">
+                  <div class="small-number">+1 (555) 123-4567</div>
+                  <button type="button" class="whatsapp-button">Chat now on WhatsApp</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="help-panel resources-panel">
+              <div class="section-title-row">
+                <span class="section-badge docs-badge">▣</span>
+                <h2>Documentation &amp; Resources</h2>
+              </div>
+
+              <ul class="resource-list">
+                <li>AgroSphere Docs</li>
+                <li>API Reference</li>
+                <li>Changelog</li>
+                <li>Community Forum</li>
+              </ul>
+            </div>
+
+            <div class="help-panel tip-panel">
+              <div class="section-title-row">
+                <span class="section-badge tip-badge">i</span>
+                <h2>Tip: Press ? to open keyboard shortcuts</h2>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>
