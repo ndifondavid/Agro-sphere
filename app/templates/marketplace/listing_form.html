@@ -33,7 +33,7 @@
         </div>
         <p class="market-form-subtitle">Select the crop from your farm to list it on the marketplace.</p>
 
-        <form method="post" class="listing-form">
+        <form method="post" enctype="multipart/form-data" class="listing-form">
           <div class="field-block">
             <label for="farm_id">Select Farm</label>
             <select id="farm_id" name="farm_id" required>
@@ -80,8 +80,8 @@
           </div>
 
           <div class="field-block upload-box">
-            <label for="image_path">Upload photos</label>
-            <input id="image_path" name="image_path" type="text" placeholder="Optional photo reference" />
+            <label for="photo">Upload photos</label>
+            <input id="photo" name="photo" type="file" accept="image/png,image/jpeg" />
           </div>
 
           <div class="alert-banner">
