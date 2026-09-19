@@ -17,8 +17,11 @@
       }
       h1 { margin: 0 0 8px; color: #143a2d; font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -0.05em; }
       p { color: #5d6e6a; margin: 0 0 22px; }
+      .required-hint { color: #5d6e6a; font-size: 0.9rem; font-weight: 600; margin: -8px 0 18px; }
       form { display: grid; gap: 18px; }
       label { display: grid; gap: 8px; color: #21473e; font-weight: 700; }
+      .label-text { display: inline-flex; align-items: center; gap: 6px; }
+      .required-star { color: #c94242; }
       input { border: 1px solid #d8e1dc; border-radius: 12px; padding: 14px 16px; font-size: 1rem; background: #f9faf9; }
       .file-picker { display: grid; gap: 8px; }
       .file-picker input[type="file"] { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
@@ -33,7 +36,7 @@
   </head>
   <body>
     <div class="topbar-strip" style="max-width: 760px; margin: 24px auto 0; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 0 6px; font-weight: 700; color: #1c4b3d;">
-      <a href="{{ url_for('dashboard.index') }}" style="color: #0f6a4e; text-decoration: none;">Dashboard</a>
+      <a href="{{ url_for('dashboard.index') }}" style="color: #0f6a4e; text-decoration: none;">Overview</a>
       <span>›</span>
       <a href="{{ url_for('farm.list_farms') }}" style="color: #0f6a4e; text-decoration: none;">Farms</a>
     </div>
@@ -41,10 +44,11 @@
     <div class="section-shell">
       <h1>Add Crop</h1>
       <p>Attach a crop to your farm so that scan results can be saved and tracked properly.</p>
+      <div class="required-hint">Required fields are marked with *</div>
 
       <form method="POST" action="{{ url_for('farm.create_crop', farm_id=farm.id) }}" enctype="multipart/form-data">
         <label>
-          Crop Type
+          <span class="label-text"><span>Crop Type</span><span class="required-star">*</span></span>
           <input type="text" name="crop_type" placeholder="e.g. Tomatoes" required />
         </label>
 

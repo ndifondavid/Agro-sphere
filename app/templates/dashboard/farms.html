@@ -57,7 +57,7 @@
             <span>{{ current_user.name }}</span>
           </a>
 
-          <a class="dashboard-mini-btn" href="{{ url_for('dashboard.index') }}">Dashboard</a>
+          <a class="dashboard-mini-btn" href="{{ url_for('dashboard.index') }}">Overview</a>
           <a class="new-scan-btn" href="{{ url_for('scan.scan_leaf') }}" style="display:inline-flex;align-items:center;justify-content:center;">+ New Scan</a>
         </div>
       </header>
@@ -68,10 +68,11 @@
             <h1>Farms Management</h1>
             <p class="farm-subtitle">Monitor and manage all your farms in one place • {{ farms|length }} total farms • {{ total_area|round(1) }} ha managed</p>
           </div>
-          <div class="farm-page-actions">
-            <a class="market-listing-btn" href="{{ url_for('marketplace.create_listing') }}">List Crop to Market</a>
-            <a class="add-farm-btn" href="{{ url_for('farm.create_farm') }}">+ Add Farm</a>
-          </div>
+        </div>
+
+        <div class="farm-page-actions farm-actions-row">
+          <a class="market-listing-btn" href="{{ url_for('marketplace.create_listing') }}">List Crop to Market</a>
+          <a class="add-farm-btn" href="{{ url_for('farm.create_farm') }}">+ Add Farm</a>
         </div>
 
         <div class="farm-search-row">
@@ -137,11 +138,54 @@
           </article>
         </div>
 
+        <section class="farm-setup-guide" aria-label="Farm setup guide">
+          <div class="guide-header">
+            <h2>Getting started</h2>
+            <span>Set up your farm in 5 quick steps</span>
+          </div>
+          <div class="guide-row">
+            <div class="guide-step-card">
+              <span class="step-num">1</span>
+              <div>
+                <strong>Create farm</strong>
+                <p>Add your farm name and location.</p>
+              </div>
+            </div>
+            <div class="guide-step-card">
+              <span class="step-num">2</span>
+              <div>
+                <strong>Add crop</strong>
+                <p>Record the crop type and details.</p>
+              </div>
+            </div>
+            <div class="guide-step-card">
+              <span class="step-num">3</span>
+              <div>
+                <strong>Upload photo</strong>
+                <p>Attach a clear crop image.</p>
+              </div>
+            </div>
+            <div class="guide-step-card">
+              <span class="step-num">4</span>
+              <div>
+                <strong>Run diagnosis</strong>
+                <p>Let the AI analyze the plant.</p>
+              </div>
+            </div>
+            <div class="guide-step-card">
+              <span class="step-num">5</span>
+              <div>
+                <strong>Manage treatment</strong>
+                <p>Review next steps and actions.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {% if not farms %}
           <div class="empty-farms-card">
             <h2>No farms yet</h2>
-            <p>Create your first farm to begin tracking crop health and scan history.</p>
-            <a href="{{ url_for('farm.create_farm') }}" class="add-farm-btn large">Create a Farm</a>
+            <p>Use the Create Farm button above to begin tracking crop health and scan history.</p>
           </div>
         {% else %}
           <div class="farm-cards-grid" id="farmCardsGrid">
