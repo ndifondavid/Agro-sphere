@@ -30,19 +30,23 @@
         </div>
 
         <div class="top-actions">
-          <button class="icon-button" type="button" aria-label="Notifications">
+          <a class="icon-button" href="{{ url_for('dashboard.notifications') }}" aria-label="Notifications">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 10-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5m6 0a3 3 0 0 1-6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <span class="notification-dot">3</span>
-          </button>
+          </a>
 
-          <div class="profile-pill" aria-label="Profile">
+          <a class="profile-pill" href="{{ url_for('dashboard.settings') }}" aria-label="Profile">
             <div class="profile-frame">
-              <img src="{{ url_for('static', filename='images/profile-avatar.svg') }}" alt="Profile picture" />
+                {% if current_user.profile_image_path %}
+                  <img src="{{ url_for('static', filename=current_user.profile_image_path) }}" alt="Profile picture" />
+                {% else %}
+                  <img src="{{ url_for('static', filename='images/profile-avatar.svg') }}" alt="Profile picture" />
+                {% endif %}
             </div>
             <span>{{ current_user.name }}</span>
-          </div>
+          </a>
 
           <a class="new-scan-btn" href="{{ url_for('scan.scan_leaf') }}" style="display:inline-flex;align-items:center;justify-content:center;">+ New Scan</a>
         </div>
@@ -51,7 +55,7 @@
       <div class="content-grid">
         <aside class="sidebar" aria-label="Sidebar navigation">
           <nav class="menu">
-            <a href="#" class="menu-item active">
+            <a href="{{ url_for('dashboard.index') }}" class="menu-item active">
               <span class="menu-icon">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 12.2 12 5l7.5 7.2M7 10.8V19h10v-8.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </span>
@@ -92,6 +96,7 @@
           <div class="plan-box">
             <span>Plan: Pro • 45 farms</span>
             <button type="button">Upgrade</button>
+            <a class="logout-btn" href="{{ url_for('auth.logout') }}">Log out</a>
           </div>
         </aside>
 
@@ -99,9 +104,9 @@
           <div class="panel-header">
             <h1>Farm Overview</h1>
             <div class="filters">
-              <button type="button" class="filter-btn">All Farms</button>
-              <button type="button" class="filter-btn">Last 7 days</button>
-              <button type="button" class="icon-btn-mini" aria-label="Toggle view">
+              <button type="button" class="filter-btn" id="dashboardFarmFilter">All Farms</button>
+              <button type="button" class="filter-btn" id="dashboardDateFilter">Last 7 days</button>
+              <button type="button" class="icon-btn-mini" id="dashboardViewToggle" aria-label="Toggle view" title="Toggle compact view">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v18M3 12h18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
               </button>
             </div>
@@ -115,8 +120,8 @@
                 </span>
                 <span>Total Crops</span>
               </div>
-              <div class="stat-value">12,450</div>
-              <div class="stat-meta positive">+342 this week <span>~ +2.8%</span></div>
+              <div class="stat-value">{{ total_crops }}</div>
+              <div class="stat-meta positive">{{ 'New crop added' if total_crops == 0 else 'Live crop count' }}<span> {{ '0%' if total_crops == 0 else 'updated' }}</span></div>
             </article>
 
             <article class="stat-card">
@@ -126,8 +131,8 @@
                 </span>
                 <span>Disease Detections</span>
               </div>
-              <div class="stat-value">136</div>
-              <div class="stat-meta negative">-12 vs last week <span>~ -8.1%</span></div>
+              <div class="stat-value">{{ disease_count }}</div>
+              <div class="stat-meta negative">{{ 'No detections yet' if disease_count == 0 else 'Latest scan result' }} <span>{{ '' if disease_count == 0 else 'updated' }}</span></div>
             </article>
 
             <article class="stat-card">
@@ -137,8 +142,8 @@
                 </span>
                 <span>Healthy Plants</span>
               </div>
-              <div class="stat-value">11,498</div>
-              <div class="stat-meta success">92.3% healthy</div>
+              <div class="stat-value">{{ healthy_count }}</div>
+              <div class="stat-meta success">{{ healthy_percentage }}% healthy</div>
             </article>
 
             <article class="stat-card">
@@ -148,8 +153,8 @@
                 </span>
                 <span>Diseased Plants</span>
               </div>
-              <div class="stat-value">952</div>
-              <div class="stat-meta warning">7.7% detected</div>
+              <div class="stat-value">{{ diseased_percentage }}</div>
+              <div class="stat-meta warning">{{ diseased_percentage }}% detected</div>
             </article>
           </div>
 
@@ -159,28 +164,28 @@
               <div class="donut-layout">
                 <div class="donut-ring" aria-label="Healthy vs diseased percentage">
                   <div class="donut-center">
-                    <span>92%</span>
+                    <span>{{ healthy_percentage if total_crops else 0 }}%</span>
                   </div>
                 </div>
                 <div class="legend-block">
                   <div class="legend-row">
                     <span class="legend-dot green"></span>
-                    <span class="legend-text"><strong>Healthy</strong> <em>92.3% • 11,498 plants</em></span>
+                    <span class="legend-text"><strong>Healthy</strong> <em>{{ healthy_percentage if total_crops else 0 }}% • {{ healthy_count }} plants</em></span>
                   </div>
                   <div class="legend-row">
                     <span class="legend-dot amber"></span>
-                    <span class="legend-text"><strong>Diseased</strong> <em>7.7% • 952 plants</em></span>
+                    <span class="legend-text"><strong>Diseased</strong> <em>{{ diseased_percentage if total_crops else 0 }}% • {{ disease_count }} plants</em></span>
                   </div>
                 </div>
               </div>
-              <div class="chart-caption">Detection accuracy 96.4% • Last model update: 2 days ago</div>
+              <div class="chart-caption">Farm data updates as you add new crops and scans.</div>
             </article>
 
             <article class="card trend-card">
               <h2>Detection Trend • Last 7 Days</h2>
               <div class="trend-surface" aria-label="Detection trend chart placeholder">
                 <div class="trend-grid"></div>
-                <div class="trend-empty-label">Overall -18%<span>decline in detections this week</span></div>
+                <div class="trend-empty-label">Overall {{ 0 if disease_count == 0 else disease_count }}<span>{{ 'detections recorded so far' if disease_count == 0 else 'detected this period' }}</span></div>
                 <div class="trend-days">
                   <span>Mon</span>
                   <span>Tue</span>
@@ -198,62 +203,41 @@
             <article class="card recent-card">
               <div class="section-head">
                 <h2>Recent Scans</h2>
-                <a href="#">View all →</a>
+                <a href="{{ url_for('scan.history') }}">View all →</a>
               </div>
-              <ul class="scan-list">
-                <li>
-                  <div class="scan-item">
-                    <span class="scan-icon scan-icon--green">🌱</span>
-                    <div class="scan-copy">
-                      <strong>Field A-12 • Tomato Crop</strong>
-                      <span>Early blight detected • 10:12 AM</span>
-                    </div>
-                  </div>
-                  <span class="scan-tag warning">Diseased</span>
-                </li>
-                <li>
-                  <div class="scan-item">
-                    <span class="scan-icon scan-icon--green">🌱</span>
-                    <div class="scan-copy">
-                      <strong>Field B-05 • Lettuce Crop</strong>
-                      <span>Healthy • 09:45 AM</span>
-                    </div>
-                  </div>
-                  <span class="scan-tag success">Healthy</span>
-                </li>
-                <li>
-                  <div class="scan-item">
-                    <span class="scan-icon scan-icon--green">🌱</span>
-                    <div class="scan-copy">
-                      <strong>Field C-03 • Corn Crop</strong>
-                      <span>Powdery mildew detected • 08:22 AM</span>
-                    </div>
-                  </div>
-                  <span class="scan-tag warning">Diseased</span>
-                </li>
-                <li>
-                  <div class="scan-item">
-                    <span class="scan-icon scan-icon--green">🌱</span>
-                    <div class="scan-copy">
-                      <strong>Field D-01 • Wheat Crop</strong>
-                      <span>Healthy • Yestarday 17:05</span>
-                    </div>
-                  </div>
-                  <span class="scan-tag success">Healthy</span>
-                </li>
-              </ul>
+              {% if not recent_scans %}
+                <div class="buyer-empty-state" style="margin-top: 12px;">
+                  <h3>No scans yet</h3>
+                  <p>Your latest crop scans will appear here once you upload and analyze a plant photo.</p>
+                </div>
+              {% else %}
+                <ul class="scan-list">
+                  {% for scan in recent_scans[:4] %}
+                    <li>
+                      <div class="scan-item">
+                        <span class="scan-icon scan-icon--green">🌱</span>
+                        <div class="scan-copy">
+                          <strong>{{ scan.crop.crop_type }} • {{ scan.crop.farm.name }}</strong>
+                          <span>{{ scan.predicted_disease }} • {{ scan.timestamp.strftime('%b %d, %Y') }}</span>
+                        </div>
+                      </div>
+                      <span class="scan-tag {{ 'warning' if 'disease' in scan.predicted_disease.lower() else 'success' }}">{{ 'Diseased' if 'disease' in scan.predicted_disease.lower() else 'Healthy' }}</span>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
             </article>
 
             <aside class="side-stack">
               <article class="card mini-card">
                 <div class="mini-header">
                   <h3>Farm Statistics</h3>
-                  <span>45.2 ha</span>
+                  <span>{{ farm_area }} ha</span>
                 </div>
                 <div class="stats-inline">
                   <div>
                     <span class="stat-mini-label">Total Farm Area</span>
-                    <strong>45.2 ha</strong>
+                    <strong>{{ farm_area }} ha</strong>
                   </div>
                 </div>
                 <div class="stats-inline two-col">
@@ -321,5 +305,25 @@
         <span>Next scan scheduled in 1h 23m</span>
       </footer>
     </div>
+    <script>
+      const dashboardViewToggle = document.getElementById('dashboardViewToggle');
+      const dashboardDateFilter = document.getElementById('dashboardDateFilter');
+      const dashboardFarmFilter = document.getElementById('dashboardFarmFilter');
+      const dashboardMainPanel = document.querySelector('.main-panel');
+      const dateRanges = ['Last 7 days', 'Last 30 days', 'All time'];
+      let dateRangeIndex = 0;
+
+      dashboardViewToggle?.addEventListener('click', () => {
+        dashboardMainPanel?.classList.toggle('dashboard-compact-view');
+        dashboardViewToggle.setAttribute('aria-pressed', dashboardMainPanel?.classList.contains('dashboard-compact-view') ? 'true' : 'false');
+      });
+      dashboardDateFilter?.addEventListener('click', () => {
+        dateRangeIndex = (dateRangeIndex + 1) % dateRanges.length;
+        dashboardDateFilter.textContent = dateRanges[dateRangeIndex];
+      });
+      dashboardFarmFilter?.addEventListener('click', () => {
+        dashboardFarmFilter.textContent = dashboardFarmFilter.textContent === 'All Farms' ? 'My Farms' : 'All Farms';
+      });
+    </script>
   </body>
 </html>

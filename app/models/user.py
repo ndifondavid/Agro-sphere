@@ -31,6 +31,11 @@ class User(UserMixin, db.Model):
     email = db.Column(db.Text, nullable=False, unique=True, index=True)
     password_hash = db.Column(db.Text, nullable=False)
     role = db.Column(db.Text, nullable=False)
+    phone = db.Column(db.Text, nullable=True)
+    farm_location = db.Column(db.Text, nullable=True)
+    language = db.Column(db.Text, nullable=True, default="English")
+    profile_image_path = db.Column(db.Text, nullable=True)
+    notification_preferences = db.Column(db.Text, nullable=True)
 
     # Relationships
     farms = db.relationship("Farm", backref="owner", lazy=True, cascade="all, delete-orphan")

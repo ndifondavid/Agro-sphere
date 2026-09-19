@@ -81,7 +81,7 @@
       <h1>Create a Farm</h1>
       <p>Add your farm details before you scan any crop or save disease history.</p>
 
-      <form method="POST" action="{{ url_for('farm.create_farm') }}">
+      <form method="POST" action="{{ url_for('farm.create_farm') }}" enctype="multipart/form-data">
         <label>
           Farm Name
           <input type="text" name="name" placeholder="e.g. Sunrise Farm" required />
@@ -90,6 +90,21 @@
         <label>
           Farm Location
           <input type="text" name="location" placeholder="e.g. Salinas Valley, CA" required />
+        </label>
+
+        <label>
+          Farm Size
+          <input type="text" name="farm_size" placeholder="e.g. 24.5 hectares" />
+        </label>
+
+        <label>
+          Farm Description
+          <textarea name="description" rows="4" placeholder="Describe the farm, crops grown, soil quality, climate, and farming practices."></textarea>
+        </label>
+
+        <label>
+          Farm Photo
+          <input type="file" name="photo" accept="image/png,image/jpeg" />
         </label>
 
         <div class="form-actions">

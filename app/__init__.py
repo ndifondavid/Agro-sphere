@@ -10,7 +10,7 @@ Architecture (per AgroSphere_SDS.docx, Section 2 - System Architecture Design):
 All client requests pass through this Application Tier; the browser never talks to the
 AI model or the database directly, keeping access control centralized (FR-1.4, NFR-2.2).
 """
-from flask import Flask
+from flask import Flask, render_template
 
 from app.extensions import db, login_manager, migrate
 
@@ -30,6 +30,10 @@ def create_app(config_object: str = "config.DevelopmentConfig") -> Flask:
     from app import models  # noqa: F401
 
     register_blueprints(app)
+
+    @app.errorhandler(413)
+    def request_entity_too_large(error):
+        return render_template("errors/413.html"), 413
 
     with app.app_context():
         db.create_all()

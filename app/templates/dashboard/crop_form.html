@@ -20,6 +20,11 @@
       form { display: grid; gap: 18px; }
       label { display: grid; gap: 8px; color: #21473e; font-weight: 700; }
       input { border: 1px solid #d8e1dc; border-radius: 12px; padding: 14px 16px; font-size: 1rem; background: #f9faf9; }
+      .file-picker { display: grid; gap: 8px; }
+      .file-picker input[type="file"] { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+      .file-picker button { width: fit-content; border: 1px solid #0f6a4e; border-radius: 12px; padding: 12px 16px; background: #edf5ef; color: #0d5f43; font: inherit; font-weight: 700; cursor: pointer; }
+      .file-name { color: #5d6e6a; font-size: .92rem; font-weight: 400; }
+      .image-preview { display: none; width: 100%; max-height: 220px; object-fit: cover; border-radius: 14px; border: 1px solid #d8e1dc; }
       .form-actions { display: flex; justify-content: space-between; gap: 12px; margin-top: 10px; }
       .primary-btn, .secondary-btn { border-radius: 12px; padding: 12px 18px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
       .primary-btn { background: linear-gradient(180deg, #0f7a59, #0f5d43); color: white; border: none; }
@@ -37,15 +42,33 @@
       <h1>Add Crop</h1>
       <p>Attach a crop to your farm so that scan results can be saved and tracked properly.</p>
 
-      <form method="POST" action="{{ url_for('farm.create_crop', farm_id=farm.id) }}">
+      <form method="POST" action="{{ url_for('farm.create_crop', farm_id=farm.id) }}" enctype="multipart/form-data">
         <label>
           Crop Type
           <input type="text" name="crop_type" placeholder="e.g. Tomatoes" required />
         </label>
 
         <label>
+          Crop Variety
+          <input type="text" name="variety" placeholder="e.g. Roma, Hybrid 40" />
+        </label>
+
+        <label>
           Planting Date
           <input type="date" name="planting_date" />
+        </label>
+
+        <label>
+          Crop Description
+          <textarea name="description" rows="4" placeholder="Add crop notes, irrigation plan, stage, and expected production details."></textarea>
+        </label>
+
+        <label class="file-picker">
+          Crop Photo
+          <input id="crop-photo" type="file" name="photo" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" />
+          <button type="button" id="choose-crop-photo">Choose picture from this device</button>
+          <span class="file-name" id="crop-photo-name">No picture selected</span>
+          <img class="image-preview" id="crop-photo-preview" alt="Selected crop preview" />
         </label>
 
         <div class="form-actions">
@@ -54,5 +77,20 @@
         </div>
       </form>
     </div>
+    <script>
+      const cropPhoto = document.getElementById('crop-photo');
+      const chooseCropPhoto = document.getElementById('choose-crop-photo');
+      const cropPhotoName = document.getElementById('crop-photo-name');
+      const cropPhotoPreview = document.getElementById('crop-photo-preview');
+
+      chooseCropPhoto.addEventListener('click', () => cropPhoto.click());
+      cropPhoto.addEventListener('change', () => {
+        const file = cropPhoto.files && cropPhoto.files[0];
+        if (!file) return;
+        cropPhotoName.textContent = file.name;
+        cropPhotoPreview.src = URL.createObjectURL(file);
+        cropPhotoPreview.style.display = 'block';
+      });
+    </script>
   </body>
 </html>

@@ -33,17 +33,21 @@
           <button class="icon-button" type="button" aria-label="Search">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
           </button>
-          <button class="icon-button" type="button" aria-label="Notifications">
+          <a class="icon-button" href="{{ url_for('dashboard.notifications') }}" aria-label="Notifications">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 10-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5m6 0a3 3 0 0 1-6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <span class="notification-dot">1</span>
-          </button>
+          </a>
 
-          <div class="profile-pill" aria-label="Profile">
+          <a class="profile-pill" href="{{ url_for('dashboard.settings') }}" aria-label="Profile">
             <div class="profile-frame">
-              <span>{{ current_user.name[0].upper() }}</span>
+                {% if current_user.profile_image_path %}
+                  <img src="{{ url_for('static', filename=current_user.profile_image_path) }}" alt="Profile picture" />
+                {% else %}
+                  <span>{{ current_user.name[0].upper() }}</span>
+                {% endif %}
             </div>
             <span>{{ current_user.name }}</span>
-          </div>
+          </a>
         </div>
       </header>
 
@@ -80,7 +84,7 @@
               </span>
               Settings
             </a>
-            <a href="#" class="menu-item">
+            <a href="{{ url_for('dashboard.help_page') }}" class="menu-item">
               <span class="menu-icon">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9.1 9.2a3 3 0 1 1 5.8 1.4c-.9 1.4-2.8 1.9-3.8 3.3-.4.6-.4 1.1-.4 1.9M12 17.5h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </span>
@@ -105,7 +109,10 @@
             <button type="button" class="settings-tab">Farm Preferences</button>
           </div>
 
-          <section class="settings-card notifications-card">
+          <form class="settings-card notifications-card" method="POST" action="{{ url_for('dashboard.notifications') }}">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}{% for category, message in messages %}<div role="alert" style="padding:12px 16px;margin-bottom:14px;border-radius:12px;background:#eafaf0;color:#1d3a30;font-weight:700;">{{ message }}</div>{% endfor %}{% endif %}
+            {% endwith %}
             <div class="settings-section-header notifications-title-block">
               <h2>Notification Settings</h2>
               <p>Manage your notification preferences. Control what alerts you receive and how they're delivered.</p>
@@ -115,7 +122,7 @@
               <div class="subsection-title">Alert Types</div>
               <p class="subsection-copy">Toggle alerts for different activities and events.</p>
 
-              <div class="alert-row">
+              <div class="alert-row" data-notification-setting>
                 <div class="alert-copy">
                   <div class="alert-icon green-icon">🌱</div>
                   <div>
@@ -124,13 +131,13 @@
                   </div>
                 </div>
                 <label class="switch">
-                  <input type="checkbox" checked />
+                  <input type="checkbox" name="disease_alert" {% if notification_preferences.get('disease_alert', true) %}checked{% endif %} />
                   <span class="slider"></span>
                 </label>
                 <span class="switch-state on">ON</span>
               </div>
 
-              <div class="alert-row">
+              <div class="alert-row" data-notification-setting>
                 <div class="alert-copy">
                   <div class="alert-icon amber-icon">⛅</div>
                   <div>
@@ -139,13 +146,13 @@
                   </div>
                 </div>
                 <label class="switch">
-                  <input type="checkbox" checked />
+                  <input type="checkbox" name="weather_warning" {% if notification_preferences.get('weather_warning', true) %}checked{% endif %} />
                   <span class="slider"></span>
                 </label>
                 <span class="switch-state on">ON</span>
               </div>
 
-              <div class="alert-row">
+              <div class="alert-row" data-notification-setting>
                 <div class="alert-copy">
                   <div class="alert-icon gray-icon">💬</div>
                   <div>
@@ -154,13 +161,13 @@
                   </div>
                 </div>
                 <label class="switch">
-                  <input type="checkbox" />
+                  <input type="checkbox" name="community_reply" {% if notification_preferences.get('community_reply', false) %}checked{% endif %} />
                   <span class="slider"></span>
                 </label>
                 <span class="switch-state off">OFF</span>
               </div>
 
-              <div class="alert-row">
+              <div class="alert-row" data-notification-setting>
                 <div class="alert-copy">
                   <div class="alert-icon blue-icon">📅</div>
                   <div>
@@ -169,7 +176,7 @@
                   </div>
                 </div>
                 <label class="switch">
-                  <input type="checkbox" checked />
+                  <input type="checkbox" name="weekly_report" {% if notification_preferences.get('weekly_report', true) %}checked{% endif %} />
                   <span class="slider"></span>
                 </label>
                 <span class="switch-state on">ON</span>
@@ -190,7 +197,7 @@
                     </div>
                   </div>
                   <label class="switch">
-                    <input type="checkbox" checked />
+                    <input type="checkbox" name="email_delivery" {% if notification_preferences.get('email_delivery', true) %}checked{% endif %} />
                     <span class="slider"></span>
                   </label>
                 </div>
@@ -204,7 +211,7 @@
                     </div>
                   </div>
                   <label class="switch">
-                    <input type="checkbox" checked />
+                    <input type="checkbox" name="sms_delivery" {% if notification_preferences.get('sms_delivery', true) %}checked{% endif %} />
                     <span class="slider"></span>
                   </label>
                 </div>
@@ -218,7 +225,7 @@
                     </div>
                   </div>
                   <label class="switch">
-                    <input type="checkbox" checked />
+                    <input type="checkbox" name="whatsapp_delivery" {% if notification_preferences.get('whatsapp_delivery', true) %}checked{% endif %} />
                     <span class="slider"></span>
                   </label>
                 </div>
@@ -232,7 +239,7 @@
                     </div>
                   </div>
                   <label class="switch">
-                    <input type="checkbox" checked />
+                    <input type="checkbox" name="push_delivery" {% if notification_preferences.get('push_delivery', true) %}checked{% endif %} />
                     <span class="slider"></span>
                   </label>
                 </div>
@@ -246,12 +253,37 @@
               <p>Changes saved automatically</p>
             </div>
             <div class="footer-actions">
-              <button type="button" class="secondary-button">Reset to Defaults</button>
-              <button type="button" class="primary-green-button">Save Changes</button>
+              <button type="button" class="secondary-button" id="resetNotifications">Reset to Defaults</button>
+              <button type="submit" class="primary-green-button">Save Changes</button>
             </div>
           </div>
+          </form>
         </main>
       </div>
     </div>
+    <script>
+      const notificationInputs = Array.from(document.querySelectorAll('[data-notification-setting] input, .delivery-option input'));
+      const notificationStorageKey = 'agrosphere-notification-settings';
+      const notificationDefaults = notificationInputs.map((input) => input.checked);
+      const savedNotifications = JSON.parse(localStorage.getItem(notificationStorageKey) || 'null');
+      if (savedNotifications) notificationInputs.forEach((input, index) => { input.checked = Boolean(savedNotifications[index]); });
+      const updateSwitchLabels = () => document.querySelectorAll('.switch').forEach((switchLabel) => {
+        const input = switchLabel.querySelector('input');
+        const state = switchLabel.parentElement.querySelector('.switch-state');
+        if (state) { state.textContent = input.checked ? 'ON' : 'OFF'; state.className = `switch-state ${input.checked ? 'on' : 'off'}`; }
+      });
+      notificationInputs.forEach((input) => input.addEventListener('change', updateSwitchLabels));
+      updateSwitchLabels();
+      document.getElementById('saveNotifications')?.addEventListener('click', () => {
+        localStorage.setItem(notificationStorageKey, JSON.stringify(notificationInputs.map((input) => input.checked)));
+        document.querySelector('.notifications-footer .warn-banner p').textContent = 'Notification preferences saved';
+      });
+      document.getElementById('resetNotifications')?.addEventListener('click', () => {
+        notificationInputs.forEach((input, index) => { input.checked = notificationDefaults[index]; });
+        localStorage.removeItem(notificationStorageKey);
+        updateSwitchLabels();
+        document.querySelector('.notifications-footer .warn-banner p').textContent = 'Notification preferences reset';
+      });
+    </script>
   </body>
 </html>

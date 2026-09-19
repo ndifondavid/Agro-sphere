@@ -22,6 +22,12 @@ from app.ai.disease_detector import predict_disease
 scan_bp = Blueprint("scan", __name__, url_prefix="/scan")
 
 
+def normalize_image_path(path):
+    if not path:
+        return path
+    return path.replace("\\", "/")
+
+
 @scan_bp.route("/", methods=["GET", "POST"])
 @login_required
 @roles_required("farmer")
@@ -62,7 +68,11 @@ def scan_leaf():
             flash("Image is too large.", "danger")
             return render_template("scan/scan.html", crops=crops)
 
-        crop = Crop.query.get_or_404(int(crop_id))
+        crop = (
+            Crop.query.join(Crop.farm)
+            .filter(Crop.id == int(crop_id), Crop.farm.has(owner_id=current_user.id))
+            .first_or_404()
+        )
 
         # --- Persist the uploaded image ---
         upload_dir = current_app.config["UPLOAD_FOLDER"]
@@ -82,17 +92,18 @@ def scan_leaf():
         # --- Persist Scan record (FR-3.6) ---
         scan = Scan(
             crop_id=crop.id,
-            image_path=os.path.join("images", "uploads", stored_name),
+            image_path=f"images/uploads/{stored_name}",
             predicted_disease=result.predicted_disease,
             confidence_score=result.confidence_score,
             recommendation=result.recommendation,
         )
         db.session.add(scan)
         db.session.commit()
+        scan.image_path = normalize_image_path(scan.image_path)
 
         return render_template("scan/scan.html", crops=crops, scan=scan, crop=crop)
 
-    return render_template("scan/scan.html", crops=crops, scan=None)
+    return render_template("scan/scan.html", crops=crops, scan=None, crop=crops[0] if crops else None)
 
 
 @scan_bp.route("/history")
@@ -105,4 +116,18 @@ def history():
         if crop_ids
         else []
     )
+    for scan in scans:
+        scan.image_path = normalize_image_path(scan.image_path)
     return render_template("scan/history.html", scans=scans)
+
+
+@scan_bp.route("/<int:scan_id>")
+@login_required
+@roles_required("farmer")
+def scan_detail(scan_id):
+    scan = Scan.query.join(Scan.crop).filter(
+        Scan.id == scan_id,
+        Crop.farm.has(owner_id=current_user.id),
+    ).first_or_404()
+    scan.image_path = normalize_image_path(scan.image_path)
+    return render_template("scan/scan_detail.html", scan=scan)

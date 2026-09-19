@@ -18,8 +18,8 @@ class BaseConfig:
 
     # Upload settings for leaf scan photos (FR-3.1)
     UPLOAD_FOLDER = os.path.join(BASE_DIR, "app", "static", "images", "uploads")
-    MAX_CONTENT_LENGTH = 8 * 1024 * 1024  # 8 MB max upload size
-    ALLOWED_IMAGE_EXTENSIONS = {"png", "jpg", "jpeg"}
+    MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16 MB max upload size
+    ALLOWED_IMAGE_EXTENSIONS = {"png", "jpg", "jpeg", "webp"}
 
     # AI Tier model location (SDS Section 2 - AI Tier)
     AI_MODEL_PATH = os.path.join(BASE_DIR, "ai_model", "disease_model.h5")

@@ -20,6 +20,8 @@ class Crop(db.Model):
     farm_id = db.Column(db.Integer, db.ForeignKey("farm.id"), nullable=False, index=True)
     crop_type = db.Column(db.Text, nullable=False)
     planting_date = db.Column(db.Date, nullable=True)
+    variety = db.Column(db.Text, nullable=True)
+    description = db.Column(db.Text, nullable=True)
     image_path = db.Column(db.Text, nullable=True)
 
     scans = db.relationship("Scan", backref="crop", lazy=True, cascade="all, delete-orphan")

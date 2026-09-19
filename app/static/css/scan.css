@@ -278,6 +278,7 @@ button, input { font: inherit; }
 
 .action-row {
   display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
 }
 
@@ -295,6 +296,7 @@ button, input { font: inherit; }
 
 .primary-btn:hover,
 .secondary-btn:hover,
+.scan-submit-btn:hover,
 .save-btn:hover,
 .export-btn:hover,
 .view-treatment-btn:hover {
@@ -317,6 +319,141 @@ button, input { font: inherit; }
   color: var(--brand-deep);
   border: 1.5px solid rgba(11, 106, 198, 0.42);
   font-size: 1.08rem;
+}
+
+.scan-submit-btn {
+  min-height: 54px;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 12px;
+  background: #183c34;
+  color: #fff;
+  font-size: 1.08rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 10px 18px rgba(24, 60, 52, 0.16);
+}
+
+.drop-zone.has-file {
+  border-color: var(--brand);
+  background: rgba(155, 214, 182, 0.18);
+}
+
+.camera-modal[hidden] {
+  display: none;
+}
+
+.camera-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(15, 35, 27, 0.62);
+}
+
+.camera-dialog {
+  width: min(560px, 100%);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
+  background: var(--card);
+  box-shadow: 0 24px 60px rgba(8, 43, 28, 0.3);
+}
+
+.camera-dialog-head,
+.camera-dialog-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 18px 20px;
+}
+
+.camera-dialog-head {
+  border-bottom: 1px solid var(--rule);
+}
+
+.camera-kicker {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--brand);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.camera-dialog h2 {
+  margin: 0;
+  color: var(--heading);
+  font-size: 1.45rem;
+}
+
+.camera-close {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--brand-soft);
+  color: var(--brand-deep);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.camera-preview-wrap {
+  position: relative;
+  min-height: 320px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #13251f;
+}
+
+.camera-preview-wrap video {
+  width: 100%;
+  max-height: 480px;
+  display: block;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.camera-message {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  max-width: calc(100% - 28px);
+  margin: 0;
+  padding: 8px 12px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.62);
+  color: #fff;
+  font-size: 0.84rem;
+  text-align: center;
+}
+
+.camera-dialog-actions {
+  justify-content: flex-end;
+  border-top: 1px solid var(--rule);
+}
+
+.camera-dialog-actions .primary-btn,
+.camera-dialog-actions .secondary-btn {
+  min-height: 44px;
+  padding: 10px 16px;
+  font-size: 0.95rem;
+}
+
+.camera-dialog-actions .primary-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+body.camera-open {
+  overflow: hidden;
 }
 
 .tip-note {
@@ -575,9 +712,27 @@ button, input { font: inherit; }
 @media (max-width: 620px) {
   .scan-page { padding: 12px; }
   .scan-topbar, .upload-panel, .results-panel { padding-left: 18px; padding-right: 18px; }
+  .scan-topbar { gap: 14px; }
   .brand { min-width: auto; }
   .brand-text { font-size: 2.3rem; }
+  .top-nav { gap: 12px 18px; }
+  .top-nav a { min-height: 32px; font-size: 0.92rem; }
+  .profile-chip { max-width: 100%; }
   .drop-zone { min-height: 300px; }
+  .action-row { grid-template-columns: 1fr; }
   .bottom-actions { grid-template-columns: 1fr; }
   .results-head { flex-direction: column; align-items: flex-start; }
+  .scan-context-card { grid-template-columns: 1fr; }
+  .result-top h3 { font-size: 1.8rem; }
+  .result-card { padding: 18px 16px; }
+}
+
+@media (max-width: 420px) {
+  .scan-topbar { padding: 16px 14px; }
+  .brand { gap: 10px; }
+  .brand-mark { width: 42px; height: 42px; }
+  .brand-text { font-size: 1.8rem; }
+  .profile-chip { padding-right: 10px; }
+  .profile-chip span { max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .camera-dialog-head, .camera-dialog-actions { padding: 16px; }
 }

@@ -20,6 +20,8 @@ class Farm(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
     name = db.Column(db.Text, nullable=False)
     location = db.Column(db.Text, nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    farm_size = db.Column(db.Text, nullable=True)
     image_path = db.Column(db.Text, nullable=True)
 
     crops = db.relationship("Crop", backref="farm", lazy=True, cascade="all, delete-orphan")
