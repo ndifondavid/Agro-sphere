@@ -56,12 +56,28 @@
 
           <div class="field-row two-up">
             <div class="field-block">
-              <label for="quantity">Quantity (kg)</label>
-              <input id="quantity" name="quantity" type="number" min="1" step="0.1" placeholder="120" required />
+              <label for="quantity">Number of packages</label>
+              <input id="quantity" name="quantity" type="number" min="1" step="1" placeholder="10" required />
             </div>
             <div class="field-block">
-              <label for="price">Price (FCFA)</label>
-              <input id="price" name="price" type="number" min="1" step="1" placeholder="500" required />
+              <label for="package_unit">Package type</label>
+              <select id="package_unit" name="package_unit" required>
+                <option value="basket">Basket</option>
+                <option value="bucket">Bucket</option>
+              </select>
+            </div>
+            <div class="field-block">
+              <label for="package_size">Package size</label>
+              <select id="package_size" name="package_size" required>
+                <option value="small basket">Small basket</option>
+                <option value="medium basket" selected>Medium basket</option>
+                <option value="large basket">Large basket</option>
+                <option value="bucket">Bucket</option>
+              </select>
+            </div>
+            <div class="field-block">
+              <label for="price">Price per package (FCFA)</label>
+              <input id="price" name="price" type="number" min="1" step="1" placeholder="5000" required />
             </div>
           </div>
 
@@ -73,8 +89,8 @@
             <div class="field-block">
               <label>Condition</label>
               <div class="condition-box">
-                <span class="condition-chip">Healthy</span>
-                <strong>— 95%</strong>
+                <span class="condition-chip">Ready to list</span>
+                  <strong>Package price</strong>
               </div>
             </div>
           </div>
@@ -87,8 +103,8 @@
           <div class="alert-banner">
             <span class="alert-icon">i</span>
             <div>
-              <strong>Only healthy crops can be listed</strong>
-              <p>Crops with condition below 95% health cannot be listed for market sale.</p>
+              <strong>Set the price for this package size</strong>
+              <p>Buyers will see the selected basket or bucket size and its exact price.</p>
             </div>
           </div>
 

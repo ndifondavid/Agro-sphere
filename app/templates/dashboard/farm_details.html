@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AgroSphere | Farm Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+    <style>
+      :root { --ink:#173b31; --muted:#63736f; --green:#0f6a4e; --line:#dce9e0; --soft:#f4f9f5; }
+      body { background:#eaf3ed; font-family:Arial, sans-serif; color:var(--ink); }
+      .page-shell { max-width:1180px; margin:0 auto; padding:26px 22px 56px; }
+      .topbar-strip { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-bottom:24px; }
+      .breadcrumbs { display:flex; align-items:center; gap:10px; color:var(--muted); font-size:.92rem; font-weight:700; }
+      .breadcrumbs a { color:var(--green); text-decoration:none; }
+      .top-actions { display:flex; gap:10px; flex-wrap:wrap; }
+      .top-action { display:inline-flex; align-items:center; gap:7px; padding:10px 14px; border-radius:11px; background:#fff; border:1px solid var(--line); color:var(--green); text-decoration:none; font-weight:700; box-shadow:0 5px 15px rgba(14,72,52,.05); }
+      .farm-panel { background:#fff; border:1px solid rgba(15,93,67,.08); border-radius:26px; overflow:hidden; box-shadow:0 20px 55px rgba(14,72,52,.11); }
+      .hero { display:grid; grid-template-columns:minmax(0,1.12fr) minmax(320px,.88fr); min-height:360px; }
+      .hero-image { order:2; min-height:360px; background:linear-gradient(135deg,#dff7e9,#cfe8cf); overflow:hidden; }
+      .hero-image img { width:100%; height:100%; object-fit:cover; display:block; }
+      .hero-fallback { width:100%; height:100%; display:grid; place-items:center; color:#0f6a4e; font-size:6rem; background:linear-gradient(135deg,#dff7e9,#cfe8cf); }
+      .hero-copy { display:flex; flex-direction:column; justify-content:center; padding:48px; }
+      .eyebrow { margin:0 0 12px; color:#16825d; text-transform:uppercase; letter-spacing:.12em; font-size:.75rem; font-weight:800; }
+      .hero-copy h1 { margin:0; color:var(--ink); font-size:clamp(2.35rem,5vw,4.5rem); line-height:1; letter-spacing:-.055em; }
+      .hero-location { margin:18px 0 0; color:var(--muted); font-size:1.05rem; font-weight:700; }
+      .meta-row { display:flex; flex-wrap:wrap; gap:9px; margin:24px 0 0; }
+      .meta-pill { display:inline-flex; align-items:center; gap:6px; background:#edf8f0; color:var(--green); border:1px solid #d8eddf; border-radius:10px; padding:9px 11px; font-size:.86rem; font-weight:800; }
+      .content-section { padding:30px 34px; border-top:1px solid #edf2ee; }
+      .section-heading { display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:18px; }
+      .section-heading h2 { margin:0; color:var(--ink); font-size:1.45rem; letter-spacing:-.025em; }
+      .section-heading p { margin:5px 0 0; color:var(--muted); font-size:.92rem; }
+      .info-grid { display:grid; grid-template-columns:.8fr 1.2fr; gap:18px; }
+      .info-block { padding:20px; border:1px solid var(--line); border-radius:16px; background:var(--soft); }
+      .info-block h3 { margin:0 0 14px; font-size:1rem; color:var(--ink); }
+      .fact-list { display:grid; gap:13px; margin:0; }
+      .fact { display:flex; justify-content:space-between; gap:14px; padding-bottom:12px; border-bottom:1px solid #e2ede5; }
+      .fact:last-child { padding-bottom:0; border-bottom:0; }
+      .fact dt { color:var(--muted); font-size:.88rem; }
+      .fact dd { margin:0; color:var(--ink); font-weight:800; text-align:right; }
+      .description { margin:0; color:#465b55; line-height:1.8; white-space:pre-line; }
+      .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; }
+      .primary-btn, .secondary-btn { display:inline-flex; align-items:center; justify-content:center; min-height:44px; border-radius:11px; padding:11px 17px; font-weight:800; text-decoration:none; }
+      .primary-btn { background:linear-gradient(180deg,#15805c,#0d6046); color:#fff; box-shadow:0 8px 16px rgba(15,93,67,.17); }
+      .secondary-btn { background:#edf6ef; color:#0d6046; border:1px solid #d5e9da; }
+      .crop-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(235px,1fr)); gap:18px; }
+      .crop-card { display:flex; flex-direction:column; min-width:0; border:1px solid var(--line); border-radius:17px; overflow:hidden; background:#fff; box-shadow:0 8px 20px rgba(14,72,52,.05); }
+      .crop-visual { height:178px; background:linear-gradient(135deg,#eefaf2,#dfeee2); overflow:hidden; }
+      .crop-visual img { width:100%; height:100%; object-fit:cover; display:block; }
+      .crop-fallback { width:100%; height:100%; display:grid; place-items:center; color:#16825d; font-size:3rem; }
+      .crop-body { display:flex; flex-direction:column; gap:9px; padding:17px; flex:1; }
+      .crop-title-row { display:flex; justify-content:space-between; gap:10px; align-items:start; }
+      .crop-body h3 { margin:0; color:var(--ink); font-size:1.15rem; }
+      .crop-count { color:#16825d; background:#eaf8ef; border-radius:999px; padding:4px 8px; font-size:.72rem; font-weight:800; white-space:nowrap; }
+      .crop-meta { margin:0; color:var(--muted); font-size:.84rem; font-weight:700; }
+      .crop-description { margin:2px 0 0; color:#52655f; font-size:.9rem; line-height:1.55; }
+      .empty-state { padding:28px; text-align:center; border:1px dashed #c7ddd0; border-radius:16px; background:var(--soft); color:var(--muted); }
+      .empty-state p { margin:6px 0 18px; }
+      @media (max-width:760px) {
+        .page-shell { padding:18px 14px 36px; }
+        .topbar-strip { align-items:flex-start; flex-direction:column; }
+        .hero { grid-template-columns:1fr; }
+        .hero-image { order:0; min-height:230px; }
+        .hero-copy { padding:30px 24px; }
+        .content-section { padding:24px 20px; }
+        .info-grid { grid-template-columns:1fr; }
+        .section-heading { align-items:flex-start; flex-direction:column; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell">
+      <div class="topbar-strip">
+        <div class="breadcrumbs">
+          <a href="{{ url_for('dashboard.index') }}">Dashboard</a>
+          <span>/</span>
+          <a href="{{ url_for('farm.list_farms') }}">Farms</a>
+          <span>/</span>
+          <span>Details</span>
+        </div>
+        <div class="top-actions">
+          <a class="top-action" href="{{ url_for('farm.list_farms') }}">Back to Farms</a>
+          <a class="top-action" href="{{ url_for('farm.manage_farm', farm_id=farm.id) }}">Manage Farm</a>
+        </div>
+      </div>
+
+      <div class="farm-panel">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div style="display:grid;gap:10px;padding:18px 34px 0;">
+              {% for category, message in messages %}
+                <div role="alert" style="padding:12px 16px;border-radius:12px;font-weight:700;background:{% if category == 'success' %}#eafaf0{% elif category == 'danger' %}#ffeaea{% else %}#fff7e8{% endif %};color:#1d3a30;">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <div class="hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Farm profile</p>
+            <h1>{{ farm.name }}</h1>
+            <p class="hero-location">📍 {{ farm.location }}</p>
+            <div class="meta-row">
+              {% if farm.farm_size %}<span class="meta-pill">📏 {{ farm.farm_size }}</span>{% endif %}
+              <span class="meta-pill">🌾 {{ farm.crops|length }} crop{{ '' if farm.crops|length == 1 else 's' }}</span>
+              <span class="meta-pill">● Active farm</span>
+            </div>
+          </div>
+
+          <div class="hero-image">
+            {% if farm.image_path %}
+              <img src="{{ url_for('static', filename=farm.image_path) }}" alt="{{ farm.name }}" />
+            {% else %}
+              <div class="hero-fallback">🌾</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <section class="content-section">
+          <div class="section-heading">
+            <div>
+              <h2>About this farm</h2>
+              <p>Key information and notes for this growing operation.</p>
+            </div>
+          </div>
+          <div class="info-grid">
+            <div class="info-block">
+              <h3>Farm facts</h3>
+              <dl class="fact-list">
+                <div class="fact"><dt>Farm name</dt><dd>{{ farm.name }}</dd></div>
+                <div class="fact"><dt>Location</dt><dd>{{ farm.location }}</dd></div>
+                <div class="fact"><dt>Farm size</dt><dd>{{ farm.farm_size or 'Not specified' }}</dd></div>
+                <div class="fact"><dt>Total crops</dt><dd>{{ farm.crops|length }}</dd></div>
+              </dl>
+            </div>
+            <div class="info-block">
+              <h3>Farm description</h3>
+              <p class="description">{{ farm.description or 'No description added yet. Use Manage Farm to add information about the soil, climate, farming practices, and goals for this farm.' }}</p>
+            </div>
+          </div>
+          <div class="actions">
+            <a href="{{ url_for('farm.manage_farm', farm_id=farm.id) }}" class="primary-btn">Manage Farm</a>
+            <a href="{{ url_for('farm.create_crop', farm_id=farm.id) }}" class="secondary-btn">Add Crop</a>
+          </div>
+        </section>
+
+        <section class="content-section">
+          <div class="section-heading">
+            <div>
+              <h2>Crops on this farm</h2>
+              <p>Every crop linked to {{ farm.name }} appears here.</p>
+            </div>
+            <span class="meta-pill">{{ farm.crops|length }} total</span>
+          </div>
+          {% if not farm.crops %}
+            <div class="empty-state">
+              <strong>No crops added yet</strong>
+              <p>Add your first crop to start tracking growth and scans.</p>
+              <a href="{{ url_for('farm.create_crop', farm_id=farm.id) }}" class="primary-btn">Add your first crop</a>
+            </div>
+          {% else %}
+            <div class="crop-grid">
+              {% for crop in farm.crops %}
+                <article class="crop-card">
+                  <div class="crop-visual">
+                    {% if crop.image_path %}<img src="{{ url_for('static', filename=crop.image_path) }}" alt="{{ crop.crop_type }}" />{% else %}<div class="crop-fallback">🌱</div>{% endif %}
+                  </div>
+                  <div class="crop-body">
+                    <div class="crop-title-row"><h3>{{ crop.crop_type }}</h3><span class="crop-count">Crop</span></div>
+                    {% if crop.variety %}<p class="crop-meta">Variety: {{ crop.variety }}</p>{% endif %}
+                    {% if crop.planting_date %}<p class="crop-meta">Planted: {{ crop.planting_date.strftime('%b %d, %Y') }}</p>{% endif %}
+                    <p class="crop-description">{{ crop.description or 'No crop description added yet.' }}</p>
+                  </div>
+                </article>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </section>
+      </div>
+    </div>
+  </body>
+</html>

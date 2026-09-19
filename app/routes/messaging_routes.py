@@ -20,6 +20,12 @@ messaging_bp = Blueprint("messaging", __name__, url_prefix="/messages")
 @login_required
 def thread(listing_id):
     listing = Listing.query.get_or_404(listing_id)
+    is_listing_owner = current_user.is_farmer() and listing.farmer_id == current_user.id
+    is_existing_buyer = current_user.is_buyer() and any(
+        reservation.buyer_id == current_user.id for reservation in listing.reservations
+    )
+    if not (is_listing_owner or is_existing_buyer):
+        return "Access denied.", 403
 
     if request.method == "POST":
         missing = require_fields(request.form, ["content", "receiver_id"])
@@ -29,6 +35,8 @@ def thread(listing_id):
             receiver = User.query.get(int(request.form["receiver_id"]))
             if receiver is None:
                 flash("Recipient not found.", "danger")
+            elif receiver.id == current_user.id:
+                flash("You cannot message yourself.", "danger")
             else:
                 message = Message(
                     sender_id=current_user.id,

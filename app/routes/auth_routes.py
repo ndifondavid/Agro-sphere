@@ -1,9 +1,15 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user
 
-from app.models.user import User
+from app.models.user import User, REGISTRABLE_ROLES
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
+
+
+@auth_bp.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for("public.landing"))
 
 
 @auth_bp.route("/login", methods=["GET", "POST"])
@@ -11,6 +17,7 @@ def login():
     if request.method == "POST":
         email = (request.form.get("email") or "").strip().lower()
         password = request.form.get("password") or ""
+        remember = request.form.get("remember") == "1"
 
         if not email or not password:
             flash("Please enter your email and password.", "danger")
@@ -18,7 +25,7 @@ def login():
 
         user = User.query.filter_by(email=email).first()
         if user and user.check_password(password):
-            login_user(user)
+            login_user(user, remember=remember)
             flash("Login successful", "success")
 
             if user.is_buyer():
@@ -44,6 +51,10 @@ def register():
 
         if not name or not email or not password:
             flash("Please complete all fields.", "danger")
+            return render_template("auth/register.html")
+
+        if role not in REGISTRABLE_ROLES:
+            flash("Please choose a valid account role.", "danger")
             return render_template("auth/register.html")
 
         if User.query.filter_by(email=email).first():

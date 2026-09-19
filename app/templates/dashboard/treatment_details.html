@@ -479,7 +479,7 @@
         <nav class="top-nav" aria-label="Farmer navigation">
           <a href="{{ url_for('dashboard.index') }}" class="nav-link">Dashboard</a>
           <a href="{{ url_for('scan.history') }}" class="nav-link active">History</a>
-          <a href="#" class="nav-link">Settings</a>
+          <a href="{{ url_for('dashboard.settings') }}" class="nav-link">Settings</a>
         </nav>
 
         <div class="profile-pill" aria-label="Farmer profile">
@@ -507,7 +507,7 @@
             </h2>
 
             <div class="leaf-box">
-              <img src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&w=900&q=80" alt="Leaf image analysis" />
+              <div class="leaf-placeholder" role="img" aria-label="Uploaded leaf analysis placeholder">🌿</div>
             </div>
 
             <div class="details-box">
@@ -522,7 +522,7 @@
             <div class="camera-box">
               <div class="camera-label">Live Camera Ready</div>
             </div>
-            <button class="capture-btn" type="button">Capture Photo</button>
+            <a class="capture-btn" href="{{ url_for('scan.scan_leaf') }}">Capture Photo</a>
           </aside>
 
           <section class="right-panel">
@@ -580,13 +580,16 @@
             </div>
 
             <div class="action-row">
-              <button class="action-btn" type="button">Download Report</button>
-              <button class="action-btn" type="button">Save to History</button>
-              <button class="action-btn primary" type="button">Scan Another Plant</button>
+              <button class="action-btn" type="button" id="downloadReport">Download Report</button>
+              <a class="action-btn" href="{{ url_for('scan.history') }}">Save to History</a>
+              <a class="action-btn primary" href="{{ url_for('scan.scan_leaf') }}">Scan Another Plant</a>
             </div>
           </section>
         </div>
       </main>
     </div>
+    <script>
+      document.getElementById('downloadReport')?.addEventListener('click', () => window.print());
+    </script>
   </body>
 </html>

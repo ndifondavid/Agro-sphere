@@ -28,6 +28,9 @@
           </nav>
 
           <form class="auth-form" method="POST" action="{{ url_for('auth.register') }}">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}<div class="auth-messages">{% for category, message in messages %}<div class="auth-message auth-message--{{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+            {% endwith %}
             <h2 class="form-title">Sign up</h2>
             <div class="field-row">
               <span class="field-icon">
@@ -78,10 +81,23 @@
                 </svg>
               </span>
               <div class="field-box field-box--role">
-                <label>Role / User Type</label>
+                <span class="role-heading">Choose your role</span>
+                <span class="role-help">Select how you will use AgroSphere.</span>
                 <div class="role-options">
-                  <label class="role-option"><input type="radio" name="role" value="farmer" checked /> <span>Farmer</span></label>
-                  <label class="role-option"><input type="radio" name="role" value="buyer" /> <span>Buyer</span></label>
+                  <label class="role-option">
+                    <input type="radio" name="role" value="farmer" checked />
+                    <span class="role-option-copy">
+                      <strong>Farmer</strong>
+                      <small>Manage farms, crops, and scans</small>
+                    </span>
+                  </label>
+                  <label class="role-option">
+                    <input type="radio" name="role" value="buyer" />
+                    <span class="role-option-copy">
+                      <strong>Buyer</strong>
+                      <small>Discover and reserve farm products</small>
+                    </span>
+                  </label>
                 </div>
               </div>
             </div>

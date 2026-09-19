@@ -27,12 +27,12 @@
           <a href="{{ url_for('dashboard.index') }}">Dashboard</a>
           <a href="{{ url_for('farm.list_farms') }}">Farms</a>
           <a href="{{ url_for('scan.scan_leaf') }}" class="active">Scans</a>
-          <a href="#">History</a>
-          <a href="#">Settings</a>
+          <a href="{{ url_for('scan.history') }}">History</a>
+          <a href="{{ url_for('dashboard.settings') }}">Settings</a>
         </nav>
 
         <div class="profile-chip" aria-label="Current user">
-          <img src="{{ url_for('static', filename='images/profile-avatar.svg') }}" alt="Farmer profile picture" />
+          {% if current_user.profile_image_path %}<img src="{{ url_for('static', filename=current_user.profile_image_path) }}" alt="Farmer profile picture" />{% else %}<img src="{{ url_for('static', filename='images/profile-avatar.svg') }}" alt="Farmer profile picture" />{% endif %}
           <span>{{ current_user.name }}</span>
         </div>
       </header>
@@ -55,11 +55,11 @@
             <div class="scan-context-card">
               <div>
                 <span class="context-label">Selected farm</span>
-                <strong>{% if crops %}{{ crops[0].farm.name }}{% else %}No farm created{% endif %}</strong>
+                <strong>{% if crop %}{{ crop.farm.name }}{% else %}No farm created{% endif %}</strong>
               </div>
               <div>
                 <span class="context-label">Crop type</span>
-                <strong>{% if crops %}{{ crops[0].crop_type }}{% else %}Create a crop{% endif %}</strong>
+                <strong>{% if crop %}{{ crop.crop_type }}{% else %}Create a crop{% endif %}</strong>
               </div>
             </div>
 
@@ -72,12 +72,13 @@
                 </svg>
               </div>
               <p class="drop-zone-title">Drag &amp; drop an image here</p>
-              <p class="drop-zone-copy">or click to browse files — JPG, PNG up to 10MB</p>
+              <p class="drop-zone-copy">or click to browse files — JPG, PNG, WebP up to 16MB</p>
             </div>
 
             <div class="action-row">
               <button type="button" class="primary-btn" data-trigger="camera">Use Camera</button>
               <button type="button" class="secondary-btn" data-trigger="file">Choose File</button>
+              <button type="submit" class="scan-submit-btn">Scan</button>
             </div>
 
             <div class="tip-note">Tip: Use a clear, well-lit photo of the affected leaf for best results.</div>
@@ -105,10 +106,16 @@
             </div>
 
             <div class="farm-summary-mini">
-              <span><strong>Farm:</strong> {% if crops %}{{ crops[0].farm.name }}{% else %}Not assigned{% endif %}</span>
-              <span><strong>Crop:</strong> {% if crops %}{{ crops[0].crop_type }}{% else %}No crop{% endif %}</span>
+              <span><strong>Farm:</strong> {% if crop %}{{ crop.farm.name }}{% else %}Not assigned{% endif %}</span>
+              <span><strong>Crop:</strong> {% if crop %}{{ crop.crop_type }}{% else %}No crop{% endif %}</span>
               <span><strong>Scan date:</strong> {% if scan %}{{ scan.timestamp.strftime('%b %d, %Y') }}{% else %}Pending{% endif %}</span>
             </div>
+
+            {% if scan and scan.image_path %}
+              <div style="margin:18px 0;border-radius:16px;overflow:hidden;background:#edf6ee;">
+                <img src="{{ url_for('static', filename=scan.image_path) }}" alt="Uploaded crop scan" style="display:block;width:100%;max-height:280px;object-fit:cover;" />
+              </div>
+            {% endif %}
 
             <div class="result-section">
               <div class="result-row">
@@ -139,7 +146,7 @@
               <div>Tip: Monitor nearby plants for similar symptoms over the next 5–7 days.</div>
             </div>
 
-            <a href="{{ url_for('dashboard.treatment_details') }}" class="view-treatment-btn">View treatment details</a>
+            <a href="{{ url_for('scan.scan_detail', scan_id=scan.id) if scan else url_for('dashboard.treatment_details') }}" class="view-treatment-btn">View treatment details</a>
 
             <div class="bottom-actions">
               <a href="{{ url_for('scan.history') }}" class="save-btn">Save to History</a>
@@ -150,23 +157,106 @@
       </main>
     </div>
 
+    <div class="camera-modal" id="cameraModal" hidden>
+      <div class="camera-dialog" role="dialog" aria-modal="true" aria-labelledby="cameraTitle">
+        <div class="camera-dialog-head">
+          <div>
+            <span class="camera-kicker">Camera capture</span>
+            <h2 id="cameraTitle">Take a crop photo</h2>
+          </div>
+          <button type="button" class="camera-close" id="closeCamera" aria-label="Close camera">&times;</button>
+        </div>
+        <div class="camera-preview-wrap">
+          <video id="cameraPreview" autoplay playsinline muted></video>
+          <canvas id="cameraCanvas" hidden></canvas>
+          <p class="camera-message" id="cameraMessage">Allow camera access to take a photo.</p>
+        </div>
+        <div class="camera-dialog-actions">
+          <button type="button" class="secondary-btn" id="cancelCamera">Cancel</button>
+          <button type="button" class="primary-btn" id="capturePhoto">Capture photo</button>
+        </div>
+      </div>
+    </div>
+
     <script>
       const photoInput = document.getElementById('photoInput');
       const dropZone = document.getElementById('dropZone');
       const triggerButtons = document.querySelectorAll('[data-trigger]');
+      const scanForm = document.querySelector('.scan-form');
+      const cameraModal = document.getElementById('cameraModal');
+      const cameraPreview = document.getElementById('cameraPreview');
+      const cameraCanvas = document.getElementById('cameraCanvas');
+      const cameraMessage = document.getElementById('cameraMessage');
+      const closeCamera = document.getElementById('closeCamera');
+      const cancelCamera = document.getElementById('cancelCamera');
+      const capturePhoto = document.getElementById('capturePhoto');
+      let cameraStream;
 
       const openPicker = () => photoInput.click();
+
+      const stopCamera = () => {
+        if (cameraStream) {
+          cameraStream.getTracks().forEach((track) => track.stop());
+          cameraStream = null;
+        }
+        cameraPreview.srcObject = null;
+        cameraModal.hidden = true;
+        document.body.classList.remove('camera-open');
+      };
+
+      const openCamera = async () => {
+        cameraModal.hidden = false;
+        document.body.classList.add('camera-open');
+        cameraMessage.textContent = 'Starting camera...';
+        capturePhoto.disabled = true;
+
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          cameraMessage.textContent = 'Camera access is not supported in this browser.';
+          return;
+        }
+
+        try {
+          cameraStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: { ideal: 'environment' } },
+            audio: false,
+          });
+          cameraPreview.srcObject = cameraStream;
+          capturePhoto.disabled = false;
+          cameraMessage.textContent = 'Position the affected leaf inside the frame.';
+        } catch (error) {
+          cameraMessage.textContent = 'Camera access was blocked. Allow permission and try again.';
+        }
+      };
 
       triggerButtons.forEach((button) => {
         button.addEventListener('click', () => {
           const mode = button.dataset.trigger;
           if (mode === 'camera') {
-            photoInput.setAttribute('capture', 'environment');
+            openCamera();
           } else {
             photoInput.removeAttribute('capture');
+            openPicker();
           }
-          openPicker();
         });
+      });
+
+      closeCamera.addEventListener('click', stopCamera);
+      cancelCamera.addEventListener('click', stopCamera);
+
+      capturePhoto.addEventListener('click', () => {
+        if (!cameraStream) return;
+        cameraCanvas.width = cameraPreview.videoWidth;
+        cameraCanvas.height = cameraPreview.videoHeight;
+        cameraCanvas.getContext('2d').drawImage(cameraPreview, 0, 0);
+        cameraCanvas.toBlob((blob) => {
+          if (!blob) return;
+          const file = new File([blob], `crop-photo-${Date.now()}.jpg`, { type: 'image/jpeg' });
+          const transfer = new DataTransfer();
+          transfer.items.add(file);
+          photoInput.files = transfer.files;
+          stopCamera();
+          cameraMessage.textContent = 'Photo captured. Click Scan to continue.';
+        }, 'image/jpeg', 0.92);
       });
 
       ['dragenter', 'dragover'].forEach((eventName) => {
@@ -187,7 +277,6 @@
         const files = event.dataTransfer.files;
         if (files && files.length) {
           photoInput.files = files;
-          photoInput.closest('form').submit();
         }
       });
 
@@ -200,9 +289,11 @@
 
       photoInput.addEventListener('change', () => {
         if (photoInput.files && photoInput.files.length) {
-          photoInput.closest('form').submit();
+          dropZone.classList.add('has-file');
         }
       });
+
+      window.addEventListener('beforeunload', stopCamera);
     </script>
   </body>
 </html>

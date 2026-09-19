@@ -29,6 +29,8 @@ class Listing(db.Model):
     crop_type = db.Column(db.Text, nullable=False)
     harvest_date = db.Column(db.Date, nullable=False)
     quantity = db.Column(db.Float, nullable=False)
+    package_size = db.Column(db.Text, nullable=False, default="medium basket")
+    package_unit = db.Column(db.Text, nullable=False, default="basket")
     price = db.Column(db.Float, nullable=False)
     availability_status = db.Column(
         db.Text, nullable=False, default=STATUS_AVAILABLE, index=True

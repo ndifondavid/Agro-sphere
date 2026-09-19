@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AgroSphere | Manage Farm</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+    <style>
+      body { background: #edf4ef; font-family: Arial, sans-serif; }
+      .page-shell { max-width: 1100px; margin: 32px auto; padding: 0 20px 48px; }
+      .topbar-strip { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px 18px; margin-bottom:20px; background:#fff; border-radius:16px; box-shadow:0 8px 22px rgba(14,72,52,0.08); }
+      .topbar-strip a { color:#0f6a4e; text-decoration:none; font-weight:700; }
+      .panel { background:#fff; border-radius:24px; box-shadow:0 18px 48px rgba(14,72,52,0.10); padding:24px; }
+      .heading { margin-bottom:20px; }
+      .heading h1 { margin:0 0 8px; font-size:clamp(2rem,4vw,2.8rem); color:#143a2d; }
+      .heading p { margin:0; color:#5d6e6a; }
+      .two-col { display:grid; grid-template-columns: 1fr 1fr; gap:24px; }
+      .section-card { background:#f8fbf9; border:1px solid #e3ece6; border-radius:20px; padding:20px; }
+      .section-card h2 { margin:0 0 16px; color:#143a2d; }
+      form { display:grid; gap:16px; }
+      label { display:grid; gap:8px; color:#21473e; font-weight:700; }
+      input, textarea { border:1px solid #d8e1dc; border-radius:12px; padding:14px 16px; font:inherit; background:#fff; }
+      textarea { min-height:120px; resize:vertical; }
+      .form-actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:8px; }
+      .primary-btn, .secondary-btn { display:inline-flex; align-items:center; justify-content:center; border-radius:12px; padding:12px 18px; font-weight:700; text-decoration:none; }
+      .primary-btn { background:linear-gradient(180deg,#0f7a59,#0f5d43); color:#fff; border:none; cursor:pointer; }
+      .secondary-btn { background:#edf5ef; color:#0d5f43; border:1px solid rgba(15,93,67,0.1); }
+      .crop-list { margin-top:26px; display:grid; gap:16px; }
+      .crop-item { background:#f8fbf9; border:1px solid #e3ece6; border-radius:18px; padding:16px; display:grid; gap:10px; }
+      .crop-item h3 { margin:0; color:#143a2d; }
+      .crop-item p { margin:0; color:#4f5e5b; }
+      .thumb { width:100%; height:150px; object-fit:cover; border-radius:14px; display:block; background:#dff7e9; }
+      .file-picker { display:grid; gap:8px; }
+      .file-picker input[type="file"] { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; }
+      .file-picker button { width:fit-content; border:1px solid #0f6a4e; border-radius:12px; padding:12px 16px; background:#edf5ef; color:#0d5f43; font:inherit; font-weight:700; cursor:pointer; }
+      .file-name { color:#5d6e6a; font-size:.92rem; font-weight:400; }
+      .image-preview { display:none; width:100%; max-height:180px; object-fit:cover; border-radius:14px; border:1px solid #d8e1dc; }
+      @media (max-width: 760px) { .two-col { grid-template-columns:1fr; } }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell">
+      <div class="topbar-strip">
+        <a href="{{ url_for('dashboard.index') }}">Dashboard</a>
+        <span>›</span>
+        <a href="{{ url_for('farm.list_farms') }}">Farms</a>
+      </div>
+
+      <div class="panel">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div style="display:grid;gap:10px;margin-bottom:20px;">
+              {% for category, message in messages %}
+                <div role="alert" style="padding:12px 16px;border-radius:12px;font-weight:700;background:{% if category == 'success' %}#eafaf0{% elif category == 'danger' %}#ffeaea{% else %}#fff7e8{% endif %};color:#1d3a30;border:1px solid rgba(15,93,67,.12);">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <div class="heading">
+          <h1>Manage Farm</h1>
+          <p>Update farm information, add new crops, and keep the profile detailed for every part of your operation.</p>
+        </div>
+
+        <div class="two-col">
+          <section class="section-card">
+            <h2>Farm Details</h2>
+            <form method="POST" action="{{ url_for('farm.manage_farm', farm_id=farm.id) }}" enctype="multipart/form-data">
+              <input type="hidden" name="action" value="update_farm" />
+
+              <label>
+                Farm Name
+                <input type="text" name="name" value="{{ farm.name }}" required />
+              </label>
+
+              <label>
+                Location
+                <input type="text" name="location" value="{{ farm.location }}" required />
+              </label>
+
+              <label>
+                Farm Size
+                <input type="text" name="farm_size" value="{{ farm.farm_size or '' }}" placeholder="e.g. 24.5 hectares" />
+              </label>
+
+              <label>
+                Farm Description
+                <textarea name="description" placeholder="Describe your farm, soils, climate, crops, and practices.">{{ farm.description or '' }}</textarea>
+              </label>
+
+              <label>
+                Farm Photo
+                <input type="file" name="photo" accept="image/png,image/jpeg" />
+              </label>
+
+              <div class="form-actions">
+                <a href="{{ url_for('farm.farm_details', farm_id=farm.id) }}" class="secondary-btn">View Details</a>
+                <button type="submit" class="primary-btn">Save Farm</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="section-card">
+            <h2>Add Crop</h2>
+            <form method="POST" action="{{ url_for('farm.manage_farm', farm_id=farm.id) }}" enctype="multipart/form-data">
+              <input type="hidden" name="action" value="add_crop" />
+
+              <label>
+                Crop Type
+                <input type="text" name="crop_type" placeholder="e.g. Tomatoes" required />
+              </label>
+
+              <label>
+                Variety
+                <input type="text" name="variety" placeholder="e.g. Roma, Hybrid 40" />
+              </label>
+
+              <label>
+                Planting Date
+                <input type="date" name="planting_date" />
+              </label>
+
+              <label>
+                Crop Description
+                <textarea name="description" placeholder="Add crop notes, irrigation, growth stage, and expected output."></textarea>
+              </label>
+
+              <label class="file-picker">
+                Crop Photo
+                <input id="manage-crop-photo" type="file" name="crop_photo" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" />
+                <button type="button" id="choose-manage-crop-photo">Choose picture from this device</button>
+                <span class="file-name" id="manage-crop-photo-name">No picture selected</span>
+                <img class="image-preview" id="manage-crop-photo-preview" alt="Selected crop preview" />
+              </label>
+
+              <div class="form-actions">
+                <button type="submit" class="primary-btn">Add Crop</button>
+              </div>
+            </form>
+          </section>
+        </div>
+
+        <div class="crop-list">
+          <h2 style="margin:26px 0 10px; color:#143a2d;">Crops on This Farm</h2>
+          {% if not farm.crops %}
+            <div style="padding:20px; background:#f8fbf9; border:1px dashed #ccddd3; border-radius:18px; color:#3d504b;">
+              There are no crops added yet. Add your first crop to start tracking growth and disease results.
+            </div>
+          {% else %}
+            {% for crop in farm.crops %}
+              <div class="crop-item">
+                {% if crop.image_path %}
+                  <img class="thumb" src="{{ url_for('static', filename=crop.image_path) }}" alt="{{ crop.crop_type }}" />
+                {% else %}
+                  <div class="thumb" style="display:flex;align-items:center;justify-content:center;font-size:2.8rem;color:#0f6a4e;">🌱</div>
+                {% endif %}
+                <h3>{{ crop.crop_type }}</h3>
+                {% if crop.variety %}<p><strong>Variety:</strong> {{ crop.variety }}</p>{% endif %}
+                {% if crop.planting_date %}<p><strong>Planted:</strong> {{ crop.planting_date }}</p>{% endif %}
+                <p>{{ crop.description or 'No crop description has been added yet.' }}</p>
+                <div class="form-actions">
+                  <a href="{{ url_for('farm.edit_crop', farm_id=farm.id, crop_id=crop.id) }}" class="secondary-btn">Edit Crop</a>
+                  <form method="POST" action="{{ url_for('farm.delete_crop', farm_id=farm.id, crop_id=crop.id) }}" onsubmit="return confirm('Delete this crop and its scan history?');">
+                    <button type="submit" class="secondary-btn">Delete</button>
+                  </form>
+                </div>
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <script>
+      const manageCropPhoto = document.getElementById('manage-crop-photo');
+      const chooseManageCropPhoto = document.getElementById('choose-manage-crop-photo');
+      const manageCropPhotoName = document.getElementById('manage-crop-photo-name');
+      const manageCropPhotoPreview = document.getElementById('manage-crop-photo-preview');
+
+      chooseManageCropPhoto.addEventListener('click', () => manageCropPhoto.click());
+      manageCropPhoto.addEventListener('change', () => {
+        const file = manageCropPhoto.files && manageCropPhoto.files[0];
+        if (!file) return;
+        manageCropPhotoName.textContent = file.name;
+        manageCropPhotoPreview.src = URL.createObjectURL(file);
+        manageCropPhotoPreview.style.display = 'block';
+      });
+    </script>
+  </body>
+</html>

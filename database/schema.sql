@@ -5,7 +5,12 @@ CREATE TABLE user (
     name TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
     password_hash TEXT NOT NULL,
-    role TEXT NOT NULL
+    role TEXT NOT NULL,
+    phone TEXT,
+    farm_location TEXT,
+    language TEXT DEFAULT 'English',
+    profile_image_path TEXT,
+    notification_preferences TEXT
 );
 
 CREATE TABLE farm (
@@ -13,6 +18,8 @@ CREATE TABLE farm (
     owner_id INTEGER NOT NULL REFERENCES user(id),
     name TEXT NOT NULL,
     location TEXT NOT NULL,
+    description TEXT,
+    farm_size TEXT,
     image_path TEXT
 );
 
@@ -21,6 +28,8 @@ CREATE TABLE crop (
     farm_id INTEGER NOT NULL REFERENCES farm(id),
     crop_type TEXT NOT NULL,
     planting_date DATE,
+    variety TEXT,
+    description TEXT,
     image_path TEXT
 );
 
@@ -40,6 +49,8 @@ CREATE TABLE listing (
     crop_type TEXT NOT NULL,
     harvest_date DATE NOT NULL,
     quantity FLOAT NOT NULL,
+    package_size TEXT NOT NULL DEFAULT 'medium basket',
+    package_unit TEXT NOT NULL DEFAULT 'basket',
     price FLOAT NOT NULL,
     availability_status TEXT NOT NULL DEFAULT 'available',
     image_path TEXT
