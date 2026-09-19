@@ -9,7 +9,7 @@
   <body class="dashboard-body">
     <div class="dashboard-shell">
       <header class="topbar">
-        <div class="brand" aria-label="CropCare AI brand">
+        <div class="brand" aria-label="AgroSphere brand">
           <div class="brand-mark" aria-hidden="true">
             <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
               <path d="M31.8 7.5c5.8 7.3 4 16.8-2.3 22.3-4.8 4.2-10.4 6.1-14.2 10.5-4.8 5.8-4.7 15.2 1.4 20.4 7.3 6.1 18.5 5.1 24.7-2.4 6.1-7.3 5.9-17.4 1.2-24.4C37.3 25.9 31.6 17.6 31.8 7.5Z" fill="rgba(255,255,255,0.18)"/>
@@ -109,9 +109,7 @@
 
           <div class="settings-tabs" aria-label="Settings sections">
             <button type="button" class="settings-tab active">Profile</button>
-            <button type="button" class="settings-tab">Security</button>
             <a href="{{ url_for('dashboard.notifications') }}" class="settings-tab settings-tab-link">Notifications</a>
-            <button type="button" class="settings-tab">Farm Preferences</button>
           </div>
 
           <form id="profile-settings-form" method="POST" action="{{ url_for('dashboard.settings') }}" enctype="multipart/form-data">
@@ -185,7 +183,7 @@
               <p>Your profile is private and only visible to your farm team members.</p>
             </div>
             <div class="footer-actions">
-              <button type="button" class="secondary-button">Cancel</button>
+              <a href="{{ url_for('dashboard.index') }}" class="secondary-button">Cancel</a>
               <button type="submit" form="profile-settings-form" class="primary-green-button">Save changes</button>
             </div>
           </div>

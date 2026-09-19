@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AgroSphere | Farmer Dashboard</title>
+    <title>AgroSphere | Farmer Overview</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
   </head>
   <body class="dashboard-body">
     <div class="dashboard-shell">
       <header class="topbar">
-        <div class="brand" aria-label="CropCare AI brand">
+        <div class="brand" aria-label="AgroSphere brand">
           <div class="brand-mark" aria-hidden="true">
             <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
               <path d="M31.8 7.5c5.8 7.3 4 16.8-2.3 22.3-4.8 4.2-10.4 6.1-14.2 10.5-4.8 5.8-4.7 15.2 1.4 20.4 7.3 6.1 18.5 5.1 24.7-2.4 6.1-7.3 5.9-17.4 1.2-24.4C37.3 25.9 31.6 17.6 31.8 7.5Z" fill="rgba(255,255,255,0.18)"/>
@@ -112,6 +112,17 @@
             </div>
           </div>
 
+          {% if not current_user.farms %}
+            <section class="overview-empty-state" aria-labelledby="overview-empty-title">
+              <div class="overview-empty-copy">
+                <span class="overview-empty-kicker">Your farm workspace</span>
+                <h2 id="overview-empty-title">Start with your first farm</h2>
+                <p>Create a farm to add crops, upload plant photos, and begin tracking crop health.</p>
+              </div>
+              <a href="{{ url_for('farm.create_farm') }}" class="overview-empty-action">Create Farm</a>
+            </section>
+          {% endif %}
+
           <div class="stats-grid">
             <article class="stat-card">
               <div class="stat-head">
@@ -121,7 +132,7 @@
                 <span>Total Crops</span>
               </div>
               <div class="stat-value">{{ total_crops }}</div>
-              <div class="stat-meta positive">{{ 'New crop added' if total_crops == 0 else 'Live crop count' }}<span> {{ '0%' if total_crops == 0 else 'updated' }}</span></div>
+              <div class="stat-meta positive">{{ 'Create a farm to begin' if total_crops == 0 else 'Live crop count' }}<span> {{ '—' if total_crops == 0 else 'updated' }}</span></div>
             </article>
 
             <article class="stat-card">
@@ -158,6 +169,7 @@
             </article>
           </div>
 
+          {% if total_crops %}
           <div class="metric-grid">
             <article class="card chart-card">
               <h2>Healthy vs Diseased Plants</h2>
@@ -198,35 +210,48 @@
               </div>
             </article>
           </div>
+          {% else %}
+          <section class="overview-data-empty" aria-labelledby="overview-data-empty-title">
+            <div>
+              <span class="overview-empty-kicker">Your analytics will appear here</span>
+              <h2 id="overview-data-empty-title">No crop data yet</h2>
+              <p>Add a crop to unlock health comparisons, detection trends, and scan history.</p>
+            </div>
+            <a href="{{ url_for('farm.list_farms') }}" class="overview-secondary-action">Go to Farms</a>
+          </section>
+          {% endif %}
 
           <div class="lower-grid">
-            <article class="card recent-card">
-              <div class="section-head">
-                <h2>Recent Scans</h2>
-                <a href="{{ url_for('scan.history') }}">View all →</a>
-              </div>
-              {% if not recent_scans %}
-                <div class="buyer-empty-state" style="margin-top: 12px;">
-                  <h3>No scans yet</h3>
-                  <p>Your latest crop scans will appear here once you upload and analyze a plant photo.</p>
+            <div class="recent-guide-stack">
+              <article class="card recent-card">
+                <div class="section-head">
+                  <h2>Recent Scans</h2>
+                  <a href="{{ url_for('scan.history') }}">View all →</a>
                 </div>
-              {% else %}
-                <ul class="scan-list">
-                  {% for scan in recent_scans[:4] %}
-                    <li>
-                      <div class="scan-item">
-                        <span class="scan-icon scan-icon--green">🌱</span>
-                        <div class="scan-copy">
-                          <strong>{{ scan.crop.crop_type }} • {{ scan.crop.farm.name }}</strong>
-                          <span>{{ scan.predicted_disease }} • {{ scan.timestamp.strftime('%b %d, %Y') }}</span>
+                {% if not recent_scans %}
+                  <div class="buyer-empty-state" style="margin-top: 12px;">
+                    <h3>No scans yet</h3>
+                    <p>Your latest crop scans will appear here once you upload and analyze a plant photo.</p>
+                  </div>
+                {% else %}
+                  <ul class="scan-list">
+                    {% for scan in recent_scans[:4] %}
+                      <li>
+                        <div class="scan-item">
+                          <span class="scan-icon scan-icon--green">🌱</span>
+                          <div class="scan-copy">
+                            <strong>{{ scan.crop.crop_type }} • {{ scan.crop.farm.name }}</strong>
+                            <span>{{ scan.predicted_disease }} • {{ scan.timestamp.strftime('%b %d, %Y') }}</span>
+                          </div>
                         </div>
-                      </div>
-                      <span class="scan-tag {{ 'warning' if 'disease' in scan.predicted_disease.lower() else 'success' }}">{{ 'Diseased' if 'disease' in scan.predicted_disease.lower() else 'Healthy' }}</span>
-                    </li>
-                  {% endfor %}
-                </ul>
-              {% endif %}
-            </article>
+                        <span class="scan-tag {{ 'warning' if 'disease' in scan.predicted_disease.lower() else 'success' }}">{{ 'Diseased' if 'disease' in scan.predicted_disease.lower() else 'Healthy' }}</span>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </article>
+
+            </div>
 
             <aside class="side-stack">
               <article class="card mini-card">
@@ -240,70 +265,13 @@
                     <strong>{{ farm_area }} ha</strong>
                   </div>
                 </div>
-                <div class="stats-inline two-col">
-                  <div>
-                    <span class="stat-mini-label">Active Sensors</span>
-                    <strong>3.2 t/ha</strong>
-                  </div>
-                  <div>
-                    <span class="stat-mini-label">Yield</span>
-                    <strong>+0.4 t/ha</strong>
-                  </div>
-                </div>
               </article>
 
-              <article class="card weather-card">
-                <h3>Weather &amp; Environment</h3>
-                <div class="weather-main">
-                  <span class="weather-emoji">☀️</span>
-                  <div>
-                    <strong>22°C • Sunny</strong>
-                    <div class="weather-meta">
-                      <span>Humidity</span>
-                      <span>12 km/h NW</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="weather-grid">
-                  <div>
-                    <span>Soil Moisture</span>
-                    <strong>58%</strong>
-                  </div>
-                  <div>
-                    <span>Wind</span>
-                    <strong>12 km/h</strong>
-                  </div>
-                </div>
-                <div class="forecast-row">
-                  <div class="day-chip">
-                    <span>Today</span>
-                    <strong>22°/14°</strong>
-                    <em>Sunny</em>
-                  </div>
-                  <div class="day-chip">
-                    <span>Thu</span>
-                    <strong>19°/12°</strong>
-                    <em>Cloudy</em>
-                  </div>
-                  <div class="day-chip">
-                    <span>Fri</span>
-                    <strong>17°/11°</strong>
-                    <em>Light Rain</em>
-                  </div>
-                </div>
-              </article>
             </aside>
           </div>
         </main>
       </div>
 
-      <footer class="bottom-bar">
-        <span>AI Model: AgroSphere-2.1 active</span>
-        <span>•</span>
-        <span>All sensors online</span>
-        <span>•</span>
-        <span>Next scan scheduled in 1h 23m</span>
-      </footer>
     </div>
     <script>
       const dashboardViewToggle = document.getElementById('dashboardViewToggle');

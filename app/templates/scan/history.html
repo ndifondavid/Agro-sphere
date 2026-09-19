@@ -1,1 +1,64 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Scan History</title><link rel="stylesheet" href="{{ url_for('static', filename='css/scan.css') }}"><style>body{background:#edf4ef;font-family:Arial,sans-serif}.shell{max-width:1050px;margin:30px auto;padding:0 20px 48px}.head{display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap}.head h1{color:#143a2d}.back{color:#0f6a4e;font-weight:700;text-decoration:none}.list{display:grid;gap:14px}.scan{display:grid;grid-template-columns:120px 1fr auto;gap:18px;align-items:center;background:#fff;border:1px solid #dce9e0;border-radius:18px;padding:14px}.scan img,.placeholder{width:120px;height:90px;object-fit:cover;border-radius:12px;background:#dff7e9;display:grid;place-items:center;color:#0f6a4e;font-size:2rem}.scan h2{margin:0 0 6px;color:#143a2d}.scan p{margin:4px 0;color:#5d6e6a}.btn{display:inline-flex;padding:10px 14px;border-radius:10px;background:#0f6a4e;color:#fff;text-decoration:none;font-weight:700}@media(max-width:640px){.scan{grid-template-columns:1fr}.scan img,.placeholder{width:100%;height:180px}}</style></head><body><main class="shell"><div class="head"><div><a class="back" href="{{ url_for('dashboard.index') }}">Dashboard</a><h1>Scan History</h1></div><a class="btn" href="{{ url_for('scan.scan_leaf') }}">New Scan</a></div>{% if not scans %}<div class="scan"><div><h2>No scans yet</h2><p>Your analyzed crop images will appear here.</p></div></div>{% else %}<div class="list">{% for scan in scans %}<article class="scan">{% if scan.image_path %}<img src="{{ url_for('static', filename=scan.image_path) }}" alt="{{ scan.crop.crop_type }} scan">{% else %}<div class="placeholder">🌿</div>{% endif %}<div><h2>{{ scan.crop.crop_type }} • {{ scan.crop.farm.name }}</h2><p>{{ scan.predicted_disease }} • {{ (scan.confidence_score or 0)|round(1) }}% confidence</p><p>{{ scan.timestamp.strftime('%b %d, %Y at %H:%M') }}</p></div><a class="btn" href="{{ url_for('scan.scan_detail', scan_id=scan.id) }}">View Result</a></article>{% endfor %}</div>{% endif %}</main></body></html>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scan History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/scan.css') }}" />
+    <style>
+      body { background: #edf4ef; font-family: Arial, sans-serif; }
+      .shell { max-width: 1050px; margin: 30px auto; padding: 0 20px 48px; }
+      .head { display: flex; justify-content: space-between; gap: 16px; align-items: center; flex-wrap: wrap; }
+      .head h1 { color: #143a2d; }
+      .back { color: #0f6a4e; font-weight: 700; text-decoration: none; }
+      .list { display: grid; gap: 14px; }
+      .scan { display: grid; grid-template-columns: 120px 1fr auto; gap: 18px; align-items: center; background: #fff; border: 1px solid #dce9e0; border-radius: 18px; padding: 14px; }
+      .scan img, .placeholder { width: 120px; height: 90px; object-fit: cover; border-radius: 12px; background: #dff7e9; display: grid; place-items: center; color: #0f6a4e; font-size: 2rem; }
+      .scan h2 { margin: 0 0 6px; color: #143a2d; }
+      .scan p { margin: 4px 0; color: #5d6e6a; }
+      .btn { display: inline-flex; padding: 10px 14px; border-radius: 10px; background: #0f6a4e; color: #fff; text-decoration: none; font-weight: 700; }
+      @media (max-width: 640px) {
+        .scan { grid-template-columns: 1fr; }
+        .scan img, .placeholder { width: 100%; height: 180px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <div class="head">
+        <div>
+          <a class="back" href="{{ url_for('dashboard.index') }}">Overview</a>
+          <h1>Scan History</h1>
+        </div>
+        <a class="btn" href="{{ url_for('scan.scan_leaf') }}">New Scan</a>
+      </div>
+
+      {% if not scans %}
+        <div class="scan">
+          <div>
+            <h2>No scans yet</h2>
+            <p>Your analyzed crop images will appear here.</p>
+          </div>
+        </div>
+      {% else %}
+        <div class="list">
+          {% for scan in scans %}
+            <article class="scan">
+              {% if scan.image_path %}
+                <img src="{{ url_for('static', filename=scan.image_path) }}" alt="{{ scan.crop.crop_type }} scan" />
+              {% else %}
+                <div class="placeholder">🌿</div>
+              {% endif %}
+              <div>
+                <h2>{{ scan.crop.crop_type }} • {{ scan.crop.farm.name }}</h2>
+                <p>{{ scan.predicted_disease }} • {{ (scan.confidence_score or 0)|round(1) }}% confidence</p>
+                <p>{{ scan.timestamp.strftime('%b %d, %Y at %H:%M') }}</p>
+              </div>
+              <a class="btn" href="{{ url_for('scan.scan_detail', scan_id=scan.id) }}">View Result</a>
+            </article>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </main>
+  </body>
+</html>

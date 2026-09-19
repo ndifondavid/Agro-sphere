@@ -25,6 +25,12 @@
         color: #5d6e6a;
         margin: 0 0 22px;
       }
+      .required-hint {
+        color: #5d6e6a;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin: -8px 0 18px;
+      }
       form {
         display: grid;
         gap: 18px;
@@ -34,6 +40,14 @@
         gap: 8px;
         color: #21473e;
         font-weight: 700;
+      }
+      .label-text {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .required-star {
+        color: #c94242;
       }
       input {
         border: 1px solid #d8e1dc;
@@ -72,7 +86,7 @@
   </head>
   <body>
     <div class="topbar-strip" style="max-width: 760px; margin: 24px auto 0; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 0 6px; font-weight: 700; color: #1c4b3d;">
-      <a href="{{ url_for('dashboard.index') }}" style="color: #0f6a4e; text-decoration: none;">Dashboard</a>
+      <a href="{{ url_for('dashboard.index') }}" style="color: #0f6a4e; text-decoration: none;">Overview</a>
       <span>›</span>
       <a href="{{ url_for('farm.list_farms') }}" style="color: #0f6a4e; text-decoration: none;">Farms</a>
     </div>
@@ -80,15 +94,16 @@
     <div class="section-shell">
       <h1>Create a Farm</h1>
       <p>Add your farm details before you scan any crop or save disease history.</p>
+      <div class="required-hint">Required fields are marked with *</div>
 
       <form method="POST" action="{{ url_for('farm.create_farm') }}" enctype="multipart/form-data">
         <label>
-          Farm Name
+          <span class="label-text"><span>Farm Name</span><span class="required-star">*</span></span>
           <input type="text" name="name" placeholder="e.g. Sunrise Farm" required />
         </label>
 
         <label>
-          Farm Location
+          <span class="label-text"><span>Farm Location</span><span class="required-star">*</span></span>
           <input type="text" name="location" placeholder="e.g. Salinas Valley, CA" required />
         </label>
 
