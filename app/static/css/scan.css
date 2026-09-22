@@ -670,7 +670,6 @@ body.camera-open {
 }
 
 .tip-box {
-  margin-top: 18px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -679,6 +678,20 @@ body.camera-open {
   border-radius: 14px;
   padding: 16px 18px;
   color: var(--heading);
+}
+
+.result-callouts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.result-callouts .tip-box,
+.result-callouts .view-treatment-btn {
+  min-height: 82px;
+  margin-top: 0;
 }
 
 .tip-box .icon {
@@ -694,7 +707,6 @@ body.camera-open {
 
 .view-treatment-btn {
   width: 100%;
-  margin-top: 16px;
   min-height: 54px;
   padding: 14px 18px;
   background: rgba(26, 143, 95, 0.06);
@@ -702,6 +714,10 @@ body.camera-open {
   color: var(--brand-deep);
   font-size: 1.06rem;
   font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .bottom-actions {
@@ -753,6 +769,7 @@ body.camera-open {
   .profile-chip { max-width: 100%; }
   .drop-zone { min-height: 300px; }
   .action-row { grid-template-columns: 1fr; }
+  .result-callouts { grid-template-columns: 1fr; }
   .bottom-actions { grid-template-columns: 1fr; }
   .results-head { flex-direction: column; align-items: flex-start; }
   .scan-context-card { grid-template-columns: 1fr; }

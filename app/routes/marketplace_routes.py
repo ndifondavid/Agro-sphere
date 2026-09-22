@@ -162,6 +162,15 @@ def create_listing():
 def reserve(listing_id):
     listing = Listing.query.filter_by(id=listing_id, availability_status=STATUS_AVAILABLE).first_or_404()
 
+    existing_reservation = Reservation.query.filter(
+        Reservation.listing_id == listing.id,
+        Reservation.buyer_id == current_user.id,
+        Reservation.status.in_(("requested", "confirmed")),
+    ).first()
+    if existing_reservation:
+        flash("You already have an active reservation for this listing.", "warning")
+        return redirect(url_for("marketplace.browse"))
+
     reservation = Reservation(listing_id=listing.id, buyer_id=current_user.id)
     listing.availability_status = STATUS_RESERVED
     db.session.add(reservation)

@@ -29,26 +29,7 @@
           </div>
         </div>
 
-        <div class="top-actions">
-          <button class="icon-button" type="button" aria-label="Search">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          </button>
-          <a class="icon-button" href="{{ url_for('dashboard.notifications') }}" aria-label="Notifications">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 10-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5m6 0a3 3 0 0 1-6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span class="notification-dot">1</span>
-          </a>
-
-          <a class="profile-pill" href="{{ url_for('dashboard.settings') }}" aria-label="Profile">
-            <div class="profile-frame">
-                {% if current_user.profile_image_path %}
-                  <img src="{{ url_for('static', filename=current_user.profile_image_path) }}" alt="Profile picture" />
-                {% else %}
-                  <span>{{ current_user.name[0].upper() }}</span>
-                {% endif %}
-            </div>
-            <span>{{ current_user.name }}</span>
-          </a>
-        </div>
+        {% include 'partials/top_actions.html' %}
       </header>
 
       <div class="content-grid">

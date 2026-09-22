@@ -475,16 +475,7 @@
           <div class="brand-name">AgroSphere</div>
         </div>
 
-        <nav class="top-nav" aria-label="Farmer navigation">
-          <a href="{{ url_for('dashboard.index') }}" class="nav-link">Overview</a>
-          <a href="{{ url_for('scan.history') }}" class="nav-link active">History</a>
-          <a href="{{ url_for('dashboard.settings') }}" class="nav-link">Settings</a>
-        </nav>
-
-        <div class="profile-pill" aria-label="Farmer profile">
-          <img src="{{ url_for('static', filename='images/profile-avatar.svg') }}" alt="Farmer profile picture" />
-          <span>{{ farmer_name }}</span>
-        </div>
+        {% include 'partials/top_actions.html' %}
       </header>
 
       <main class="treatment-main">

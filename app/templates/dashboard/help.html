@@ -26,20 +26,7 @@
           <div class="help-brand-text">AgroSphere</div>
         </div>
 
-        <div class="help-top-actions">
-          <button class="help-icon-button" type="button" aria-label="Search">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="m16 16 4 4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
-          </button>
-          <button class="help-icon-button" type="button" aria-label="Notifications">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 10-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5m6 0a3 3 0 0 1-6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span class="notification-dot">1</span>
-          </button>
-          <div class="help-profile">
-            <div class="help-profile-badge">{{ current_user.name[0].upper() }}</div>
-            <span>{{ current_user.name }}</span>
-            <svg class="caret" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-        </div>
+        {% include 'partials/top_actions.html' %}
       </header>
 
       <div class="help-layout">
@@ -55,25 +42,13 @@
               <span class="help-menu-icon">
                 <svg viewBox="0 0 24 24"><path d="M12 21s-7-4.35-7-10a4 4 0 0 1 7-2.65A4 4 0 0 1 19 11c0 5.65-7 10-7 10Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </span>
-              Fields
+                Farms
             </a>
             <a href="{{ url_for('scan.scan_leaf') }}" class="help-menu-item">
               <span class="help-menu-icon">
                 <svg viewBox="0 0 24 24"><path d="M12 3.5c-2.3 2.4-4 5.4-4 8.4a4 4 0 1 0 8 0c0-3-1.7-6-4-8.4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </span>
-              Crops
-            </a>
-            <a href="{{ url_for('scan.history') }}" class="help-menu-item">
-              <span class="help-menu-icon">
-                <svg viewBox="0 0 24 24"><path d="M4 7.5h16M4 12h8m-8 4.5h12M18 12.5l2.5 2.5m-2.5 0 2.5-2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </span>
-              Scans
-            </a>
-            <a href="{{ url_for('dashboard.notifications') }}" class="help-menu-item">
-              <span class="help-menu-icon">
-                <svg viewBox="0 0 24 24"><path d="M7 18V9m5 9V5m5 13v-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              </span>
-              Analytics
+                Scan
             </a>
             <a href="{{ url_for('dashboard.settings') }}" class="help-menu-item">
               <span class="help-menu-icon">
@@ -85,7 +60,7 @@
               <span class="help-menu-icon">
                 <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9.1 9.2a3 3 0 1 1 5.8 1.4c-.9 1.4-2.8 1.9-3.8 3.3-.4.6-.4 1.1-.4 1.9M12 17.5h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </span>
-              Help & Support
+                Help
             </a>
           </nav>
 
@@ -129,61 +104,7 @@
               </div>
 
               <div class="faq-item faq-featured">
-                <div class="faq-question-row">
-                  <h3>How do I upload a new crop scan?</h3>
-                  <span class="chevron">⌄</span>
-                </div>
-                <p>
-                  Go to the Scans page from the sidebar, then click the <strong>+ New Scan</strong>
-                  button on the top right, upload an image, drag and drop, or connect a device.
-                  Processing usually takes 1–3 minutes and results will appear in your overview.
-                </p>
-              </div>
-
-              <div class="faq-item faq-collapsed">
-                <div class="faq-question-row">
-                  <h3>Why is my scan processing taking longer than usual?</h3>
-                  <span class="chevron">›</span>
-                </div>
-              </div>
-
-              <div class="faq-item faq-collapsed">
-                <div class="faq-question-row">
-                  <h3>How do I invite team members to my workspace?</h3>
-                  <span class="chevron">›</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="help-panel videos-panel">
-              <div class="section-title-row">
-                <span class="section-badge video-badge">▶</span>
-                <h2>Video Tutorials</h2>
-              </div>
-
-              <div class="video-item">
-                <div class="video-thumb thumb-one"></div>
-                <div class="video-copy">
-                  <h3>Getting Started with AgroSphere</h3>
-                  <p>5:24 • Basics &amp; Overview</p>
-                </div>
-              </div>
-
-              <div class="video-item">
-                <div class="video-thumb thumb-two"></div>
-                <div class="video-copy">
-                  <h3>Crop Disease Detection Walkthrough</h3>
-                  <p>8:12 • Advanced Features</p>
-                </div>
-              </div>
-
-              <div class="video-item">
-                <div class="video-thumb thumb-three"></div>
-                <div class="video-copy">
-                  <h3>Exporting Analytics Reports</h3>
-                  <p>4:37 • Data &amp; Exports</p>
-                </div>
-              </div>
+                {% include 'partials/sidebar.html' %}
             </div>
 
             <div class="help-panel support-panel">

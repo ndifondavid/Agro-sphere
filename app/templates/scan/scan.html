@@ -141,12 +141,14 @@
               </ol>
             </div>
 
-            <div class="tip-box">
-              <div class="icon" aria-hidden="true">💡</div>
-              <div>Tip: Monitor nearby plants for similar symptoms over the next 5–7 days.</div>
-            </div>
+            <div class="result-callouts">
+              <div class="tip-box">
+                <div class="icon" aria-hidden="true">💡</div>
+                <div>Tip: Monitor nearby plants for similar symptoms over the next 5–7 days.</div>
+              </div>
 
-            <a href="{{ url_for('scan.scan_detail', scan_id=scan.id) if scan else url_for('dashboard.treatment_details') }}" class="view-treatment-btn">View treatment details</a>
+              <a href="{{ url_for('scan.scan_detail', scan_id=scan.id) if scan else url_for('dashboard.treatment_details') }}" class="view-treatment-btn">View treatment details</a>
+            </div>
 
             <div class="bottom-actions">
               <a href="{{ url_for('scan.history') }}" class="save-btn">Save to History</a>

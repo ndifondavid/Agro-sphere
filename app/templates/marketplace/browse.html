@@ -13,11 +13,18 @@
           <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M32 8c3.3 4.9 2.3 10.8-1.8 15.1-4.2 4.4-10.1 6.1-15.6 9.3-5.8 3.5-9.1 9.8-8.7 16.3.4 7.2 6.3 13.1 13.5 13.1 7.7 0 13.8-6.1 13.8-13.8 0-9.4-7.7-16.8-13.5-19.5C22.3 23.8 17.7 18.5 17.7 12.8c0-1.7.3-3.3.9-4.8 2 3.2 5 5.6 8.6 7.1 4.7 1.9 10.1 2.2 14.3.7L32 8Z" fill="#E8FFF2"/></svg></div>
           <div class="brand-text"><span class="brand-title">AgroSphere</span><small>AgroMarket • Buyer Marketplace</small></div>
         </div>
-        <div class="top-actions"><a class="profile-pill" href="{{ url_for('auth.logout') }}"><div class="profile-frame"><span>{{ current_user.name[0].upper() }}</span></div><span>{{ current_user.name }}</span></a></div>
+        {% include 'partials/top_actions.html' %}
       </header>
-      <div class="persistent-layout">
-        {% include 'partials/sidebar.html' %}
-        <main class="marketplace-page">
+      <main class="marketplace-page">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="marketplace-alerts" role="status">
+              {% for category, message in messages %}
+                <div class="marketplace-alert marketplace-alert--{{ category }}">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
         <nav aria-label="Marketplace navigation" style="display:flex;gap:16px;margin-bottom:18px;font-weight:700;"><a href="{{ url_for('marketplace.browse') }}" style="color:#0f6a4e;text-decoration:none;">Home</a><a href="{{ url_for('marketplace.browse') }}" style="color:#0f6a4e;text-decoration:none;">Market</a></nav>
         <div class="marketplace-header-row"><div><h1>Marketplace</h1><p>Fresh produce available from trusted farmers.</p></div></div>
         <form method="get" action="{{ url_for('marketplace.browse') }}" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr auto;gap:12px;align-items:end;margin:20px 0;padding:18px;background:#f5faf6;border:1px solid #dce9e0;border-radius:16px;">
@@ -47,8 +54,7 @@
             {% endfor %}
           </div>
         {% endif %}
-        </main>
-      </div>
+      </main>
     </div>
   </body>
 </html>
