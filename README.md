@@ -109,6 +109,8 @@ Typical farmer flow:
 - The default database is SQLite.
 - AI model paths and upload configuration are managed in `config.py`.
 - The disease detector includes a fallback result to keep the app usable even when the model file is absent.
+- Production requires `SECRET_KEY` and `DATABASE_URL` environment variables. Production sessions use secure, HTTP-only, same-site cookies.
+- Local development uses `instance/agrosphere.db`; it is not shared with other cloned copies of the repository.
 
 ## Testing
 

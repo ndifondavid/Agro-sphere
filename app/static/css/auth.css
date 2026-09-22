@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
 .auth-messages {
   display: grid;
   gap: 8px;
@@ -25,7 +27,7 @@
   --green-500: #59d39c;
   --green-100: #ecfff6;
   --white: #ffffff;
-  --panel-bg: #f4f7f5;
+  --panel-bg: #f7faf8;
   --field-bg: #f8faf9;
   --line: rgba(12, 72, 58, 0.12);
   --text: #183c34;
@@ -38,9 +40,13 @@ body {
   min-height: 100vh;
   display: grid;
   place-items: center;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #e7ece9;
+  font-family: "Times New Roman", Times, serif !important;
+  background: #ffffff;
   color: var(--text);
+}
+
+h1, h2, h3, .form-title {
+  font-family: "Times New Roman", Times, serif;
 }
 
 a { color: inherit; text-decoration: none; }
@@ -58,7 +64,7 @@ button, input { font: inherit; }
   grid-template-columns: 1fr 1.2fr;
   width: min(860px, 92vw);
   min-height: 530px;
-  background: linear-gradient(180deg, #1cb878 0%, #0f8259 100%);
+  background: linear-gradient(180deg, #0f6a4e 0%, #073b2b 100%);
   border-radius: 18px;
   overflow: hidden;
   box-shadow: 0 18px 30px rgba(10, 71, 53, 0.18);

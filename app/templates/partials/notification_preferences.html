@@ -1,0 +1,43 @@
+<section class="settings-card notifications-card" aria-labelledby="notification-settings-title">
+  <div class="settings-section-header notifications-title-block">
+    <h2 id="notification-settings-title">Notification Settings</h2>
+    <p>Manage the alerts and activity updates you receive in the notification menu.</p>
+  </div>
+
+  <div class="notification-section-group">
+    <div class="subsection-title">Alert Types</div>
+    <p class="subsection-copy">Choose which activity should appear in your notifications.</p>
+
+    <div class="alert-row" data-notification-setting>
+      <div class="alert-copy"><div class="alert-icon green-icon">🌱</div><div><h3>Disease Alert</h3><p>Get notified when a crop disease is detected in your fields.</p></div></div>
+      <label class="switch"><input type="checkbox" name="disease_alert" {% if notification_preferences.get('disease_alert', true) %}checked{% endif %} /><span class="slider"></span></label>
+      <span class="switch-state on">ON</span>
+    </div>
+    <div class="alert-row" data-notification-setting>
+      <div class="alert-copy"><div class="alert-icon amber-icon">⛅</div><div><h3>Weather Warning</h3><p>Receive alerts for severe weather, frost, rainfall, and storms.</p></div></div>
+      <label class="switch"><input type="checkbox" name="weather_warning" {% if notification_preferences.get('weather_warning', true) %}checked{% endif %} /><span class="slider"></span></label>
+      <span class="switch-state on">ON</span>
+    </div>
+    <div class="alert-row" data-notification-setting>
+      <div class="alert-copy"><div class="alert-icon gray-icon">💬</div><div><h3>Community Reply</h3><p>Get notified when someone replies to your community posts.</p></div></div>
+      <label class="switch"><input type="checkbox" name="community_reply" {% if notification_preferences.get('community_reply', false) %}checked{% endif %} /><span class="slider"></span></label>
+      <span class="switch-state off">OFF</span>
+    </div>
+    <div class="alert-row" data-notification-setting>
+      <div class="alert-copy"><div class="alert-icon blue-icon">📅</div><div><h3>Weekly Report</h3><p>Receive a weekly summary of your field health and activities every Monday.</p></div></div>
+      <label class="switch"><input type="checkbox" name="weekly_report" {% if notification_preferences.get('weekly_report', true) %}checked{% endif %} /><span class="slider"></span></label>
+      <span class="switch-state on">ON</span>
+    </div>
+  </div>
+
+  <div class="notification-section-group delivery-block">
+    <div class="subsection-title">Delivery Methods</div>
+    <p class="subsection-copy">Choose how you want to receive notifications.</p>
+    <div class="delivery-grid">
+      <div class="delivery-option"><div class="delivery-header"><div class="delivery-icon email-icon">✉</div><div><span>Email</span><small>{{ current_user.email }}</small></div></div><label class="switch"><input type="checkbox" name="email_delivery" {% if notification_preferences.get('email_delivery', true) %}checked{% endif %} /><span class="slider"></span></label></div>
+      <div class="delivery-option"><div class="delivery-header"><div class="delivery-icon sms-icon">💬</div><div><span>SMS</span><small>{{ current_user.phone or 'Add a phone number in Profile' }}</small></div></div><label class="switch"><input type="checkbox" name="sms_delivery" {% if notification_preferences.get('sms_delivery', true) %}checked{% endif %} /><span class="slider"></span></label></div>
+      <div class="delivery-option"><div class="delivery-header"><div class="delivery-icon whatsapp-icon">💬</div><div><span>WhatsApp</span><small>{{ current_user.phone or 'Add a phone number in Profile' }}</small></div></div><label class="switch"><input type="checkbox" name="whatsapp_delivery" {% if notification_preferences.get('whatsapp_delivery', true) %}checked{% endif %} /><span class="slider"></span></label></div>
+      <div class="delivery-option"><div class="delivery-header"><div class="delivery-icon push-icon">🔔</div><div><span>Push Notifications</span><small>Browser notifications on this device</small></div></div><label class="switch"><input type="checkbox" name="push_delivery" {% if notification_preferences.get('push_delivery', true) %}checked{% endif %} /><span class="slider"></span></label></div>
+    </div>
+  </div>
+</section>

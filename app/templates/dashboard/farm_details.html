@@ -67,11 +67,12 @@
       }
     </style>
   </head>
-  <body>
+  <body class="standalone-page">
+    {% include 'partials/sidebar.html' %}
     <div class="page-shell">
       <div class="topbar-strip">
         <div class="breadcrumbs">
-          <a href="{{ url_for('dashboard.index') }}">Dashboard</a>
+          <a href="{{ url_for('dashboard.index') }}">Overview</a>
           <span>/</span>
           <a href="{{ url_for('farm.list_farms') }}">Farms</a>
           <span>/</span>
@@ -80,6 +81,7 @@
         <div class="top-actions">
           <a class="top-action" href="{{ url_for('farm.list_farms') }}">Back to Farms</a>
           <a class="top-action" href="{{ url_for('farm.manage_farm', farm_id=farm.id) }}">Manage Farm</a>
+          {% include 'partials/top_actions.html' %}
         </div>
       </div>
 

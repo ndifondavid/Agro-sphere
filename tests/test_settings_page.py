@@ -72,7 +72,7 @@ def test_farmer_can_save_profile_changes():
         assert user.language == "French"
 
 
-def test_notifications_page_loads_for_authenticated_farmer():
+def test_notification_preferences_live_inside_settings():
     app = make_app()
     with app.app_context():
         make_farmer()
@@ -84,10 +84,10 @@ def test_notifications_page_loads_for_authenticated_farmer():
             follow_redirects=True,
         )
 
-        response = client.get("/dashboard/notifications")
+        response = client.get("/dashboard/settings")
         assert response.status_code == 200
         html = response.get_data(as_text=True)
-        assert "Notifications" in html
+        assert "Profile &amp; Notifications" in html
         assert "Alert Types" in html
 
 
@@ -102,12 +102,17 @@ def test_farmer_can_save_notification_preferences():
             data={"email": "notifications-save@example.com", "password": "StrongPass1"},
         )
         response = client.post(
-            "/dashboard/notifications",
-            data={"disease_alert": "on", "email_delivery": "on"},
+            "/dashboard/settings",
+            data={
+                "name": "Farmer One",
+                "email": "notifications-save@example.com",
+                "disease_alert": "on",
+                "email_delivery": "on",
+            },
             follow_redirects=True,
         )
         assert response.status_code == 200
-        assert "Notification preferences saved." in response.get_data(as_text=True)
+        assert "Profile changes saved." in response.get_data(as_text=True)
 
         from app.models.user import User
         user = User.query.filter_by(email="notifications-save@example.com").one()
@@ -175,6 +180,19 @@ def test_dashboard_and_help_pages_do_not_use_placeholder_links():
         assert 'href="#"' not in help_html
 
 
+def test_landing_page_links_point_to_real_sections():
+    app = make_app()
+
+    with app.test_client() as client:
+        response = client.get("/")
+        assert response.status_code == 200
+        html = response.get_data(as_text=True)
+        assert 'href="#demo"' not in html
+        assert 'href="#treatment"' not in html
+        assert 'href="#how-it-works"' in html
+        assert 'href="#features"' in html
+
+
 def test_new_farmer_dashboard_starts_at_zero_until_data_is_added():
     app = make_app()
     with app.app_context():
@@ -195,6 +213,41 @@ def test_new_farmer_dashboard_starts_at_zero_until_data_is_added():
         assert "0" in html
         assert "12,450" not in html
         assert "136" not in html
+
+
+def test_farmer_creation_forms_use_consistent_required_field_ux():
+    app = make_app()
+    with app.app_context():
+        make_farmer()
+
+    with app.app_context():
+        from app.models.farm import Farm
+        from app.extensions import db
+        farm = Farm(owner_id=1, name="Demo Farm", location="Kigali")
+        db.session.add(farm)
+        db.session.commit()
+        farm_id = farm.id
+
+    with app.test_client() as client:
+        login_response = client.post(
+            "/auth/login",
+            data={"email": "farmer@example.com", "password": "StrongPass1"},
+            follow_redirects=True,
+        )
+        assert login_response.status_code == 200
+
+        response = client.get("/farms/new")
+        assert response.status_code == 200
+        farm_html = response.get_data(as_text=True)
+        assert "Required fields are marked with *" in farm_html
+        assert 'name="name"' in farm_html and 'required' in farm_html
+        assert 'name="location"' in farm_html and 'required' in farm_html
+
+        crop_response = client.get(f"/farms/{farm_id}/crops/new")
+        assert crop_response.status_code == 200
+        crop_html = crop_response.get_data(as_text=True)
+        assert "Required fields are marked with *" in crop_html
+        assert 'name="crop_type"' in crop_html and 'required' in crop_html
 
 
 def test_farmer_can_create_farm_with_details_and_manage_page_loads():
