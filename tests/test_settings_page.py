@@ -72,7 +72,7 @@ def test_farmer_can_save_profile_changes():
         assert user.language == "French"
 
 
-def test_notifications_page_loads_for_authenticated_farmer():
+def test_notification_preferences_live_inside_settings():
     app = make_app()
     with app.app_context():
         make_farmer()
@@ -84,10 +84,10 @@ def test_notifications_page_loads_for_authenticated_farmer():
             follow_redirects=True,
         )
 
-        response = client.get("/dashboard/notifications")
+        response = client.get("/dashboard/settings")
         assert response.status_code == 200
         html = response.get_data(as_text=True)
-        assert "Notifications" in html
+        assert "Profile &amp; Notifications" in html
         assert "Alert Types" in html
 
 
@@ -102,12 +102,17 @@ def test_farmer_can_save_notification_preferences():
             data={"email": "notifications-save@example.com", "password": "StrongPass1"},
         )
         response = client.post(
-            "/dashboard/notifications",
-            data={"disease_alert": "on", "email_delivery": "on"},
+            "/dashboard/settings",
+            data={
+                "name": "Farmer One",
+                "email": "notifications-save@example.com",
+                "disease_alert": "on",
+                "email_delivery": "on",
+            },
             follow_redirects=True,
         )
         assert response.status_code == 200
-        assert "Notification preferences saved." in response.get_data(as_text=True)
+        assert "Profile changes saved." in response.get_data(as_text=True)
 
         from app.models.user import User
         user = User.query.filter_by(email="notifications-save@example.com").one()

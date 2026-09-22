@@ -24,6 +24,8 @@ class BaseConfig:
     # AI Tier model location (SDS Section 2 - AI Tier)
     AI_MODEL_PATH = os.path.join(BASE_DIR, "ai_model", "disease_model.h5")
     AI_CONFIDENCE_THRESHOLD = 0.60
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SAMESITE = "Lax"
 
 
 class DevelopmentConfig(BaseConfig):
@@ -41,6 +43,6 @@ class TestingConfig(BaseConfig):
 
 class ProductionConfig(BaseConfig):
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        "DATABASE_URL", "sqlite:///" + os.path.join(INSTANCE_DIR, "agrosphere.db")
-    )
+    SECRET_KEY = os.environ.get("SECRET_KEY")
+    SESSION_COOKIE_SECURE = True
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")

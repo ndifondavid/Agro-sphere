@@ -14,6 +14,7 @@ from flask_login import login_required, current_user
 
 from app.extensions import db
 from app.models.farm import Farm
+from app.models.scan import Scan
 from app.models.crop import Crop
 from app.utils.decorators import roles_required
 from app.utils.validators import require_fields, allowed_image_file, is_within_max_size
@@ -71,8 +72,15 @@ def list_farms():
             status = "Needs setup"
             health_style = "neutral"
         else:
-            status = "Healthy"
-            health_style = "healthy"
+            crop_ids = [crop.id for crop in farm.crops]
+            recent_scans = Scan.query.filter(Scan.crop_id.in_(crop_ids)).order_by(Scan.timestamp.desc()).limit(10).all()
+            diseased_scans = [scan for scan in recent_scans if "healthy" not in scan.predicted_disease.lower()]
+            if diseased_scans:
+                status = "Needs attention"
+                health_style = "warning"
+            else:
+                status = "Healthy"
+                health_style = "healthy"
         farm_cards.append({
             "farm": farm,
             "crop_name": first_crop,
