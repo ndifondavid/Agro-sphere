@@ -84,7 +84,8 @@
       }
     </style>
   </head>
-  <body>
+  <body class="standalone-page">
+    {% include 'partials/sidebar.html' %}
     <div class="topbar-strip" style="max-width: 760px; margin: 24px auto 0; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 0 6px; font-weight: 700; color: #1c4b3d;">
       <a href="{{ url_for('dashboard.index') }}" style="color: #0f6a4e; text-decoration: none;">Overview</a>
       <span>›</span>

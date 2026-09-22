@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">AS logo</title>
+  <desc id="desc">White AS monogram inside a deep green circle</desc>
+  <circle cx="128" cy="128" r="112" fill="#0b472b"/>
+  <path fill="#fff" d="M62 176 94 80h30l34 96h-27l-7-22H93l-7 22H62Zm38-43h18l-9-31-9 31Zm73 45c-21 0-35-9-40-25l24-8c3 8 9 12 18 12 8 0 13-3 13-8 0-4-3-6-11-8l-13-3c-17-4-26-13-26-28 0-19 16-31 39-31 20 0 34 8 40 23l-23 9c-3-7-9-10-17-10-7 0-11 3-11 7 0 4 3 6 10 8l14 3c18 4 27 14 27 29 0 19-17 30-44 30Z"/>
+</svg>

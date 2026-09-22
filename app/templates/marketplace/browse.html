@@ -15,7 +15,9 @@
         </div>
         <div class="top-actions"><a class="profile-pill" href="{{ url_for('auth.logout') }}"><div class="profile-frame"><span>{{ current_user.name[0].upper() }}</span></div><span>{{ current_user.name }}</span></a></div>
       </header>
-      <main class="marketplace-page">
+      <div class="persistent-layout">
+        {% include 'partials/sidebar.html' %}
+        <main class="marketplace-page">
         <nav aria-label="Marketplace navigation" style="display:flex;gap:16px;margin-bottom:18px;font-weight:700;"><a href="{{ url_for('marketplace.browse') }}" style="color:#0f6a4e;text-decoration:none;">Home</a><a href="{{ url_for('marketplace.browse') }}" style="color:#0f6a4e;text-decoration:none;">Market</a></nav>
         <div class="marketplace-header-row"><div><h1>Marketplace</h1><p>Fresh produce available from trusted farmers.</p></div></div>
         <form method="get" action="{{ url_for('marketplace.browse') }}" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr auto;gap:12px;align-items:end;margin:20px 0;padding:18px;background:#f5faf6;border:1px solid #dce9e0;border-radius:16px;">
@@ -45,7 +47,8 @@
             {% endfor %}
           </div>
         {% endif %}
-      </main>
+        </main>
+      </div>
     </div>
   </body>
 </html>

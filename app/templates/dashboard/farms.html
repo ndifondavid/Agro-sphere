@@ -62,7 +62,9 @@
         </div>
       </header>
 
-      <main class="farm-management-page">
+      <div class="persistent-layout">
+        {% include 'partials/sidebar.html' %}
+        <main class="farm-management-page">
         <div class="farm-page-top">
           <div>
             <h1>Farms Management</h1>
@@ -241,7 +243,8 @@
             <p>Try another farm name, crop, or location.</p>
           </div>
         {% endif %}
-      </main>
+        </main>
+      </div>
     </div>
     <script>
       const farmSearch = document.getElementById('farmSearch');

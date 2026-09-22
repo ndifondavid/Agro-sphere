@@ -27,7 +27,9 @@
         <a href="{{ url_for('farm.list_farms') }}" class="close-button" aria-label="Close">×</a>
       </header>
 
-      <main class="market-form-wrap">
+      <div class="persistent-layout">
+        {% include 'partials/sidebar.html' %}
+        <main class="market-form-wrap">
         <div class="market-form-header">
           <h1>List Crop to Market</h1>
         </div>
@@ -113,7 +115,8 @@
             <button type="submit" class="primary-market-btn">List to Market</button>
           </div>
         </form>
-      </main>
+        </main>
+      </div>
     </div>
   </body>
 </html>

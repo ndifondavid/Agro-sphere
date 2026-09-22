@@ -72,13 +72,11 @@ button, input { font: inherit; }
   border-radius: 14px;
   display: grid;
   place-items: center;
-  background: rgba(26, 143, 95, 0.06);
+  background: url('../images/as-logo.svg') center / contain no-repeat;
 }
 
 .brand-mark svg {
-  width: 100%;
-  height: 100%;
-  display: block;
+  display: none;
 }
 
 .brand-text {
