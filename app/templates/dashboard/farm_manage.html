@@ -69,7 +69,8 @@
       @media (max-width: 760px) { .two-col { grid-template-columns:1fr; } }
     </style>
   </head>
-  <body>
+  <body class="standalone-page">
+    {% include 'partials/sidebar.html' %}
     <div class="page-shell">
       <div class="topbar-strip">
         <a href="{{ url_for('dashboard.index') }}">Overview</a>

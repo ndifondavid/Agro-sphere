@@ -921,8 +921,9 @@ textarea:focus-visible {
   gap: 16px;
   min-height: 118px;
   padding: 16px 28px 18px 24px;
-  background: linear-gradient(180deg, var(--green-900), var(--green-800));
-  color: #fff;
+  background: #fff;
+  border-bottom: 1px solid rgba(18, 75, 57, 0.1);
+  color: var(--green-900);
 }
 
 .brand {
@@ -935,12 +936,11 @@ textarea:focus-visible {
   width: 54px;
   height: 54px;
   flex-shrink: 0;
+  background: url('../images/as-logo.svg') center / contain no-repeat;
 }
 
 .brand-mark svg {
-  width: 100%;
-  height: 100%;
-  display: block;
+  display: none;
 }
 
 .brand-text {
@@ -958,7 +958,7 @@ textarea:focus-visible {
 
 .brand-text small {
   font-size: 1.1rem;
-  color: rgba(255,255,255,0.82);
+  color: #60736c;
   letter-spacing: -0.02em;
 }
 
@@ -1062,6 +1062,29 @@ textarea:focus-visible {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
   min-height: 860px;
+}
+
+.persistent-layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  min-height: 860px;
+}
+
+.persistent-layout > main {
+  min-width: 0;
+}
+
+.standalone-page > .persistent-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 280px;
+  min-height: 100vh;
+  z-index: 10;
+}
+
+.standalone-page > main,
+.standalone-page > .page-shell {
+  margin-left: 280px;
 }
 
 .sidebar {
@@ -1191,9 +1214,9 @@ textarea:focus-visible {
   width: 54px;
   height: 54px;
   border-radius: 14px;
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.18);
-  color: #fff;
+  background: #eff7f2;
+  border: 1px solid rgba(18, 75, 57, 0.14);
+  color: var(--green-900);
   display: grid;
   place-items: center;
   font-size: 2.3rem;
@@ -2677,13 +2700,25 @@ textarea:focus-visible {
 }
 
 @media (max-width: 980px) {
-  .content-grid {
+  .content-grid,
+  .persistent-layout {
     grid-template-columns: 1fr;
   }
 
   .sidebar {
     border-right: none;
     border-bottom: 1px solid rgba(18, 75, 57, 0.08);
+  }
+
+  .standalone-page > .persistent-sidebar {
+    position: static;
+    width: auto;
+    min-height: auto;
+  }
+
+  .standalone-page > main,
+  .standalone-page > .page-shell {
+    margin-left: 0;
   }
 
   .profile-layout {
