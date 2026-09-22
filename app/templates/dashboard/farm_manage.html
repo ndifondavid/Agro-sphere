@@ -14,11 +14,30 @@
       .heading { margin-bottom:20px; }
       .heading h1 { margin:0 0 8px; font-size:clamp(2rem,4vw,2.8rem); color:#143a2d; }
       .heading p { margin:0; color:#5d6e6a; }
+      .overview-grid {
+        display:grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap:16px; margin:22px 0 26px;
+      }
+      .summary-card {
+        background:linear-gradient(180deg,#f9fbfa,#f2f9f4); border:1px solid #dfece3; border-radius:18px; padding:18px 16px;
+        box-shadow:0 10px 18px rgba(14,72,52,0.04);
+      }
+      .summary-card.primary { background:linear-gradient(135deg,#e7fff1,#f6faf7); }
+      .summary-card .eyebrow { display:block; margin-bottom:10px; font-size:.76rem; text-transform:uppercase; letter-spacing:.08em; color:#507468; font-weight:800; }
+      .summary-card h2 { margin:0 0 8px; font-size:1.5rem; color:#143a2d; }
+      .summary-card strong { display:block; color:#173b32; font-size:1.1rem; }
+      .summary-card small { display:block; margin-top:6px; color:#5d6e6a; }
+      .status-badge {
+        display:inline-flex; align-items:center; justify-content:center; width:fit-content; padding:7px 12px; border-radius:999px; font-size:.8rem; font-weight:800; border:1px solid transparent;
+      }
+      .status-badge.active { background:#ebfff2; color:#0f6a4e; border-color:rgba(15,106,78,.12); }
+      .status-badge.neutral { background:#f3f6f5; color:#465d59; border-color:rgba(70,93,89,.12); }
       .two-col { display:grid; grid-template-columns: 1fr 1fr; gap:24px; }
       .section-card { background:#f8fbf9; border:1px solid #e3ece6; border-radius:20px; padding:20px; }
       .section-card h2 { margin:0 0 16px; color:#143a2d; }
       form { display:grid; gap:16px; }
       label { display:grid; gap:8px; color:#21473e; font-weight:700; }
+      .field-label { display:inline-flex; align-items:center; gap:8px; }
+      .field-label svg { width:16px; height:16px; color:#0f6a4e; flex-shrink:0; }
       input, textarea { border:1px solid #d8e1dc; border-radius:12px; padding:14px 16px; font:inherit; background:#fff; }
       textarea { min-height:120px; resize:vertical; }
       .form-actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:8px; }
@@ -26,8 +45,20 @@
       .primary-btn { background:linear-gradient(180deg,#0f7a59,#0f5d43); color:#fff; border:none; cursor:pointer; }
       .secondary-btn { background:#edf5ef; color:#0d5f43; border:1px solid rgba(15,93,67,0.1); }
       .crop-list { margin-top:26px; display:grid; gap:16px; }
-      .crop-item { background:#f8fbf9; border:1px solid #e3ece6; border-radius:18px; padding:16px; display:grid; gap:10px; }
+      .crop-item { background:#f8fbf9; border:1px solid #e3ece6; border-radius:18px; padding:16px; display:grid; gap:12px; }
+      .crop-head-row { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+      .crop-title-wrap { display:flex; align-items:center; gap:10px; }
       .crop-item h3 { margin:0; color:#143a2d; }
+      .crop-status-badge {
+        display:inline-flex; align-items:center; justify-content:center; padding:5px 10px; border-radius:999px; background:#ebfff2; color:#0f6a4e; font-size:.75rem; font-weight:800; border:1px solid rgba(15,106,78,.12);
+      }
+      .crop-date { color:#5d6e6a; font-size:.78rem; font-weight:700; }
+      .crop-meta-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:10px; }
+      .meta-box {
+        background:#fff; border:1px solid #dfece3; border-radius:12px; padding:10px 12px; display:grid; gap:4px;
+      }
+      .meta-box span { font-size:.72rem; color:#65817b; text-transform:uppercase; letter-spacing:.06em; font-weight:800; }
+      .meta-box strong { color:#173b32; font-size:.98rem; }
       .crop-item p { margin:0; color:#4f5e5b; }
       .thumb { width:100%; height:150px; object-fit:cover; border-radius:14px; display:block; background:#dff7e9; }
       .file-picker { display:grid; gap:8px; }
@@ -38,12 +69,14 @@
       @media (max-width: 760px) { .two-col { grid-template-columns:1fr; } }
     </style>
   </head>
-  <body>
+  <body class="standalone-page">
+    {% include 'partials/sidebar.html' %}
     <div class="page-shell">
       <div class="topbar-strip">
-        <a href="{{ url_for('dashboard.index') }}">Dashboard</a>
+        <a href="{{ url_for('dashboard.index') }}">Overview</a>
         <span>›</span>
         <a href="{{ url_for('farm.list_farms') }}">Farms</a>
+        {% include 'partials/top_actions.html' %}
       </div>
 
       <div class="panel">
@@ -64,6 +97,29 @@
           <p>Update farm information, add new crops, and keep the profile detailed for every part of your operation.</p>
         </div>
 
+        <div class="overview-grid">
+          <div class="summary-card primary">
+            <span class="eyebrow">Farm Status</span>
+            <h2>{{ farm.name }}</h2>
+            <div class="status-badge active">Active farm</div>
+          </div>
+          <div class="summary-card">
+            <span class="eyebrow">Location</span>
+            <strong>{{ farm.location }}</strong>
+            <small>{{ farm.farm_size or 'Farm size not set yet' }}</small>
+          </div>
+          <div class="summary-card">
+            <span class="eyebrow">Crop Count</span>
+            <strong>{{ farm.crops|length }}</strong>
+            <small>{{ 'Healthy crop records tracked' if farm.crops else 'No crops added yet' }}</small>
+          </div>
+          <div class="summary-card">
+            <span class="eyebrow">Overview</span>
+            <strong>{{ 'Ready to scan' if farm.crops else 'Setup needed' }}</strong>
+            <small>{{ 'Farm details are complete' if farm.location and farm.name else 'Add missing farm details' }}</small>
+          </div>
+        </div>
+
         <div class="two-col">
           <section class="section-card">
             <h2>Farm Details</h2>
@@ -71,17 +127,39 @@
               <input type="hidden" name="action" value="update_farm" />
 
               <label>
-                Farm Name
+                <span class="field-label">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 21s6-5.6 6-11a6 6 0 1 0-12 0c0 5.4 6 11 6 11Z"></path>
+                    <circle cx="12" cy="10" r="2.5"></circle>
+                  </svg>
+                  <span>Farm Name</span>
+                </span>
                 <input type="text" name="name" value="{{ farm.name }}" required />
               </label>
 
               <label>
-                Location
+                <span class="field-label">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 21s6-5.6 6-11a6 6 0 1 0-12 0c0 5.4 6 11 6 11Z"></path>
+                    <circle cx="12" cy="10" r="2.5"></circle>
+                  </svg>
+                  <span>Location</span>
+                </span>
                 <input type="text" name="location" value="{{ farm.location }}" required />
               </label>
 
               <label>
-                Farm Size
+                <span class="field-label">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M4 18h16"></path>
+                    <path d="M7 15V7"></path>
+                    <path d="M17 15V7"></path>
+                    <path d="M5 7h14"></path>
+                    <path d="M8 4h8"></path>
+                    <path d="M8 20h8"></path>
+                  </svg>
+                  <span>Farm Size</span>
+                </span>
                 <input type="text" name="farm_size" value="{{ farm.farm_size or '' }}" placeholder="e.g. 24.5 hectares" />
               </label>
 
@@ -108,7 +186,13 @@
               <input type="hidden" name="action" value="add_crop" />
 
               <label>
-                Crop Type
+                <span class="field-label">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 3c2.6 2.9 4 5.5 4 8.5A6 6 0 1 1 6 11.5C6 8.5 7.4 5.9 10 3"></path>
+                    <path d="M12 9c1.5 1.8 2.2 3.2 2.2 4.9A4.2 4.2 0 1 1 7.8 14c0-1.7.7-3.1 2.2-4.9"></path>
+                  </svg>
+                  <span>Crop Type</span>
+                </span>
                 <input type="text" name="crop_type" placeholder="e.g. Tomatoes" required />
               </label>
 
@@ -151,14 +235,34 @@
           {% else %}
             {% for crop in farm.crops %}
               <div class="crop-item">
+                <div class="crop-head-row">
+                  <div class="crop-title-wrap">
+                    <h3>{{ crop.crop_type }}</h3>
+                    <span class="crop-status-badge">Tracked</span>
+                  </div>
+                  {% if crop.planting_date %}
+                    <span class="crop-date">Planted {{ crop.planting_date }}</span>
+                  {% endif %}
+                </div>
                 {% if crop.image_path %}
                   <img class="thumb" src="{{ url_for('static', filename=crop.image_path) }}" alt="{{ crop.crop_type }}" />
                 {% else %}
                   <div class="thumb" style="display:flex;align-items:center;justify-content:center;font-size:2.8rem;color:#0f6a4e;">🌱</div>
                 {% endif %}
-                <h3>{{ crop.crop_type }}</h3>
-                {% if crop.variety %}<p><strong>Variety:</strong> {{ crop.variety }}</p>{% endif %}
-                {% if crop.planting_date %}<p><strong>Planted:</strong> {{ crop.planting_date }}</p>{% endif %}
+                <div class="crop-meta-grid">
+                  {% if crop.variety %}
+                    <div class="meta-box">
+                      <span>Variety</span>
+                      <strong>{{ crop.variety }}</strong>
+                    </div>
+                  {% endif %}
+                  {% if crop.planting_date %}
+                    <div class="meta-box">
+                      <span>Planting</span>
+                      <strong>{{ crop.planting_date }}</strong>
+                    </div>
+                  {% endif %}
+                </div>
                 <p>{{ crop.description or 'No crop description has been added yet.' }}</p>
                 <div class="form-actions">
                   <a href="{{ url_for('farm.edit_crop', farm_id=farm.id, crop_id=crop.id) }}" class="secondary-btn">Edit Crop</a>

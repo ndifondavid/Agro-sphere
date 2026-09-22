@@ -15,15 +15,16 @@
               50: '#f0fdf4',
               100: '#dcfce7',
               200: '#bbf7d0',
-              500: '#22c55e',
-              600: '#16a34a',
-              700: '#15803d',
-              800: '#166534',
-              900: '#14532d',
+              500: '#5bb889',
+              600: '#20845f',
+              700: '#0f6a4e',
+              800: '#0a5a42',
+              900: '#073b2b',
             }
           },
           fontFamily: {
-            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            sans: ['Times New Roman', 'Times', 'serif'],
+            display: ['Times New Roman', 'Times', 'serif'],
           }
         }
       }
@@ -50,7 +51,7 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
 <!-- Brand Logo -->
 <a aria-label="AgroSphere Home" class="flex items-center gap-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500 rounded-lg p-1" href="{{ url_for('public.landing') }}">
-<div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-700 to-brand-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
+<div class="brand-mark w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-md shadow-brand-500/20">
 <!-- Leaf / Sprout Icon -->
 <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" viewbox="0 0 24 24">
 <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
@@ -113,7 +114,7 @@
 </svg>
                 Scan a Leaf
               </a>
-<a class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-medium text-base transition-all duration-200 hover:border-slate-400 shadow-sm" href="#demo">
+<a class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-medium text-base transition-all duration-200 hover:border-slate-400 shadow-sm" href="#how-it-works">
 <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 <path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
 <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
@@ -369,7 +370,7 @@
 </div>
 <!-- Treatment Action CTA -->
 <div class="mt-6">
-<a class="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-brand-700 hover:bg-brand-800 text-white font-semibold text-xs sm:text-sm transition-colors shadow-sm" href="#treatment">
+<a class="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-brand-700 hover:bg-brand-800 text-white font-semibold text-xs sm:text-sm transition-colors shadow-sm" href="#features">
                       View Treatment Details
                       <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
@@ -419,7 +420,7 @@
 <div class="flex flex-col md:flex-row items-center justify-between gap-6">
 <!-- Brand & Copyright -->
 <div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white font-bold text-sm">
+<div class="brand-mark w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm">
             C
           </div>
 <span class="text-white font-semibold tracking-tight">AgroSphere</span>

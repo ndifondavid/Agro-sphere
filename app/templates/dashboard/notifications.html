@@ -9,7 +9,7 @@
   <body class="dashboard-body">
     <div class="dashboard-shell">
       <header class="topbar">
-        <div class="brand" aria-label="CropCare AI brand">
+        <div class="brand" aria-label="AgroSphere brand">
           <div class="brand-mark" aria-hidden="true">
             <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
               <path d="M31.8 7.5c5.8 7.3 4 16.8-2.3 22.3-4.8 4.2-10.4 6.1-14.2 10.5-4.8 5.8-4.7 15.2 1.4 20.4 7.3 6.1 18.5 5.1 24.7-2.4 6.1-7.3 5.9-17.4 1.2-24.4C37.3 25.9 31.6 17.6 31.8 7.5Z" fill="rgba(255,255,255,0.18)"/>
@@ -29,26 +29,7 @@
           </div>
         </div>
 
-        <div class="top-actions">
-          <button class="icon-button" type="button" aria-label="Search">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          </button>
-          <a class="icon-button" href="{{ url_for('dashboard.notifications') }}" aria-label="Notifications">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 10-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5m6 0a3 3 0 0 1-6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span class="notification-dot">1</span>
-          </a>
-
-          <a class="profile-pill" href="{{ url_for('dashboard.settings') }}" aria-label="Profile">
-            <div class="profile-frame">
-                {% if current_user.profile_image_path %}
-                  <img src="{{ url_for('static', filename=current_user.profile_image_path) }}" alt="Profile picture" />
-                {% else %}
-                  <span>{{ current_user.name[0].upper() }}</span>
-                {% endif %}
-            </div>
-            <span>{{ current_user.name }}</span>
-          </a>
-        </div>
+        {% include 'partials/top_actions.html' %}
       </header>
 
       <div class="content-grid">
@@ -104,9 +85,8 @@
           </div>
 
           <div class="settings-tabs" aria-label="Notification settings sections">
-            <button type="button" class="settings-tab">Security</button>
+            <a href="{{ url_for('dashboard.settings') }}" class="settings-tab settings-tab-link">Profile</a>
             <button type="button" class="settings-tab active">Notifications</button>
-            <button type="button" class="settings-tab">Farm Preferences</button>
           </div>
 
           <form class="settings-card notifications-card" method="POST" action="{{ url_for('dashboard.notifications') }}">
@@ -193,7 +173,7 @@
                     <div class="delivery-icon email-icon">✉</div>
                     <div>
                       <span>Email</span>
-                      <small>notifications@cropcare.ai</small>
+                      <small>{{ current_user.email }}</small>
                     </div>
                   </div>
                   <label class="switch">
@@ -207,7 +187,7 @@
                     <div class="delivery-icon sms-icon">💬</div>
                     <div>
                       <span>SMS</span>
-                      <small>+1 (555) 234-7890</small>
+                      <small>{{ current_user.phone or 'Add a phone number in Profile' }}</small>
                     </div>
                   </div>
                   <label class="switch">
@@ -221,7 +201,7 @@
                     <div class="delivery-icon whatsapp-icon">💬</div>
                     <div>
                       <span>WhatsApp</span>
-                      <small>+1 (555) 234-7890</small>
+                      <small>{{ current_user.phone or 'Add a phone number in Profile' }}</small>
                     </div>
                   </div>
                   <label class="switch">
@@ -235,7 +215,7 @@
                     <div class="delivery-icon push-icon">🔔</div>
                     <div>
                       <span>Push Notifications</span>
-                      <small>Browser &amp; Mobile app push notifications</small>
+                      <small>Browser notifications on this device</small>
                     </div>
                   </div>
                   <label class="switch">
@@ -274,7 +254,7 @@
       });
       notificationInputs.forEach((input) => input.addEventListener('change', updateSwitchLabels));
       updateSwitchLabels();
-      document.getElementById('saveNotifications')?.addEventListener('click', () => {
+      document.querySelector('.notifications-card')?.addEventListener('submit', () => {
         localStorage.setItem(notificationStorageKey, JSON.stringify(notificationInputs.map((input) => input.checked)));
         document.querySelector('.notifications-footer .warn-banner p').textContent = 'Notification preferences saved';
       });

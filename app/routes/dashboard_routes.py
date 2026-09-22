@@ -75,18 +75,24 @@ def settings():
     if not current_user.is_farmer():
         return "Access denied: farmer account required.", 403
 
+    notification_names = (
+        "disease_alert", "weather_warning", "community_reply", "weekly_report",
+        "email_delivery", "sms_delivery", "whatsapp_delivery", "push_delivery",
+    )
+    preferences = json.loads(current_user.notification_preferences or "{}")
+
     if request.method == "POST":
         name = (request.form.get("name") or "").strip()
         email = (request.form.get("email") or "").strip().lower()
 
         if not name or not email:
             flash("Name and email are required.", "danger")
-            return render_template("dashboard/settings.html")
+            return render_template("dashboard/settings.html", notification_preferences=preferences)
 
         existing_user = User.query.filter(User.email == email, User.id != current_user.id).first()
         if existing_user:
             flash("That email address is already in use.", "danger")
-            return render_template("dashboard/settings.html")
+            return render_template("dashboard/settings.html", notification_preferences=preferences)
 
         current_user.name = name
         current_user.email = email
@@ -99,10 +105,10 @@ def settings():
             allowed_ext = current_app.config["ALLOWED_IMAGE_EXTENSIONS"]
             if not allowed_image_file(profile_photo.filename, allowed_ext):
                 flash("Unsupported profile image. Please upload PNG, JPG, JPEG, or WebP.", "danger")
-                return render_template("dashboard/settings.html")
+                return render_template("dashboard/settings.html", notification_preferences=preferences)
             if not is_within_max_size(profile_photo, current_app.config["MAX_CONTENT_LENGTH"]):
                 flash("Profile image is too large.", "danger")
-                return render_template("dashboard/settings.html")
+                return render_template("dashboard/settings.html", notification_preferences=preferences)
 
             upload_dir = current_app.config["UPLOAD_FOLDER"]
             os.makedirs(upload_dir, exist_ok=True)
@@ -111,37 +117,22 @@ def settings():
             profile_photo.save(os.path.join(upload_dir, stored_name))
             current_user.profile_image_path = f"images/uploads/{stored_name}"
 
+        current_user.notification_preferences = json.dumps({
+            preference: request.form.get(preference) == "on"
+            for preference in notification_names
+        })
+
         db.session.commit()
-        flash("Profile changes saved.", "success")
+        flash("Profile changes saved. Settings saved.", "success")
         return redirect(url_for("dashboard.settings"))
 
-    return render_template("dashboard/settings.html")
+    return render_template("dashboard/settings.html", notification_preferences=preferences)
 
 
 @dashboard_bp.route("/notifications", methods=["GET", "POST"])
 @login_required
 def notifications():
-    if current_user.is_buyer():
-        flash("Buyer accounts do not have access to the dashboard.", "warning")
-        return redirect(url_for("public.landing"))
-    if not current_user.is_farmer():
-        return "Access denied: farmer account required.", 403
-
-    if request.method == "POST":
-        preferences = {
-            name: request.form.get(name) == "on"
-            for name in (
-                "disease_alert", "weather_warning", "community_reply", "weekly_report",
-                "email_delivery", "sms_delivery", "whatsapp_delivery", "push_delivery",
-            )
-        }
-        current_user.notification_preferences = json.dumps(preferences)
-        db.session.commit()
-        flash("Notification preferences saved.", "success")
-        return redirect(url_for("dashboard.notifications"))
-
-    preferences = json.loads(current_user.notification_preferences or "{}")
-    return render_template("dashboard/notifications.html", notification_preferences=preferences)
+    return redirect(url_for("dashboard.settings"))
 
 
 @dashboard_bp.route("/help")
