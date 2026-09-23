@@ -1081,6 +1081,25 @@ textarea:focus-visible {
   box-shadow: 0 4px 12px rgba(18, 75, 57, 0.05);
 }
 
+.community-nav-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid rgba(15, 93, 67, 0.14);
+  border-radius: 12px;
+  background: #edf7f0;
+  color: #0c5f42;
+  font-weight: 700;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.community-nav-link:hover {
+  transform: translateY(-2px);
+  background: #e0f3e7;
+  box-shadow: 0 8px 16px rgba(15, 93, 67, 0.12);
+}
+
 .profile-frame {
   width: 36px;
   height: 36px;
@@ -1251,6 +1270,25 @@ textarea:focus-visible {
   padding: 10px 14px;
   font-weight: 700;
   cursor: pointer;
+}
+
+.plan-upgrade-link {
+  display: block;
+  width: 100%;
+  border: 1px solid rgba(19, 117, 80, 0.3);
+  color: #0d6848;
+  background: #f1fbf5;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 700;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.plan-upgrade-link:hover {
+  transform: translateY(-2px);
+  background: #e3f6ea;
+  box-shadow: 0 8px 16px rgba(14, 104, 72, 0.12);
 }
 
 .logout-btn {
@@ -3036,6 +3074,34 @@ textarea:focus-visible {
   text-align: center;
 }
 
+.trend-bars {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  top: 24px;
+  bottom: 42px;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  align-items: end;
+  gap: 8px;
+}
+
+.trend-bar-column {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+}
+
+.trend-bar {
+  display: block;
+  width: min(24px, 70%);
+  min-height: 3px;
+  border-radius: 8px 8px 3px 3px;
+  background: linear-gradient(180deg, #5bb889, #0f6a4e);
+  box-shadow: 0 6px 12px rgba(15, 106, 78, 0.18);
+}
+
 .lower-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.3fr) minmax(260px, 0.7fr);
@@ -4004,5 +4070,121 @@ textarea:focus-visible {
 
   .bottom-bar {
     font-size: 0.82rem;
+  }
+}
+
+/* Shared interaction and responsive polish */
+.topbar,
+.sidebar,
+.card,
+.farm-card,
+.market-card,
+.settings-card,
+.farm-summary-card,
+.empty-farms-card,
+.profile-pill,
+.icon-button,
+.new-scan-btn,
+.buyer-reservations-btn,
+.buyer-logout-btn,
+.dashboard-mini-btn,
+.plan-box button,
+.add-farm-btn,
+.market-listing-btn {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.card:hover,
+.farm-card:hover,
+.market-card:hover,
+.farm-summary-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px rgba(7, 59, 43, 0.12);
+}
+
+.icon-button:hover,
+.profile-pill:hover,
+.new-scan-btn:hover,
+.buyer-reservations-btn:hover,
+.buyer-logout-btn:hover,
+.dashboard-mini-btn:hover,
+.plan-box button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(7, 59, 43, 0.12);
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea,
+input,
+select,
+textarea {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: rgba(15, 106, 78, 0.55);
+  box-shadow: 0 0 0 4px rgba(15, 106, 78, 0.1);
+}
+
+@media (max-width: 860px) {
+  .persistent-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .standalone-page > .persistent-sidebar {
+    position: static;
+    width: 100%;
+    min-height: auto;
+  }
+
+  .standalone-page > main,
+  .standalone-page > .page-shell {
+    margin-left: 0;
+  }
+
+  .menu {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    min-height: auto;
+  }
+}
+
+@media (max-width: 560px) {
+  .dashboard-shell,
+  .market-listing-shell {
+    border-radius: 14px;
+  }
+
+  .top-actions,
+  .app-top-actions {
+    gap: 8px;
+  }
+
+  .top-actions > *,
+  .app-top-actions > * {
+    max-width: 100%;
+  }
+
+  .menu {
+    grid-template-columns: 1fr;
+    padding: 8px;
+  }
+
+  .main-panel,
+  .farm-management-page,
+  .market-form-wrap {
+    padding: 18px 14px;
+  }
+
+  .card,
+  .settings-card,
+  .farm-summary-card {
+    padding: 18px;
   }
 }

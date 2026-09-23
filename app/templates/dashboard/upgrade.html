@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AgroSphere | Upgrade</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+  </head>
+  <body class="dashboard-body">
+    <main class="card" style="max-width: 680px; margin: 60px auto; padding: 32px;">
+      <a href="{{ url_for('dashboard.index') }}">Back to Dashboard</a>
+      <h1>Upgrade your AgroSphere plan</h1>
+      <p>Plan upgrades are not connected to billing yet. Contact an administrator to discuss expanded farm capacity and future premium features.</p>
+      <a class="primary-green-button" href="{{ url_for('dashboard.index') }}">Return to Dashboard</a>
+    </main>
+  </body>
+</html>

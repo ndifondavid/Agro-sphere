@@ -52,11 +52,7 @@
 <!-- Brand Logo -->
 <a aria-label="AgroSphere Home" class="flex items-center gap-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500 rounded-lg p-1" href="{{ url_for('public.landing') }}">
 <div class="brand-mark w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-md shadow-brand-500/20">
-<!-- Leaf / Sprout Icon -->
-<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" viewbox="0 0 24 24">
-<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
-<path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
-</svg>
+<img class="w-8 h-8 object-contain" src="{{ url_for('static', filename='images/as-logo.svg') }}" alt="AgroSphere logo" />
 </div>
 <span class="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-1">
           Agro<span class="text-brand-700">Sphere</span>
@@ -128,7 +124,7 @@
 <!-- Main visual container -->
 <div class="relative w-full max-w-lg lg:max-w-none rounded-3xl p-3 bg-gradient-to-b from-slate-100 to-slate-200/60 shadow-2xl border border-slate-100">
 <div class="relative rounded-2xl overflow-hidden aspect-[4/3] sm:aspect-[16/11] bg-slate-100">
-<div class="w-full h-full bg-gradient-to-br from-emerald-100 via-green-50 to-lime-100" aria-label="Crop monitoring workspace visual"></div>
+<img class="w-full h-full object-cover" src="{{ url_for('static', filename='images/a_happy_smiling_modern_african_farmer_wearing_a_straw_hat_and_denim_shirt_in_a.png') }}" alt="Farmer checking crops with a phone in a field" />
 <!-- Subtle Gradient Overlay -->
 <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none"></div>
 <!-- Floating Bottom Live Card -->
@@ -173,7 +169,7 @@
 <!-- Header -->
 <div class="text-center max-w-2xl mx-auto mb-16">
 <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">How It Works</h2>
-<p class="mt-3 text-base sm:text-lg text-slate-600">Get accurate results in just 3 simple steps.</p>
+<p class="mt-3 text-base sm:text-lg text-slate-600">Set up your farm, prepare your crops, and turn a clear photo into a practical next step.</p>
 </div>
 <!-- 3 Step Cards Grid -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
@@ -186,9 +182,9 @@
 <path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
 </svg>
 </div>
-<h3 class="text-xl font-bold text-slate-900 mb-2">1. Take a Photo</h3>
+<h3 class="text-xl font-bold text-slate-900 mb-2">1. Create Your Farm</h3>
 <p class="text-sm text-slate-600 leading-relaxed max-w-xs">
-              Snap a clear picture of the affected leaf or crop stem using any mobile phone.
+              Add your farm name, location, size, and notes so every crop record stays organized.
             </p>
 </div>
 <!-- Step 2 -->
@@ -199,9 +195,9 @@
 <path d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
 </svg>
 </div>
-<h3 class="text-xl font-bold text-slate-900 mb-2">2. AI Analysis</h3>
+<h3 class="text-xl font-bold text-slate-900 mb-2">2. Add and Prepare Crops</h3>
 <p class="text-sm text-slate-600 leading-relaxed max-w-xs">
-              Our model detects the disease using advanced deep learning trained on millions of crop samples.
+              Record each crop and variety, then upload a clear photo when you are ready to inspect it.
             </p>
 </div>
 <!-- Step 3 -->
@@ -212,9 +208,9 @@
 <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
 </svg>
 </div>
-<h3 class="text-xl font-bold text-slate-900 mb-2">3. Get Results</h3>
+<h3 class="text-xl font-bold text-slate-900 mb-2">3. Diagnose and Act</h3>
 <p class="text-sm text-slate-600 leading-relaxed max-w-xs">
-              Receive instant diagnosis and agronomic treatment recommendations tailored to your region.
+              Run a scan, review the diagnosis, and use the treatment guidance to decide what to do next.
             </p>
 </div>
 </div>
@@ -305,7 +301,7 @@
 <div class="mt-6 grid grid-cols-1 sm:grid-cols-12 gap-6 items-center">
 <!-- Leaf Image with Reticle Scanner Box -->
 <div class="sm:col-span-6 relative rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-inner group">
-<div class="w-full aspect-square bg-gradient-to-br from-lime-100 via-emerald-50 to-amber-100" aria-label="Crop analysis workspace visual"></div>
+<img class="w-full aspect-square object-cover" src="{{ url_for('static', filename='images/close_up_of_a_diseased_green_plant_leaf_with_visible_yellow_brown_fungal_blight.png') }}" alt="Diseased tomato leaf under analysis" />
 <!-- AI Scanning Reticle Box -->
 <div class="absolute inset-8 rounded-xl scan-reticle pointer-events-none flex flex-col justify-between p-2">
 <div class="flex justify-between">
@@ -415,46 +411,39 @@
 </div>
 </section>
 <!-- BEGIN: MainFooter -->
-<footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800" data-purpose="page-footer">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-<div class="flex flex-col md:flex-row items-center justify-between gap-6">
-<!-- Brand & Copyright -->
-<div class="flex items-center gap-3">
-<div class="brand-mark w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-            C
-          </div>
-<span class="text-white font-semibold tracking-tight">AgroSphere</span>
-<span class="text-xs text-slate-500">© 2026 AgroSphere. Disease detection and farm tools.</span>
-</div>
-<!-- Secondary links -->
-<div class="flex flex-wrap items-center gap-6 text-xs sm:text-sm">
-<a class="hover:text-white transition-colors" href="#how-it-works">How it works</a>
-<a class="hover:text-white transition-colors" href="#features">Disease detection</a>
-<a class="hover:text-white transition-colors" href="#about-us">About us</a>
-<a class="hover:text-white transition-colors" href="#contact-us">Contact us</a>
-<a class="hover:text-white transition-colors" href="{{ url_for('auth.register') }}">Register</a>
-</div>
-</div>
+<footer class="landing-footer" data-purpose="page-footer">
+  <div class="landing-footer-main">
+    <div class="landing-footer-brand" id="about-us">
+      <h2>About AgroSphere</h2>
+      <p>Practical crop intelligence for healthier farms, better decisions, and stronger harvests.</p>
+      <a class="landing-footer-cta" href="{{ url_for('auth.register') }}">Start growing smarter <span aria-hidden="true">&#8594;</span></a>
+    </div>
 
-<div class="mt-10 grid gap-8 md:grid-cols-2 max-w-5xl mx-auto items-start text-sm text-slate-300">
-  <div id="about-us" class="rounded-2xl border border-slate-700/80 bg-slate-800/50 p-5 shadow-sm">
-    <h3 class="text-base font-semibold text-white mb-3">About us</h3>
-    <p class="leading-relaxed text-slate-400">
-      AgroSphere helps farmers detect crop diseases early, manage their farms more effectively,
-      and make better decisions with AI-powered field insights and crop monitoring tools.
-    </p>
-  </div>
+    <div class="landing-footer-group">
+      <h2>Explore</h2>
+      <a href="#how-it-works">How it works</a>
+      <a href="#features">Disease detection</a>
+      <a href="#tools">Farm tools</a>
+      <a href="{{ url_for('auth.login') }}">Sign in</a>
+    </div>
 
-  <div id="contact-us" class="rounded-2xl border border-slate-700/80 bg-slate-800/50 p-5 shadow-sm">
-    <h3 class="text-base font-semibold text-white mb-3">Contact us</h3>
-    <div class="space-y-2 text-slate-400 leading-relaxed">
-      <p><span class="font-medium text-slate-200">Email:</span> support@agrosphere.com</p>
-      <p><span class="font-medium text-slate-200">Phone:</span> +250 788 000 000</p>
-      <p><span class="font-medium text-slate-200">Location:</span> Kigali, Rwanda</p>
+    <div class="landing-footer-group" id="contact-us">
+      <h2>Contact</h2>
+      <a href="mailto:support@agrosphere.com">support@agrosphere.com</a>
+      <a href="tel:+250788000000">+250 788 000 000</a>
+      <span>Kigali, Rwanda</span>
+      <span>Monday - Friday, 08:00 - 17:00</span>
     </div>
   </div>
-</div>
-</div>
+
+  <div class="landing-footer-bottom">
+    <span>&copy; 2026 AgroSphere. All rights reserved.</span>
+    <div>
+      <a href="#about-us">About</a>
+      <a href="#contact-us">Contact</a>
+      <a href="{{ url_for('auth.register') }}">Create an account</a>
+    </div>
+  </div>
 </footer>
 <!-- END: MainFooter -->
 </body></html>
