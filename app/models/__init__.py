@@ -17,6 +17,7 @@ from app.models.scan import Scan
 from app.models.listing import Listing
 from app.models.reservation import Reservation
 from app.models.message import Message
+from app.models.community import CommunityPost, CommunityReply
 
 __all__ = [
     "User",
@@ -26,4 +27,6 @@ __all__ = [
     "Listing",
     "Reservation",
     "Message",
+    "CommunityPost",
+    "CommunityReply",
 ]
