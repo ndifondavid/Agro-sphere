@@ -28,6 +28,7 @@
     </div>
     <span>{{ current_user.name }}</span>
   </a>
+  <a class="community-nav-link" href="{{ url_for('community.index') }}">Community</a>
   {% if current_user.is_farmer() %}
     <a class="new-scan-btn" href="{{ url_for('scan.scan_leaf') }}">+ New Scan</a>
   {% else %}
