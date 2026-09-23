@@ -233,6 +233,13 @@ button, input { font: inherit; }
   color: var(--heading);
   padding: 12px 14px;
   font: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.crop-select-wrap select:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px rgba(15, 106, 78, 0.1);
+  outline: none;
 }
 
 .drop-zone {
@@ -350,6 +357,61 @@ button, input { font: inherit; }
   font-weight: 800;
   cursor: pointer;
   box-shadow: 0 10px 18px rgba(24, 60, 52, 0.16);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.scan-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 26px rgba(24, 60, 52, 0.22);
+  filter: brightness(1.05);
+}
+
+@media (max-width: 820px) {
+  .scan-page {
+    padding: 12px;
+  }
+
+  .scan-topbar {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 16px;
+  }
+
+  .top-nav {
+    width: 100%;
+    margin: 0;
+    gap: 14px;
+    justify-content: space-between;
+  }
+
+  .scan-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .scan-layout {
+    gap: 14px;
+  }
+
+  .upload-panel,
+  .results-panel {
+    padding: 20px 16px;
+    border-radius: 14px;
+  }
+
+  .drop-zone {
+    min-height: 270px;
+    padding: 22px 14px;
+  }
+
+  .action-row {
+    grid-template-columns: 1fr;
+  }
+
+  .brand-text {
+    font-size: 2rem;
+  }
 }
 
 .drop-zone.has-file {

@@ -113,6 +113,17 @@ def create_listing():
             flash("Please enter a valid harvest date.", "danger")
             return render_template("marketplace/listing_form.html", farms=farms)
 
+        try:
+            quantity_value = float(quantity)
+            price_value = float(price)
+        except (TypeError, ValueError):
+            flash("Quantity and price must be valid numbers.", "danger")
+            return render_template("marketplace/listing_form.html", farms=farms)
+
+        if quantity_value <= 0 or price_value <= 0:
+            flash("Quantity and price must be greater than zero.", "danger")
+            return render_template("marketplace/listing_form.html", farms=farms)
+
         farm = Farm.query.filter_by(id=farm_id, owner_id=current_user.id).first()
         crop = Crop.query.filter_by(id=crop_id, farm_id=farm.id).first() if farm else None
         if not farm or not crop:
@@ -142,10 +153,10 @@ def create_listing():
             farmer_id=current_user.id,
             crop_type=crop.crop_type,
             harvest_date=harvest_date_obj,
-            quantity=float(quantity),
+            quantity=quantity_value,
             package_size=package_size,
             package_unit=package_unit,
-            price=float(price),
+            price=price_value,
             image_path=image_path,
         )
         db.session.add(listing)

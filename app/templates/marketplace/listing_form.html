@@ -50,7 +50,7 @@
             <select id="crop_id" name="crop_id" required>
               {% for farm in farms %}
                 {% for crop in farm.crops %}
-                  <option value="{{ crop.id }}">{{ crop.crop_type }}</option>
+                  <option value="{{ crop.id }}" data-farm-id="{{ farm.id }}">{{ crop.crop_type }}</option>
                 {% endfor %}
               {% endfor %}
             </select>
@@ -119,4 +119,26 @@
       </div>
     </div>
   </body>
+  <script>
+    const farmSelect = document.getElementById('farm_id');
+    const cropSelect = document.getElementById('crop_id');
+    const cropOptions = Array.from(cropSelect?.options || []);
+
+    function syncCropsToFarm() {
+      const selectedFarm = farmSelect?.value;
+      let firstVisible = null;
+      cropOptions.forEach((option) => {
+        const visible = option.dataset.farmId === selectedFarm;
+        option.hidden = !visible;
+        option.disabled = !visible;
+        if (visible && !firstVisible) firstVisible = option;
+      });
+      if (firstVisible && (cropSelect.value !== firstVisible.value || cropSelect.selectedOptions[0]?.disabled)) {
+        cropSelect.value = firstVisible.value;
+      }
+    }
+
+    farmSelect?.addEventListener('change', syncCropsToFarm);
+    syncCropsToFarm();
+  </script>
 </html>

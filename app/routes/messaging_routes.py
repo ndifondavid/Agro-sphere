@@ -32,11 +32,27 @@ def thread(listing_id):
         if missing:
             flash("Message content is required.", "danger")
         else:
-            receiver = User.query.get(int(request.form["receiver_id"]))
-            if receiver is None:
+            try:
+                receiver_id = int(request.form["receiver_id"])
+            except (TypeError, ValueError):
+                receiver_id = None
+
+            receiver = User.query.get(receiver_id) if receiver_id else None
+            valid_receiver = (
+                receiver is not None
+                and receiver.id != current_user.id
+                and (
+                    (current_user.is_buyer() and receiver.id == listing.farmer_id)
+                    or (
+                        current_user.is_farmer()
+                        and receiver.id in {
+                            reservation.buyer_id for reservation in listing.reservations
+                        }
+                    )
+                )
+            )
+            if not valid_receiver:
                 flash("Recipient not found.", "danger")
-            elif receiver.id == current_user.id:
-                flash("You cannot message yourself.", "danger")
             else:
                 message = Message(
                     sender_id=current_user.id,

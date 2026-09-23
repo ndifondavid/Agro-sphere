@@ -1,1 +1,68 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>AgroSphere | Community</title><link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}"><style>body{background:#edf4ef;font-family:Arial,sans-serif}.shell{max-width:900px;margin:40px auto;padding:28px}.card{background:#fff;border:1px solid #dce9e0;border-radius:20px;padding:28px}a{color:#0f6a4e;font-weight:700}.empty{margin-top:20px;padding:28px;background:#f5faf6;border:1px dashed #c7ddd0;border-radius:16px;color:#52655f}</style></head><body><main class="shell"><a href="{{ url_for('dashboard.index') }}">Back to Dashboard</a><div class="card"><h1>Community</h1><p>Share practical growing knowledge with other farmers.</p><div class="empty"><strong>Community posts are coming soon.</strong><p>The discussion area is ready for posts, replies, and crop-care conversations.</p></div></div></main></body></html>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AgroSphere | Community</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+    <style>
+      body { background: #edf4ef; }
+      .community-shell { max-width: 900px; margin: 0 auto; padding: 32px 20px; }
+      .community-card { background: #fff; border: 1px solid #dce9e0; border-radius: 20px; padding: 24px; margin-top: 18px; }
+      .community-form, .reply-form { display: grid; gap: 10px; }
+      .community-form textarea, .reply-form textarea { width: 100%; min-height: 100px; padding: 12px; border: 1px solid #d8e5dc; border-radius: 12px; resize: vertical; }
+      .community-form button, .reply-form button { width: fit-content; padding: 10px 16px; border: 0; border-radius: 10px; background: #0f6a4e; color: #fff; font-weight: 700; cursor: pointer; }
+      .post { padding: 18px 0; border-bottom: 1px solid #e1ebe4; }
+      .post:last-child { border-bottom: 0; }
+      .post-meta, .reply-meta { color: #60716a; font-size: .88rem; }
+      .post-content, .reply-content { white-space: pre-wrap; line-height: 1.55; }
+      .replies { margin: 14px 0 0 22px; padding-left: 16px; border-left: 3px solid #e6f2ea; }
+      .reply { padding: 8px 0; }
+      .flash { padding: 10px 14px; border-radius: 10px; background: #eafaf0; margin-top: 14px; font-weight: 700; }
+      .flash.danger { background: #ffeaea; color: #8c2d2d; }
+    </style>
+  </head>
+  <body>
+    <main class="community-shell">
+      <a href="{{ url_for('dashboard.index') }}">Back to Dashboard</a>
+      <h1>Community</h1>
+      <p>Share practical growing knowledge with other farmers.</p>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}
+      {% endwith %}
+
+      <section class="community-card">
+        <h2>Start a discussion</h2>
+        <form class="community-form" method="post">
+          <textarea name="content" maxlength="2000" placeholder="Ask a question or share a farming tip..." required></textarea>
+          <button type="submit">Publish Post</button>
+        </form>
+      </section>
+
+      <section class="community-card">
+        <h2>Recent discussions</h2>
+        {% for post in posts %}
+          <article class="post">
+            <div class="post-meta"><strong>{{ post.author.name }}</strong> · {{ post.timestamp.strftime('%b %d, %Y at %H:%M') }}</div>
+            <p class="post-content">{{ post.content }}</p>
+            <div class="replies">
+              {% for reply in post.replies %}
+                <div class="reply">
+                  <div class="reply-meta"><strong>{{ reply.author.name }}</strong> · {{ reply.timestamp.strftime('%b %d, %Y at %H:%M') }}</div>
+                  <div class="reply-content">{{ reply.content }}</div>
+                </div>
+              {% endfor %}
+              <form class="reply-form" method="post" action="{{ url_for('community.reply', post_id=post.id) }}">
+                <textarea name="content" maxlength="1000" placeholder="Write a reply..." required></textarea>
+                <button type="submit">Reply</button>
+              </form>
+            </div>
+          </article>
+        {% else %}
+          <p>No discussions yet. Be the first to post.</p>
+        {% endfor %}
+      </section>
+    </main>
+  </body>
+</html>
