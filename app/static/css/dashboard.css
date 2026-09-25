@@ -1224,6 +1224,24 @@ textarea:focus-visible {
   box-shadow: inset 0 0 0 1px rgba(12, 91, 66, 0.08), 0 6px 14px rgba(17, 120, 84, 0.06);
 }
 
+.menu-item.help-page-link.active {
+  background: linear-gradient(135deg, #dfeff7 0%, #d8ebff 100%);
+  color: #0c67d4;
+  box-shadow: inset 0 0 0 1px rgba(14, 119, 216, 0.08);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .menu-item:hover {
   background: rgba(255, 255, 255, 0.5);
   transform: translateX(1px);
