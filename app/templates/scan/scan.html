@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PlantScan</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/scan.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
   </head>
-  <body class="scan-page">
-    <div class="scan-shell">
-      <header class="scan-topbar">
+  <body class="dashboard-body">
+    <div class="dashboard-shell">
+      <header class="topbar">
         <div class="brand" aria-label="PlantScan brand">
           <div class="brand-mark" aria-hidden="true">
             <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
@@ -20,143 +21,142 @@
               <path d="M26.3 46.8c5.4 4.5 12.2 4.6 17.7 0" stroke="#136d4b" stroke-width="3" stroke-linecap="round"/>
             </svg>
           </div>
-          <div class="brand-text">PlantScan</div>
+          <div class="brand-text">
+            <span class="brand-title">AgroSphere</span>
+          </div>
         </div>
 
-        <nav class="top-nav" aria-label="Top navigation">
-          <a href="{{ url_for('dashboard.index') }}">Overview</a>
-          <a href="{{ url_for('farm.list_farms') }}">Farms</a>
-          <a href="{{ url_for('scan.scan_leaf') }}" class="active">Scans</a>
-          <a href="{{ url_for('scan.history') }}">History</a>
-          <a href="{{ url_for('dashboard.settings') }}">Settings</a>
-        </nav>
-
-        <div class="profile-chip" aria-label="Current user">
-          {% if current_user.profile_image_path %}<img src="{{ url_for('static', filename=current_user.profile_image_path) }}" alt="Farmer profile picture" />{% else %}<img src="{{ url_for('static', filename='images/profile-avatar.svg') }}" alt="Farmer profile picture" />{% endif %}
-          <span>{{ current_user.name }}</span>
-        </div>
+        {% include 'partials/top_actions.html' %}
       </header>
 
-      <main class="scan-layout">
-        <section class="upload-panel">
-          <h1>Upload &amp; Scan</h1>
-          <p>Upload a plant photo to detect diseases instantly</p>
+      <div class="content-grid">
+        {% include 'partials/sidebar.html' %}
 
-          <form class="scan-form" method="POST" action="{{ url_for('scan.scan_leaf') }}" enctype="multipart/form-data">
-            <label class="crop-select-wrap" for="crop_id">
-              <span>Select crop</span>
-              <select id="crop_id" name="crop_id" required>
-                {% for crop in crops %}
-                  <option value="{{ crop.id }}" {% if scan and scan.crop_id == crop.id %}selected{% endif %}>{{ crop.crop_type }} — {{ crop.farm.name }}</option>
-                {% endfor %}
-              </select>
-            </label>
+        <main class="main-panel">
+          <div class="scan-page">
+            <div class="scan-layout">
+              <section class="upload-panel">
+                <h1>Upload &amp; Scan</h1>
+                <p>Upload a plant photo to detect diseases instantly</p>
 
-            <div class="scan-context-card">
-              <div>
-                <span class="context-label">Selected farm</span>
-                <strong>{% if crop %}{{ crop.farm.name }}{% else %}No farm created{% endif %}</strong>
-              </div>
-              <div>
-                <span class="context-label">Crop type</span>
-                <strong>{% if crop %}{{ crop.crop_type }}{% else %}Create a crop{% endif %}</strong>
-              </div>
+                <form class="scan-form" method="POST" action="{{ url_for('scan.scan_leaf') }}" enctype="multipart/form-data">
+                  <label class="crop-select-wrap" for="crop_id">
+                    <span>Select crop</span>
+                    <select id="crop_id" name="crop_id" required>
+                      {% for crop in crops %}
+                        <option value="{{ crop.id }}" {% if scan and scan.crop_id == crop.id %}selected{% endif %}>{{ crop.crop_type }} — {{ crop.farm.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </label>
+
+                  <div class="scan-context-card">
+                    <div>
+                      <span class="context-label">Selected farm</span>
+                      <strong>{% if crop %}{{ crop.farm.name }}{% else %}No farm created{% endif %}</strong>
+                    </div>
+                    <div>
+                      <span class="context-label">Crop type</span>
+                      <strong>{% if crop %}{{ crop.crop_type }}{% else %}Create a crop{% endif %}</strong>
+                    </div>
+                  </div>
+
+                  <div class="drop-zone" id="dropZone" role="button" tabindex="0" aria-label="Upload image">
+                    <input id="photoInput" type="file" name="photo" accept="image/*" capture="environment" />
+                    <div class="upload-icon" aria-hidden="true">
+                      <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M26 58h28a8 8 0 0 0 8-8V31.5a8 8 0 0 0-8-8h-5.6l-2.7-4.3A8 8 0 0 0 39.2 15h-1.4a8 8 0 0 0-7.2 4.5L28 23.5H22.5a8 8 0 0 0-8 8V50a8 8 0 0 0 8 8h3.5Zm14-32.5a12 12 0 1 0 0 24 12 12 0 0 0 0-24Zm0 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Z" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M26 52.5l11-11 8.8 8.8 6.8-6.8 12.4 12.5" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                    <p class="drop-zone-title">Drag &amp; drop an image here</p>
+                    <p class="drop-zone-copy">or click to browse files — JPG, PNG, WebP up to 16MB</p>
+                  </div>
+
+                  <div class="action-row">
+                    <button type="button" class="primary-btn" data-trigger="camera">Use Camera</button>
+                    <button type="button" class="secondary-btn" data-trigger="file">Choose File</button>
+                    <button type="submit" class="scan-submit-btn">Scan</button>
+                  </div>
+
+                  <div class="tip-note">Tip: Use a clear, well-lit photo of the affected leaf for best results.</div>
+                </form>
+              </section>
+
+              <section class="results-panel">
+                <div class="results-head">
+                  <h2>Scan Results</h2>
+                  <div class="analysis-badge">Analysis Complete <span class="check">✓</span></div>
+                </div>
+
+                <div class="result-card">
+                  <div class="result-top">
+                    <div class="leaf-badge" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+                        <path d="M19 4.5c-5.4 1.9-9.6 5.9-12.2 11.2C7.2 17.2 9.1 19 11.5 19c3.7 0 7-3.2 7.5-8.8V4.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9.5 12.5c.9-3 2.8-5.3 5.7-6.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <div class="result-kicker">Farm and crop summary</div>
+                      <h3>{{ scan.predicted_disease if scan else 'Leaf Blight — Bacterial' }}</h3>
+                    </div>
+                  </div>
+
+                  <div class="farm-summary-mini">
+                    <span><strong>Farm:</strong> {% if crop %}{{ crop.farm.name }}{% else %}Not assigned{% endif %}</span>
+                    <span><strong>Crop:</strong> {% if crop %}{{ crop.crop_type }}{% else %}No crop{% endif %}</span>
+                    <span><strong>Scan date:</strong> {% if scan %}{{ scan.timestamp.strftime('%b %d, %Y') }}{% else %}Pending{% endif %}</span>
+                  </div>
+
+                  {% if scan and scan.image_path %}
+                    <div style="margin:18px 0;border-radius:16px;overflow:hidden;background:#edf6ee;">
+                      <img src="{{ url_for('static', filename=scan.image_path) }}" alt="Uploaded crop scan" style="display:block;width:100%;max-height:280px;object-fit:cover;" />
+                    </div>
+                  {% endif %}
+
+                  <div class="result-section">
+                    <div class="result-row">
+                      <span>Confidence</span>
+                      <span class="confidence-value">{{ scan.confidence_score if scan else '92' }}%</span>
+                    </div>
+                    <div class="progress"><span></span></div>
+                  </div>
+
+                  <div class="result-section">
+                    <h4>Description</h4>
+                    <p>
+                      {{ scan.recommendation if scan else 'A bacterial infection causing brown/black lesions with yellow halos on leaf edges. Common in humid conditions, spreads quickly if untreated.' }}
+                    </p>
+                  </div>
+
+                  <div class="result-section">
+                    <h4>Recommended Treatment</h4>
+                    <ol class="recommendations">
+                      <li><span class="step">1</span><span>Remove affected leaves and dispose away from healthy plants.</span></li>
+                      <li><span class="step">2</span><span>Apply copper-based bactericide spray every 7–10 days.</span></li>
+                      <li><span class="step">3</span><span>Improve air circulation and avoid overhead watering.</span></li>
+                    </ol>
+                  </div>
+
+                  <div class="result-callouts">
+                    <div class="tip-box">
+                      <div class="icon" aria-hidden="true">💡</div>
+                      <div>Tip: Monitor nearby plants for similar symptoms over the next 5–7 days.</div>
+                    </div>
+
+                    <a href="{{ url_for('scan.scan_detail', scan_id=scan.id) if scan else url_for('dashboard.treatment_details') }}" class="view-treatment-btn">View treatment details</a>
+                  </div>
+
+                  <div class="bottom-actions">
+                    <a href="{{ url_for('scan.history') }}" class="save-btn">Save to History</a>
+                    <button type="button" class="export-btn">Export Report</button>
+                  </div>
+                </div>
+              </section>
             </div>
-
-            <div class="drop-zone" id="dropZone" role="button" tabindex="0" aria-label="Upload image">
-              <input id="photoInput" type="file" name="photo" accept="image/*" capture="environment" />
-              <div class="upload-icon" aria-hidden="true">
-                <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M26 58h28a8 8 0 0 0 8-8V31.5a8 8 0 0 0-8-8h-5.6l-2.7-4.3A8 8 0 0 0 39.2 15h-1.4a8 8 0 0 0-7.2 4.5L28 23.5H22.5a8 8 0 0 0-8 8V50a8 8 0 0 0 8 8h3.5Zm14-32.5a12 12 0 1 0 0 24 12 12 0 0 0 0-24Zm0 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Z" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M26 52.5l11-11 8.8 8.8 6.8-6.8 12.4 12.5" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
-              <p class="drop-zone-title">Drag &amp; drop an image here</p>
-              <p class="drop-zone-copy">or click to browse files — JPG, PNG, WebP up to 16MB</p>
-            </div>
-
-            <div class="action-row">
-              <button type="button" class="primary-btn" data-trigger="camera">Use Camera</button>
-              <button type="button" class="secondary-btn" data-trigger="file">Choose File</button>
-              <button type="submit" class="scan-submit-btn">Scan</button>
-            </div>
-
-            <div class="tip-note">Tip: Use a clear, well-lit photo of the affected leaf for best results.</div>
-          </form>
-        </section>
-
-        <section class="results-panel">
-          <div class="results-head">
-            <h2>Scan Results</h2>
-            <div class="analysis-badge">Analysis Complete <span class="check">✓</span></div>
           </div>
-
-          <div class="result-card">
-            <div class="result-top">
-              <div class="leaf-badge" aria-hidden="true">
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
-                  <path d="M19 4.5c-5.4 1.9-9.6 5.9-12.2 11.2C7.2 17.2 9.1 19 11.5 19c3.7 0 7-3.2 7.5-8.8V4.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M9.5 12.5c.9-3 2.8-5.3 5.7-6.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                </svg>
-              </div>
-              <div>
-                <div class="result-kicker">Farm and crop summary</div>
-                <h3>{{ scan.predicted_disease if scan else 'Leaf Blight — Bacterial' }}</h3>
-              </div>
-            </div>
-
-            <div class="farm-summary-mini">
-              <span><strong>Farm:</strong> {% if crop %}{{ crop.farm.name }}{% else %}Not assigned{% endif %}</span>
-              <span><strong>Crop:</strong> {% if crop %}{{ crop.crop_type }}{% else %}No crop{% endif %}</span>
-              <span><strong>Scan date:</strong> {% if scan %}{{ scan.timestamp.strftime('%b %d, %Y') }}{% else %}Pending{% endif %}</span>
-            </div>
-
-            {% if scan and scan.image_path %}
-              <div style="margin:18px 0;border-radius:16px;overflow:hidden;background:#edf6ee;">
-                <img src="{{ url_for('static', filename=scan.image_path) }}" alt="Uploaded crop scan" style="display:block;width:100%;max-height:280px;object-fit:cover;" />
-              </div>
-            {% endif %}
-
-            <div class="result-section">
-              <div class="result-row">
-                <span>Confidence</span>
-                <span class="confidence-value">{{ scan.confidence_score if scan else '92' }}%</span>
-              </div>
-              <div class="progress"><span></span></div>
-            </div>
-
-            <div class="result-section">
-              <h4>Description</h4>
-              <p>
-                {{ scan.recommendation if scan else 'A bacterial infection causing brown/black lesions with yellow halos on leaf edges. Common in humid conditions, spreads quickly if untreated.' }}
-              </p>
-            </div>
-
-            <div class="result-section">
-              <h4>Recommended Treatment</h4>
-              <ol class="recommendations">
-                <li><span class="step">1</span><span>Remove affected leaves and dispose away from healthy plants.</span></li>
-                <li><span class="step">2</span><span>Apply copper-based bactericide spray every 7–10 days.</span></li>
-                <li><span class="step">3</span><span>Improve air circulation and avoid overhead watering.</span></li>
-              </ol>
-            </div>
-
-            <div class="result-callouts">
-              <div class="tip-box">
-                <div class="icon" aria-hidden="true">💡</div>
-                <div>Tip: Monitor nearby plants for similar symptoms over the next 5–7 days.</div>
-              </div>
-
-              <a href="{{ url_for('scan.scan_detail', scan_id=scan.id) if scan else url_for('dashboard.treatment_details') }}" class="view-treatment-btn">View treatment details</a>
-            </div>
-
-            <div class="bottom-actions">
-              <a href="{{ url_for('scan.history') }}" class="save-btn">Save to History</a>
-              <button type="button" class="export-btn">Export Report</button>
-            </div>
-          </div>
-        </section>
-      </main>
+        </main>
+      </div>
     </div>
 
     <div class="camera-modal" id="cameraModal" hidden>
