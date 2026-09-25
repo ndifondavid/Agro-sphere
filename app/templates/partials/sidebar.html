@@ -12,6 +12,10 @@
       <span class="menu-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 7.5h16M4 12h8m-8 4.5h12M18 12.5l2.5 2.5m-2.5 0 2.5-2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
       Scan
     </a>
+    <a href="{{ url_for('community.index') }}" class="menu-item{% if request.endpoint and request.endpoint.startswith('community.') %} active{% endif %}">
+      <span class="menu-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 6.5h14a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-7l-4 3v-3H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
+      Community
+    </a>
     <a href="{{ url_for('dashboard.settings') }}" class="menu-item{% if request.endpoint == 'dashboard.settings' %} active{% endif %}">
       <span class="menu-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v4m0 10v4m9-9h-4M7 12H3m16.2 6.2-2.8-2.8M9.6 9.6 6.8 6.8m0 10.4 2.8-2.8m6.8-6.8-2.8 2.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
       Settings
@@ -23,7 +27,7 @@
   </nav>
   <div class="plan-box">
     <span>Plan: Pro • 45 farms</span>
-    <button type="button">Upgrade</button>
+    <a class="plan-upgrade-link" href="{{ url_for('dashboard.upgrade') }}">Upgrade</a>
     <a class="logout-btn" href="{{ url_for('auth.logout') }}">Log out</a>
   </div>
 </aside>

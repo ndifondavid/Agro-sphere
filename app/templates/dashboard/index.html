@@ -53,6 +53,12 @@
               </span>
               Scan
             </a>
+            <a href="{{ url_for('community.index') }}" class="menu-item">
+              <span class="menu-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 6.5h14a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-7l-4 3v-3H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+              </span>
+              Community
+            </a>
             <a href="{{ url_for('dashboard.settings') }}" class="menu-item">
               <span class="menu-icon">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v4m0 10v4m9-9h-4M7 12H3m16.2 6.2-2.8-2.8M9.6 9.6 6.8 6.8m0 10.4 2.8-2.8m6.8-6.8-2.8 2.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -69,7 +75,7 @@
 
           <div class="plan-box">
             <span>Plan: Pro • 45 farms</span>
-            <button type="button">Upgrade</button>
+            <a class="plan-upgrade-link" href="{{ url_for('dashboard.upgrade') }}">Upgrade</a>
             <a class="logout-btn" href="{{ url_for('auth.logout') }}">Log out</a>
           </div>
         </aside>
@@ -171,15 +177,16 @@
               <h2>Detection Trend • Last 7 Days</h2>
               <div class="trend-surface" aria-label="Detection trend chart placeholder">
                 <div class="trend-grid"></div>
-                <div class="trend-empty-label">Overall {{ 0 if disease_count == 0 else disease_count }}<span>{{ 'detections recorded so far' if disease_count == 0 else 'detected this period' }}</span></div>
+                <div class="trend-empty-label">{{ disease_count }}<span>detections in your records</span></div>
+                <div class="trend-bars" aria-hidden="true">
+                  {% for day in trend_data %}
+                    <div class="trend-bar-column" title="{{ day.date }}: {{ day.count }} detection{{ '' if day.count == 1 else 's' }}">
+                      <span class="trend-bar" style="height: {{ (day.count / trend_max * 100) if trend_max else 0 }}%"></span>
+                    </div>
+                  {% endfor %}
+                </div>
                 <div class="trend-days">
-                  <span>Mon</span>
-                  <span>Tue</span>
-                  <span>Wed</span>
-                  <span>Thu</span>
-                  <span>Fri</span>
-                  <span>Sat</span>
-                  <span>Sun</span>
+                  {% for day in trend_data %}<span>{{ day.label }}</span>{% endfor %}
                 </div>
               </div>
             </article>
