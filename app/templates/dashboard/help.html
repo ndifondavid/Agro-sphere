@@ -9,12 +9,12 @@
     <h1>Help &amp; Support</h1>
     <div class="help-header-actions">
       <button type="button" class="help-inline-btn" id="viewStatusButton">
-        <svg viewBox="0 0 24 24"><path d="M12 5.5A6.5 6.5 0 0 0 5.5 12v2.5a1.5 1.5 0 0 0 1.5 1.5h1.2l1.6 2.3a1 1 0 0 0 1.6 0l1.6-2.3h1.1a1.5 1.5 0 0 0 1.5-1.5V12A6.5 6.5 0 0 0 12 5.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5.5A6.5 6.5 0 0 0 5.5 12v2.5a1.5 1.5 0 0 0 1.5 1.5h1.2l1.6 2.3a1 1 0 0 0 1.6 0l1.6-2.3h1.1a1.5 1.5 0 0 0 1.5-1.5V12A6.5 6.5 0 0 0 12 5.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         View Status
       </button>
       <button type="button" class="help-primary-btn" id="newTicketButton">
-        <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        New Support Ticket
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        + New Support Ticket
       </button>
     </div>
   </div>
@@ -22,8 +22,8 @@
   <p class="help-subtitle">Find answers, get help, and learn how to make the most of AgroSphere</p>
 
   <div class="help-search">
-    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-    <input id="helpSearch" type="search" placeholder="Search FAQs and resources..." aria-label="Search help" />
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    <input id="helpSearch" type="search" placeholder="Search for help... e.g. 'how to export scan data'" aria-label="Search for help" />
   </div>
 
   <div class="help-grid">
@@ -33,25 +33,41 @@
         <h2>Frequently Asked Questions</h2>
       </div>
 
-      <div class="faq-item faq-featured">
-        <div class="faq-question-row">
-          <h3>How do I detect crop disease in a new scan?</h3>
-          <span class="chevron">›</span>
+      <div class="faq-accordion">
+        <div class="faq-item faq-item-open">
+          <button type="button" class="faq-question-row" aria-expanded="true">
+            <span>How do I upload a new crop scan?</span>
+            <span class="faq-arrow">−</span>
+          </button>
+          <div class="faq-answer">
+            <ol>
+              <li>Go to the Scan page from the left sidebar.</li>
+              <li>Select the farm and crop you want to analyze.</li>
+              <li>Upload a clear image of the affected leaf.</li>
+              <li>Review the diagnosis and recommendations.</li>
+            </ol>
+            <span class="new-scan-pill">+ New Scan</span>
+          </div>
         </div>
-        <p>Open the Scan page, upload a clear leaf image, select the appropriate farm and crop, and submit the scan to get disease analysis and recommendations.</p>
-      </div>
 
-      <div class="faq-item faq-collapsed">
-        <div class="faq-question-row">
-          <h3>How do I add a new farm?</h3>
-          <span class="chevron">›</span>
+        <div class="faq-item faq-item-collapsed">
+          <button type="button" class="faq-question-row" aria-expanded="false">
+            <span>Why is my scan processing taking longer than usual?</span>
+            <span class="faq-arrow">›</span>
+          </button>
+          <div class="faq-answer" hidden>
+            <p>Large images and server demand can slow down analysis. Please wait a few minutes and refresh the page if needed.</p>
+          </div>
         </div>
-      </div>
 
-      <div class="faq-item faq-collapsed">
-        <div class="faq-question-row">
-          <h3>Where do I manage notifications?</h3>
-          <span class="chevron">›</span>
+        <div class="faq-item faq-item-collapsed">
+          <button type="button" class="faq-question-row" aria-expanded="false">
+            <span>How do I invite team members to my workspace?</span>
+            <span class="faq-arrow">›</span>
+          </button>
+          <div class="faq-answer" hidden>
+            <p>Open Settings, go to Workspace Access, and send an invite to the team member’s email address.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -66,22 +82,22 @@
         <div class="support-field-row">
           <label>
             <span>Name</span>
-            <input type="text" value="{{ current_user.name }}" />
+            <input type="text" placeholder="Jordan Davis" />
           </label>
           <label>
             <span>Email</span>
-            <input type="email" value="{{ current_user.email }}" />
+            <input type="email" placeholder="you@company.com" />
           </label>
         </div>
 
         <label>
           <span>Subject</span>
-          <input type="text" value="What do you need help with?" />
+          <input type="text" placeholder="What do you need help with?" />
         </label>
 
         <label>
           <span>Message</span>
-          <textarea>Describe your issue in detail... Our team will get back to you as soon as possible.</textarea>
+          <textarea placeholder="Describe your issue..."></textarea>
         </label>
 
         <button type="submit" class="submit-btn">
@@ -93,6 +109,45 @@
       <p class="support-note">We typically respond within 2 hours during business hours • Mon–Fri, 9am–6pm UTC</p>
     </div>
 
+    <div class="help-panel video-panel">
+      <div class="section-title-row">
+        <span class="section-badge video-badge">▶</span>
+        <h2>Video Tutorials</h2>
+      </div>
+
+      <div class="video-list">
+        <div class="video-item">
+          <div class="video-thumb thumb-one">
+            <span class="video-play-btn">▶</span>
+          </div>
+          <div class="video-copy">
+            <h3>Getting Started with AgroSphere AI</h3>
+            <p>Basics &amp; Overview <span>• 5:24</span></p>
+          </div>
+        </div>
+
+        <div class="video-item">
+          <div class="video-thumb thumb-two">
+            <span class="video-play-btn">▶</span>
+          </div>
+          <div class="video-copy">
+            <h3>Crop Disease Detection Walkthrough</h3>
+            <p>Advanced Features <span>• 8:12</span></p>
+          </div>
+        </div>
+
+        <div class="video-item">
+          <div class="video-thumb thumb-three">
+            <span class="video-play-btn">▶</span>
+          </div>
+          <div class="video-copy">
+            <h3>Exporting Analytics Reports</h3>
+            <p>Data &amp; Exports <span>• 4:37</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="help-panel whats-app-panel">
       <div class="section-title-row">
         <span class="section-badge whatsapp-badge">✆</span>
@@ -102,7 +157,7 @@
       <div class="whatsapp-row">
         <div class="whatsapp-pill">
           <span class="whatsapp-icon">✆</span>
-          <span>Chat with our team instantly on WhatsApp</span>
+          <span>Chat with our team instantly</span>
         </div>
         <div class="whatsapp-actions">
           <div class="small-number">+1 (555) 123-4567</div>
@@ -118,17 +173,17 @@
       </div>
 
       <ul class="resource-list">
-        <li>AgroSphere Docs</li>
-        <li>API Reference</li>
-        <li>Changelog</li>
-        <li>Community Forum</li>
+        <li><span class="resource-icon">◧</span>AgroSphere Docs</li>
+        <li><span class="resource-icon">›</span>API Reference</li>
+        <li><span class="resource-icon">◫</span>Changelog</li>
+        <li><span class="resource-icon">◌</span>Community Forum</li>
       </ul>
     </div>
 
     <div class="help-panel tip-panel">
-      <div class="section-title-row">
-        <span class="section-badge tip-badge">i</span>
-        <h2>Tip: Press ? to open keyboard shortcuts</h2>
+      <div class="tip-box">
+        <span class="tip-badge-icon">?</span>
+        <span>Tip: Press ? to open keyboard shortcuts</span>
       </div>
     </div>
   </div>
@@ -150,8 +205,23 @@
     row.addEventListener('click', () => {
       const item = row.closest('.faq-item');
       if (!item) return;
-      item.classList.toggle('faq-collapsed');
-      item.classList.toggle('faq-expanded');
+
+      const answer = item.querySelector('.faq-answer');
+      const isOpen = item.classList.contains('faq-item-open');
+      const nextOpen = !isOpen;
+
+      item.classList.toggle('faq-item-open', nextOpen);
+      item.classList.toggle('faq-item-collapsed', !nextOpen);
+
+      if (answer) {
+        answer.hidden = !nextOpen;
+      }
+
+      row.setAttribute('aria-expanded', String(nextOpen));
+      const arrow = row.querySelector('.faq-arrow');
+      if (arrow) {
+        arrow.textContent = nextOpen ? '−' : '›';
+      }
     });
   });
 
