@@ -139,6 +139,44 @@ def test_help_page_loads_for_authenticated_farmer():
         assert "Frequently Asked Questions" in html
 
 
+def test_help_page_labels_unimplemented_support_services():
+    app = make_app()
+    with app.app_context():
+        make_farmer()
+
+    with app.test_client() as client:
+        client.post(
+            "/auth/login",
+            data={"email": "farmer@example.com", "password": "StrongPass1"},
+            follow_redirects=True,
+        )
+
+        response = client.get("/dashboard/help")
+        assert response.status_code == 200
+        html = response.get_data(as_text=True)
+        assert "Planned" in html
+        assert "not connected yet" in html.lower()
+
+
+def test_notification_preferences_mark_unavailable_channels():
+    app = make_app()
+    with app.app_context():
+        make_farmer(email="notifications-unavailable@example.com")
+
+    with app.test_client() as client:
+        client.post(
+            "/auth/login",
+            data={"email": "notifications-unavailable@example.com", "password": "StrongPass1"},
+            follow_redirects=True,
+        )
+
+        response = client.get("/dashboard/settings")
+        assert response.status_code == 200
+        html = response.get_data(as_text=True)
+        assert "Unavailable" in html
+        assert "Not yet connected" in html
+
+
 def test_treatment_details_page_has_valid_settings_link():
     app = make_app()
     with app.app_context():

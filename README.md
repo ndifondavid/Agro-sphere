@@ -1,66 +1,36 @@
 # AgroSphere
 
-AgroSphere is a Flask-based agricultural platform for farmers to manage farms, track crops, and detect plant disease using image-based scanning. It also supports farmer dashboards, product marketplace flows, and role-based access for farmer, buyer, and admin users.
+AgroSphere is a Flask-based agricultural platform for farmers to manage farms, track crops, and review plant health data. The current build includes farm and crop management, crop scans, dashboard reporting, a marketplace flow, and role-based access for farmer and buyer users.
 
-## Overview
+## What works now
 
-AgroSphere helps farmers:
-- create and manage farms
-- add crops to each farm
-- upload leaf images for disease diagnosis
-- review recommendations and scan history
-- monitor farm health through a dashboard
+- Farmer dashboard and farm overview screens
+- Farm creation, farm management, crop creation, crop editing, and crop deletion tied to the logged-in farmer
+- Image upload validation for farm and crop photos, with safe local storage under the app upload folder
+- Disease-scan workflow with historical scan results and treatment guidance views
+- Marketplace browsing and listing creation for farmers; buyer reservation flow for available listings
+- Community posts and replies scoped to the listing or community thread context
+- Settings page for profile updates and notification preferences stored under the user record
+- Basic README and local setup guidance for running the project in development
 
-The platform also includes marketplace and communication features for buyers and administrators.
+## What is still planned or external
 
-## Key Features
+The app does not yet include production-ready integrations for the following services and features:
 
-- Farmer dashboard and farm management UI
-- Farm-first scan flow to ensure scans happen only with valid farm and crop data
-- AI disease detection with fallback behavior when a model file is unavailable
-- Scan history and treatment guidance
-- Role-based authentication and access control
-- Marketplace and reservation flows
-- Messaging and admin support structure
+- Live weather alerts and advisories
+- Email, SMS, WhatsApp, and push notification delivery
+- Support ticket backend or live helpdesk system
+- Video tutorial hosting and playback content
+- Model-backed disease detection pipeline that is trained and deployed externally
+- Payment processing or billing integration
 
-## Tech Stack
+These controls are present as placeholders or planned features and should be treated as unavailable unless an external service is explicitly connected.
 
-- Python 3
-- Flask
-- Flask-SQLAlchemy
-- Flask-Login
-- Flask-Migrate
-- SQLite
-- Jinja2 templates
-- HTML, CSS, JavaScript
+## Current architecture and model integration point
 
-## Project Structure
+The trained disease model is expected to plug into the AI detection flow at the application boundary in `app/ai/disease_detector.py` and the related configuration under `config.py`. The current app includes a fallback response so local development can continue even when the model file is absent, but it is not a substitute for the real trained model.
 
-```text
-Agrosphere/
-├── app/
-│   ├── ai/
-│   ├── models/
-│   ├── routes/
-│   ├── static/
-│   ├── templates/
-│   ├── utils/
-│   ├── __init__.py
-│   └── extensions.py
-├── ai_model/
-├── database/
-├── docs/
-├── instance/
-├── migrations/
-├── tests/
-├── config.py
-├── run.py
-├── README.md
-├── requirements.txt
-└── .venv/
-```
-
-## Local Setup
+## Local setup
 
 1. Clone the repository.
 2. Open a terminal in the project root.
@@ -88,29 +58,19 @@ pip install -r requirements.txt
 python run.py
 ```
 
-The app should run locally at:
+The app runs locally at:
 
 ```text
 http://127.0.0.1:5000
 ```
 
-## App Flow
+## Environment notes
 
-Typical farmer flow:
-1. Log in as a farmer
-2. Create a farm
-3. Add at least one crop
-4. Upload a leaf image for disease scanning
-5. View diagnosis, recommendation, and treatment details
-6. Save scan history
-
-## Environment Notes
-
-- The default database is SQLite.
-- AI model paths and upload configuration are managed in `config.py`.
-- The disease detector includes a fallback result to keep the app usable even when the model file is absent.
-- Production requires `SECRET_KEY` and `DATABASE_URL` environment variables. Production sessions use secure, HTTP-only, same-site cookies.
-- Local development uses `instance/agrosphere.db`; it is not shared with other cloned copies of the repository.
+- The default database is SQLite for local development.
+- The app uses `instance/agrosphere.db` unless a different `DATABASE_URL` is configured.
+- Production variables such as `SECRET_KEY` and `DATABASE_URL` must be set before deployment.
+- Uploads are stored locally in the app upload folder and must be protected from untrusted public access.
+- Do not treat the current demo model or notification placeholders as ready for production use.
 
 ## Testing
 
@@ -120,6 +80,13 @@ Run the relevant tests with:
 python -m pytest
 ```
 
+## Future work
+
+- Connect the trained disease model behind the current detection service abstraction
+- Replace placeholder notification toggles with real delivery providers
+- Connect support and help center workflows to a real ticketing backend
+- Add documentation for deployed configuration, model versioning, and operational monitoring
+
 ## License
 
-This project currently does not include a formal license file. Add one before public distribution or production deployment.
+This project does not yet include a production license file. Add one before public distribution or deployment.

@@ -14,9 +14,9 @@
       <span class="switch-state on">ON</span>
     </div>
     <div class="alert-row" data-notification-setting>
-      <div class="alert-copy"><div class="alert-icon amber-icon">⛅</div><div><h3>Weather Warning</h3><p>Receive alerts for severe weather, frost, rainfall, and storms.</p></div></div>
-      <label class="switch"><input type="checkbox" name="weather_warning" {% if notification_preferences.get('weather_warning', true) %}checked{% endif %} /><span class="slider"></span></label>
-      <span class="switch-state on">ON</span>
+      <div class="alert-copy"><div class="alert-icon amber-icon">⛅</div><div><h3>Weather Warning</h3><p>Planned integration. Weather alerts are not yet connected to a live weather service.</p></div></div>
+      <label class="switch"><input type="checkbox" name="weather_warning" {% if notification_preferences.get('weather_warning', true) %}checked{% endif %} disabled /><span class="slider"></span></label>
+      <span class="switch-state off">Unavailable</span>
     </div>
     <div class="alert-row" data-notification-setting>
       <div class="alert-copy"><div class="alert-icon gray-icon">💬</div><div><h3>Community Reply</h3><p>Get notified when someone replies to your community posts.</p></div></div>
@@ -35,9 +35,9 @@
     <p class="subsection-copy">Choose how you want to receive notifications.</p>
     <div class="delivery-grid">
       <div class="delivery-option"><div class="delivery-header"><div class="delivery-icon email-icon">✉</div><div><span>Email</span><small>{{ current_user.email }}</small></div></div><label class="switch"><input type="checkbox" name="email_delivery" {% if notification_preferences.get('email_delivery', true) %}checked{% endif %} /><span class="slider"></span></label></div>
-      <div class="delivery-option"><div class="delivery-header"><div class="delivery-icon sms-icon">💬</div><div><span>SMS</span><small>{{ current_user.phone or 'Add a phone number in Profile' }}</small></div></div><label class="switch"><input type="checkbox" name="sms_delivery" {% if notification_preferences.get('sms_delivery', true) %}checked{% endif %} /><span class="slider"></span></label></div>
-      <div class="delivery-option"><div class="delivery-header"><div class="delivery-icon whatsapp-icon">💬</div><div><span>WhatsApp</span><small>{{ current_user.phone or 'Add a phone number in Profile' }}</small></div></div><label class="switch"><input type="checkbox" name="whatsapp_delivery" {% if notification_preferences.get('whatsapp_delivery', true) %}checked{% endif %} /><span class="slider"></span></label></div>
-      <div class="delivery-option"><div class="delivery-header"><div class="delivery-icon push-icon">🔔</div><div><span>Push Notifications</span><small>Browser notifications on this device</small></div></div><label class="switch"><input type="checkbox" name="push_delivery" {% if notification_preferences.get('push_delivery', true) %}checked{% endif %} /><span class="slider"></span></label></div>
+      <div class="delivery-option"><div class="delivery-header"><div class="delivery-icon sms-icon">💬</div><div><span>SMS</span><small>Not yet connected</small></div></div><label class="switch"><input type="checkbox" name="sms_delivery" {% if notification_preferences.get('sms_delivery', true) %}checked{% endif %} disabled /><span class="slider"></span></label></div>
+      <div class="delivery-option"><div class="delivery-header"><div class="delivery-icon whatsapp-icon">💬</div><div><span>WhatsApp</span><small>Not yet connected</small></div></div><label class="switch"><input type="checkbox" name="whatsapp_delivery" {% if notification_preferences.get('whatsapp_delivery', true) %}checked{% endif %} disabled /><span class="slider"></span></label></div>
+      <div class="delivery-option"><div class="delivery-header"><div class="delivery-icon push-icon">🔔</div><div><span>Push Notifications</span><small>Browser alerts are not connected yet</small></div></div><label class="switch"><input type="checkbox" name="push_delivery" {% if notification_preferences.get('push_delivery', true) %}checked{% endif %} disabled /><span class="slider"></span></label></div>
     </div>
   </div>
 </section>
