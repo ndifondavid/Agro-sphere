@@ -35,37 +35,37 @@
       <div class="content-grid">
         <aside class="sidebar" aria-label="Sidebar navigation">
           <nav class="menu">
-            <a href="{{ url_for('dashboard.index') }}" class="menu-item active">
+            <a href="{{ url_for('dashboard.index') }}" class="menu-item{% if request.endpoint == 'dashboard.index' %} active{% endif %}">
               <span class="menu-icon">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 12.2 12 5l7.5 7.2M7 10.8V19h10v-8.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </span>
               Overview
             </a>
-            <a href="{{ url_for('farm.list_farms') }}" class="menu-item">
+            <a href="{{ url_for('farm.list_farms') }}" class="menu-item{% if request.endpoint and request.endpoint.startswith('farm.') %} active{% endif %}">
               <span class="menu-icon">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 10.5 12 3l9 7.5V19a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1v-8.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </span>
               Farms
             </a>
-            <a href="{{ url_for('scan.scan_leaf') }}" class="menu-item">
+            <a href="{{ url_for('scan.scan_leaf') }}" class="menu-item{% if request.endpoint and request.endpoint.startswith('scan.') %} active{% endif %}">
               <span class="menu-icon">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 7.5h16M4 12h8m-8 4.5h12M18 12.5l2.5 2.5m-2.5 0 2.5-2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </span>
               Scan
             </a>
-            <a href="{{ url_for('community.index') }}" class="menu-item">
+            <a href="{{ url_for('community.index') }}" class="menu-item{% if request.endpoint and request.endpoint.startswith('community.') %} active{% endif %}">
               <span class="menu-icon">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 6.5h14a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-7l-4 3v-3H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
               </span>
               Community
             </a>
-            <a href="{{ url_for('dashboard.settings') }}" class="menu-item">
+            <a href="{{ url_for('dashboard.settings') }}" class="menu-item{% if request.endpoint in ['dashboard.settings', 'dashboard.notifications'] %} active{% endif %}">
               <span class="menu-icon">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v4m0 10v4m9-9h-4M7 12H3m16.2 6.2-2.8-2.8M9.6 9.6 6.8 6.8m0 10.4 2.8-2.8m6.8-6.8-2.8 2.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
               </span>
               Settings
             </a>
-            <a href="{{ url_for('dashboard.help_page') }}" class="menu-item">
+            <a href="{{ url_for('dashboard.help_page') }}" class="menu-item{% if request.endpoint == 'dashboard.help_page' %} active{% endif %}">
               <span class="menu-icon">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9.1 9.2a3 3 0 1 1 5.8 1.4c-.9 1.4-2.8 1.9-3.8 3.3-.4.6-.4 1.1-.4 1.9M12 17.5h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </span>
