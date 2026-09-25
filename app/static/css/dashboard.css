@@ -24,7 +24,6 @@
   --warning: #c9822d;
   --shadow: rgba(7, 59, 43, 0.13);
 }
-
 * { box-sizing: border-box; }
 html, body { margin: 0; min-height: 100%; }
 body {
@@ -4349,3 +4348,4 @@ textarea:focus {
     display: none;
   }
 }
+
