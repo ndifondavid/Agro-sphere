@@ -1,4 +1,8 @@
 <div class="app-top-actions" aria-label="Account actions">
+  <button class="sidebar-toggle" type="button" aria-label="Open navigation menu" aria-controls="dashboardSidebar" aria-expanded="false" title="Toggle navigation">
+    <svg class="sidebar-toggle-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <svg class="sidebar-toggle-close" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
   <button class="icon-button notification-trigger" type="button" aria-label="Notifications" title="Notifications" aria-expanded="false" aria-controls="notificationPopover">
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 10-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5m6 0a3 3 0 0 1-6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
     {% if header_notifications %}<span class="notification-dot">{{ header_notifications|length }}</span>{% endif %}
@@ -36,9 +40,10 @@
     <a class="buyer-logout-btn" href="{{ url_for('auth.logout') }}">Log out</a>
   {% endif %}
 </div>
+<div class="sidebar-backdrop" data-sidebar-backdrop hidden></div>
 <script>
   (() => {
-    const controls = document.currentScript?.previousElementSibling;
+    const controls = document.querySelector('.app-top-actions');
     const trigger = controls?.querySelector('.notification-trigger');
     const popover = controls?.querySelector('.notification-popover');
     if (!trigger || !popover) return;
@@ -55,4 +60,55 @@
       }
     });
   })();
+
+  const initSidebarNavigation = () => {
+    const toggle = document.querySelector('.sidebar-toggle');
+    const sidebar = document.querySelector('.sidebar');
+    const backdrop = document.querySelector('[data-sidebar-backdrop]');
+    if (!toggle || !sidebar || !backdrop) {
+      toggle?.setAttribute('hidden', 'hidden');
+      return;
+    }
+
+    sidebar.id = sidebar.id || 'dashboardSidebar';
+
+    const setOpen = (open) => {
+      sidebar.classList.toggle('is-open', open);
+      document.body.classList.toggle('sidebar-open', open);
+      backdrop.hidden = !open;
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+    };
+
+    const setCollapsed = (collapsed) => {
+      document.body.classList.toggle('sidebar-collapsed', collapsed);
+      localStorage.setItem('agrosphere-sidebar-collapsed', String(collapsed));
+    };
+
+    toggle.addEventListener('click', () => {
+      if (window.matchMedia('(max-width: 860px)').matches) {
+        setOpen(!sidebar.classList.contains('is-open'));
+      } else {
+        setCollapsed(!document.body.classList.contains('sidebar-collapsed'));
+      }
+    });
+    backdrop.addEventListener('click', () => setOpen(false));
+    sidebar.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setOpen(false)));
+    window.addEventListener('resize', () => {
+      if (!window.matchMedia('(max-width: 860px)').matches) setOpen(false);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') setOpen(false);
+    });
+
+    if (localStorage.getItem('agrosphere-sidebar-collapsed') === 'true' && !window.matchMedia('(max-width: 860px)').matches) {
+      setCollapsed(true);
+    }
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSidebarNavigation);
+  } else {
+    initSidebarNavigation();
+  }
 </script>
