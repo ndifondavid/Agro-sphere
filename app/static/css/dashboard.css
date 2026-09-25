@@ -1833,7 +1833,7 @@ textarea:focus-visible {
 
 .settings-tabs {
   display: grid;
-  grid-template-columns: repeat(4, minmax(120px, 1fr));
+  grid-template-columns: repeat(2, minmax(160px, 1fr));
   gap: 0;
   background: rgba(215, 221, 219, 0.8);
   border: 1px solid rgba(17, 87, 63, 0.08);
@@ -1854,12 +1854,27 @@ textarea:focus-visible {
   font-weight: 700;
   cursor: pointer;
   text-decoration: none;
+  position: relative;
 }
 
 .settings-tab.active {
   background: rgba(255,255,255,0.48);
   color: #0f5d43;
-  border-bottom: 3px solid #0e7a52;
+}
+
+.settings-tab.active::after {
+  content: "";
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 0;
+  height: 3px;
+  background: #0e7a52;
+  border-radius: 999px;
+}
+
+.settings-section-panel[hidden] {
+  display: none;
 }
 
 .settings-tab-link {

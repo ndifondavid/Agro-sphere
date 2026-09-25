@@ -26,6 +26,10 @@
   --green-600: #13a370;
   --green-500: #59d39c;
   --green-100: #ecfff6;
+  --blue-900: #0d3f8f;
+  --blue-700: #1954d6;
+  --blue-600: #2563eb;
+  --blue-500: #3b82f6;
   --white: #ffffff;
   --panel-bg: #f7faf8;
   --field-bg: #f8faf9;
@@ -411,11 +415,11 @@ button, input { font: inherit; }
   height: 42px;
   border: none;
   border-radius: 10px;
-  background: linear-gradient(180deg, var(--green-700), var(--green-600));
+  background: linear-gradient(180deg, var(--blue-700), var(--blue-600));
   color: var(--white);
   font-size: 13px;
   font-weight: 700;
-  box-shadow: 0 12px 18px rgba(12, 123, 91, 0.2);
+  box-shadow: 0 12px 18px rgba(37, 99, 235, 0.24);
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
@@ -436,7 +440,7 @@ button, input { font: inherit; }
 
 .primary-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 16px 24px rgba(12, 123, 91, 0.24);
+  box-shadow: 0 16px 24px rgba(37, 99, 235, 0.28);
   filter: brightness(1.04);
 }
 
