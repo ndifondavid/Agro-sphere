@@ -4349,3 +4349,171 @@ textarea:focus {
   }
 }
 
+/* Stage 1 visual polish: layout hierarchy, cards, forms, and responsive surfaces. */
+.dashboard-body {
+  background: #eaf1ee;
+}
+
+.dashboard-shell {
+  border: 1px solid rgba(15, 79, 58, 0.08);
+  box-shadow: 0 24px 60px rgba(13, 55, 42, 0.12);
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  min-height: 92px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(14px);
+}
+
+.main-panel,
+.marketplace-page,
+.farm-management-page {
+  background: #f4f7f5;
+}
+
+.main-panel {
+  padding: 32px clamp(18px, 3vw, 38px) 30px;
+}
+
+.panel-header,
+.marketplace-header-row,
+.farm-page-top {
+  margin-bottom: 28px;
+}
+
+.panel-header h1,
+.marketplace-header-row h1,
+.farm-page-top h1 {
+  letter-spacing: -0.04em;
+}
+
+.stats-grid,
+.metric-grid,
+.lower-grid,
+.marketplace-grid,
+.farm-cards-grid {
+  gap: 22px;
+}
+
+.stat-card,
+.card,
+.market-card,
+.farm-card,
+.farm-summary-card,
+.empty-farms-card {
+  border-color: rgba(18, 88, 67, 0.1);
+  box-shadow: 0 12px 28px rgba(15, 57, 44, 0.06);
+}
+
+.stat-card:hover,
+.card:hover,
+.market-card:hover,
+.farm-card:hover,
+.farm-summary-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 36px rgba(15, 57, 44, 0.11);
+}
+
+.menu-item,
+.filter-btn,
+.icon-btn-mini,
+.profile-pill,
+.community-nav-link,
+.buyer-reservations-btn,
+.buyer-logout-btn,
+.new-scan-btn,
+.plan-upgrade-link,
+.primary-green-button,
+.secondary-button,
+.reserve-btn {
+  transition: transform 0.2s ease, color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.menu-item:hover,
+.filter-btn:hover,
+.icon-btn-mini:hover,
+.profile-pill:hover,
+.community-nav-link:hover,
+.buyer-reservations-btn:hover,
+.buyer-logout-btn:hover,
+.new-scan-btn:hover,
+.plan-upgrade-link:hover,
+.primary-green-button:hover,
+.secondary-button:hover,
+.reserve-btn:hover {
+  transform: translateY(-2px);
+}
+
+.marketplace-page > form {
+  box-shadow: 0 10px 24px rgba(15, 57, 44, 0.05);
+}
+
+.market-card-image {
+  min-height: 172px;
+}
+
+@media (max-width: 860px) {
+  .topbar {
+    position: relative;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .marketplace-page > form {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .main-panel,
+  .marketplace-page,
+  .farm-management-page {
+    padding: 20px 14px 24px;
+  }
+
+  .panel-header,
+  .marketplace-header-row,
+  .farm-page-top {
+    gap: 16px;
+  }
+
+  .stats-grid,
+  .marketplace-page > form {
+    grid-template-columns: 1fr !important;
+  }
+
+  .stat-card,
+  .card,
+  .market-card,
+  .farm-card {
+    border-radius: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-card,
+  .card,
+  .market-card,
+  .farm-card,
+  .farm-summary-card,
+  .menu-item,
+  .filter-btn,
+  .icon-btn-mini,
+  .profile-pill,
+  .community-nav-link,
+  .buyer-reservations-btn,
+  .buyer-logout-btn,
+  .new-scan-btn,
+  .plan-upgrade-link,
+  .primary-green-button,
+  .secondary-button,
+  .reserve-btn {
+    transition: none;
+  }
+}
+
