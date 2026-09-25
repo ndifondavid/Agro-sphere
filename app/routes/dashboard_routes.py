@@ -8,6 +8,7 @@ import os
 import uuid
 import re
 import json
+from datetime import datetime, timedelta
 
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_required, current_user
@@ -33,18 +34,29 @@ def index():
     farms = Farm.query.filter_by(owner_id=current_user.id).all()
     crop_count = sum(len(f.crops) for f in farms)
     crop_ids = [crop.id for farm in farms for crop in farm.crops]
-    recent_scans = (
+    all_scans = (
         Scan.query.filter(Scan.crop_id.in_(crop_ids))
         .order_by(Scan.timestamp.desc())
-        .limit(10)
         .all()
         if crop_ids
         else []
     )
-    disease_scans = [scan for scan in recent_scans if "healthy" not in scan.predicted_disease.lower()]
-    healthy_scans = [scan for scan in recent_scans if "healthy" in scan.predicted_disease.lower()]
+    recent_scans = all_scans[:10]
+    disease_scans = [scan for scan in all_scans if "healthy" not in scan.predicted_disease.lower()]
+    healthy_scans = [scan for scan in all_scans if "healthy" in scan.predicted_disease.lower()]
     disease_count = len(disease_scans)
     healthy_count = len(healthy_scans)
+    trend_start = datetime.utcnow().date() - timedelta(days=6)
+    trend_data = []
+    for offset in range(7):
+        day = trend_start + timedelta(days=offset)
+        day_scans = [scan for scan in all_scans if scan.timestamp.date() == day]
+        trend_data.append({
+            "label": day.strftime("%a"),
+            "date": day.strftime("%b %d"),
+            "count": len(day_scans),
+        })
+    trend_max = max((day["count"] for day in trend_data), default=0)
     total_farm_area = sum(
         float(re.search(r"\d+(?:\.\d+)?", farm.farm_size or "").group())
         for farm in farms
@@ -57,12 +69,14 @@ def index():
         recent_scans=recent_scans,
         total_farms=len(farms),
         total_crops=crop_count,
-        total_scans=len(recent_scans),
+        total_scans=len(all_scans),
         disease_count=disease_count,
         healthy_count=healthy_count,
         farm_area=total_farm_area,
-        healthy_percentage=(100 if crop_count == 0 else round((healthy_count / crop_count) * 100, 1)),
-        diseased_percentage=(0 if crop_count == 0 else round((disease_count / crop_count) * 100, 1)),
+        healthy_percentage=(0 if not all_scans else round((healthy_count / len(all_scans)) * 100, 1)),
+        diseased_percentage=(0 if not all_scans else round((disease_count / len(all_scans)) * 100, 1)),
+        trend_data=trend_data,
+        trend_max=trend_max,
     )
 
 
@@ -132,7 +146,31 @@ def settings():
 @dashboard_bp.route("/notifications", methods=["GET", "POST"])
 @login_required
 def notifications():
-    return redirect(url_for("dashboard.settings"))
+    if current_user.is_buyer():
+        flash("Buyer accounts do not have access to the dashboard.", "warning")
+        return redirect(url_for("public.landing"))
+    if not current_user.is_farmer():
+        return "Access denied: farmer account required.", 403
+
+    notification_names = (
+        "disease_alert", "weather_warning", "community_reply", "weekly_report",
+        "email_delivery", "sms_delivery", "whatsapp_delivery", "push_delivery",
+    )
+    preferences = json.loads(current_user.notification_preferences or "{}")
+
+    if request.method == "POST":
+        current_user.notification_preferences = json.dumps({
+            preference: request.form.get(preference) == "on"
+            for preference in notification_names
+        })
+        db.session.commit()
+        flash("Notification preferences saved.", "success")
+        return redirect(url_for("dashboard.notifications"))
+
+    return render_template(
+        "dashboard/notifications.html",
+        notification_preferences=preferences,
+    )
 
 
 @dashboard_bp.route("/help")
@@ -157,3 +195,9 @@ def treatment_details():
         return "Access denied: farmer account required.", 403
 
     return render_template("dashboard/treatment_details.html", farmer_name=current_user.name)
+
+
+@dashboard_bp.route("/upgrade")
+@login_required
+def upgrade():
+    return render_template("dashboard/upgrade.html")
