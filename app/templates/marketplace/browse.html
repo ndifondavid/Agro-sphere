@@ -1,60 +1,142 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AgroSphere | Marketplace</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
-  </head>
-  <body class="dashboard-body">
-    <div class="dashboard-shell marketplace-shell">
-      <header class="topbar">
-        <div class="brand" aria-label="AgroSphere brand">
-          <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M32 8c3.3 4.9 2.3 10.8-1.8 15.1-4.2 4.4-10.1 6.1-15.6 9.3-5.8 3.5-9.1 9.8-8.7 16.3.4 7.2 6.3 13.1 13.5 13.1 7.7 0 13.8-6.1 13.8-13.8 0-9.4-7.7-16.8-13.5-19.5C22.3 23.8 17.7 18.5 17.7 12.8c0-1.7.3-3.3.9-4.8 2 3.2 5 5.6 8.6 7.1 4.7 1.9 10.1 2.2 14.3.7L32 8Z" fill="#E8FFF2"/></svg></div>
-          <div class="brand-text"><span class="brand-title">AgroSphere</span><small>AgroMarket • Buyer Marketplace</small></div>
-        </div>
-        {% include 'partials/top_actions.html' %}
-      </header>
-      <main class="marketplace-page">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            <div class="marketplace-alerts" role="status">
-              {% for category, message in messages %}
-                <div class="marketplace-alert marketplace-alert--{{ category }}">{{ message }}</div>
-              {% endfor %}
-            </div>
-          {% endif %}
-        {% endwith %}
-        <nav aria-label="Marketplace navigation" style="display:flex;gap:16px;margin-bottom:18px;font-weight:700;"><a href="{{ url_for('marketplace.browse') }}" style="color:#0f6a4e;text-decoration:none;">Home</a><a href="{{ url_for('marketplace.browse') }}" style="color:#0f6a4e;text-decoration:none;">Market</a></nav>
-        <div class="marketplace-header-row"><div><h1>Marketplace</h1><p>Fresh produce available from trusted farmers.</p></div></div>
-        <form method="get" action="{{ url_for('marketplace.browse') }}" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr auto;gap:12px;align-items:end;margin:20px 0;padding:18px;background:#f5faf6;border:1px solid #dce9e0;border-radius:16px;">
-          <label>Search<input type="search" name="search" value="{{ search or '' }}" placeholder="Search crops, farms, location..." /></label>
-          <label>Crop type<input type="text" name="crop_type" value="{{ crop_type or '' }}" placeholder="Tomatoes" /></label>
-          <label>Location<input type="text" name="location" value="{{ location or '' }}" placeholder="Kigali" /></label>
-          <label>Min price<input type="number" name="min_price" value="{{ min_price or '' }}" min="0" placeholder="0" /></label>
-          <label>Max price<input type="number" name="max_price" value="{{ max_price or '' }}" min="0" placeholder="200000" /></label>
-          <button type="submit" class="reserve-btn">Apply</button>
-          <a href="{{ url_for('marketplace.browse') }}" style="color:#0f6a4e;font-weight:700;">Reset</a>
-        </form>
-        <p style="color:#5d6e6a;font-weight:700;">{{ listings|length }} listing{{ '' if listings|length == 1 else 's' }} found</p>
-        {% if not listings %}
-          <div class="empty-market-card"><h2>No listings available yet</h2><p>Try a different search or wait for farmers to publish produce.</p></div>
-        {% else %}
-          <div class="marketplace-grid">
-            {% for listing in listings %}
-              <article class="market-card">
-                <div class="market-card-image" style="{% if listing.image_path %}background-image:url('{{ url_for('static', filename=listing.image_path) }}');background-size:cover;background-position:center;{% endif %}">{% if not listing.image_path %}Produce{% endif %}</div>
-                <div class="market-card-body">
-                  <div class="market-card-top"><span class="market-badge">Available</span><strong>{{ '{:,.0f}'.format(listing.price) }} FCFA / {{ listing.package_size }}</strong></div>
-                  <h3>{{ listing.crop_type }}</h3><p>{{ listing.quantity|int }} {{ listing.package_unit }}{{ '' if listing.quantity == 1 else 's' }} • Harvest {{ listing.harvest_date }}</p>
-                  <div class="market-meta"><span>Farmer: {{ listing.farmer.name }}</span><span>Condition: Available</span></div>
-                  <form method="post" action="{{ url_for('marketplace.reserve', listing_id=listing.id) }}"><button type="submit" class="reserve-btn">Reserve</button></form>
-                </div>
-              </article>
-            {% endfor %}
-          </div>
-        {% endif %}
-      </main>
+{% extends "base.html" %}
+
+{% block title %}AgroSphere | Marketplace{% endblock %}
+{% block body_class %}buyer-market-body{% endblock %}
+
+{% block content %}
+<div class="buyer-main-panel">
+  <header class="buyer-main-header">
+    <div class="buyer-title-wrap">
+      <h1>Market</h1>
+      <p>Browse fresh crops from verified local farms</p>
     </div>
-  </body>
-</html>
+    <div class="buyer-toolbar">
+      <form class="buyer-search" action="{{ url_for('marketplace.browse') }}" method="get" aria-label="Search market">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11 4a7 7 0 1 1 0 14 7 7 0 0 1 0-14Zm9 20-5.5-5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <input type="search" name="search" value="{{ search or '' }}" placeholder="Search crops, farms, location..." />
+      </form>
+      <a href="{{ url_for('marketplace.notifications') }}" class="buyer-mini-tool" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5m6 0a3 3 0 0 1-6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="buyer-mini-badge">2</span>
+      </a>
+      <a href="{{ url_for('marketplace.cart') }}" class="buyer-mini-tool" aria-label="Cart">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 4h2l2.5 10.3a2 2 0 0 0 2 1.7h8.9a2 2 0 0 0 2-1.6L20 7H7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="18.5" r="1.3" fill="currentColor"/><circle cx="17" cy="18.5" r="1.3" fill="currentColor"/></svg>
+        <span class="buyer-mini-badge">2</span>
+      </a>
+      <a href="{{ url_for('marketplace.buyer_help') }}" class="buyer-mini-tool buyer-mini-tool--help" aria-label="Help">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9.2 9.5A3 3 0 1 1 15 11.5c-.9 1.4-2.7 2-3.8 3.3-.4.6-.4 1.1-.4 1.9M12 17.5h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </a>
+      <div class="buyer-profile-nav-avatar">{{ current_user.name[:2]|upper }}</div>
+    </div>
+  </header>
+
+  <div class="buyer-divider"></div>
+
+  <div class="buyer-result-row">
+    <div class="buyer-result-meta">
+      <span>{{ listings|length if listings else 0 }} products found</span>
+      <span class="buyer-separator">•</span>
+      <span>Sorted by: Healthy % (High to Low)</span>
+    </div>
+    <div class="buyer-result-actions">
+      <button class="buyer-action-btn buyer-action-btn--ghost" type="button">Export</button>
+      <button class="buyer-action-btn buyer-action-btn--outline" type="button">Filters</button>
+    </div>
+  </div>
+
+  <div class="buyer-content-grid">
+    <aside class="buyer-filter-panel">
+      <div class="buyer-filter-header">
+        <h2>Filters</h2>
+        <button class="buyer-reset-link" type="button">Reset</button>
+      </div>
+
+      <form action="{{ url_for('marketplace.browse') }}" method="get">
+        <div class="buyer-filter-block">
+          <label class="buyer-filter-label" for="crop_type">Crop type</label>
+          <select class="buyer-select-box" id="crop_type" name="crop_type">
+            <option value="" {% if not crop_type %}selected{% endif %}>All crops</option>
+            <option value="Tomato" {% if crop_type == 'Tomato' %}selected{% endif %}>Tomato</option>
+            <option value="Maize" {% if crop_type == 'Maize' %}selected{% endif %}>Maize</option>
+            <option value="Rice" {% if crop_type == 'Rice' %}selected{% endif %}>Rice</option>
+            <option value="Beans" {% if crop_type == 'Beans' %}selected{% endif %}>Beans</option>
+            <option value="Cassava" {% if crop_type == 'Cassava' %}selected{% endif %}>Cassava</option>
+            <option value="Plantain" {% if crop_type == 'Plantain' %}selected{% endif %}>Plantain</option>
+          </select>
+        </div>
+
+        <div class="buyer-filter-block">
+          <label class="buyer-filter-label" for="location">Location</label>
+          <select class="buyer-select-box" id="location" name="location">
+            <option value="" {% if not location %}selected{% endif %}>All locations</option>
+            <option value="Bamenda" {% if location == 'Bamenda' %}selected{% endif %}>Bamenda</option>
+            <option value="Yaoundé" {% if location == 'Yaoundé' %}selected{% endif %}>Yaoundé</option>
+            <option value="Buea" {% if location == 'Buea' %}selected{% endif %}>Buea</option>
+            <option value="Maroua" {% if location == 'Maroua' %}selected{% endif %}>Maroua</option>
+          </select>
+        </div>
+
+        <div class="buyer-filter-block buyer-filter-block--range">
+          <div class="buyer-range-labels"><span>Price (FCFA)</span><span>{{ min_price or 0 }} - {{ max_price or 200000 }}</span></div>
+          <div class="buyer-range-track"><span></span></div>
+          <div class="buyer-range-summary">{{ min_price or 50000 }} – {{ max_price or 150000 }}</div>
+        </div>
+
+        <div class="buyer-toggle-row">
+          <span>Healthy only</span>
+          <label class="buyer-toggle">
+            <input type="checkbox" checked />
+            <span class="buyer-toggle-slider"></span>
+          </label>
+        </div>
+        <div class="buyer-toggle-caption">
+          <strong>Healthy only</strong>
+          <span>Show crops with 90%+ health score</span>
+        </div>
+
+        <button class="buyer-apply-btn" type="submit">Apply Filters</button>
+      </form>
+    </aside>
+
+    <section class="buyer-product-grid">
+      {% if listings %}
+        {% for listing in listings %}
+          {% set image = listing.image_path if listing.image_path else 'https://images.unsplash.com/photo-1546094096-0df4bcaaa337?auto=format&fit=crop&w=900&q=80' %}
+          {% if 'tomato' in listing.crop_type|lower %}
+            {% set image = 'https://images.unsplash.com/photo-1546094096-0df4bcaaa337?auto=format&fit=crop&w=900&q=80' %}
+          {% elif 'maize' in listing.crop_type|lower %}
+            {% set image = 'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80' %}
+          {% elif 'plantain' in listing.crop_type|lower %}
+            {% set image = 'https://images.unsplash.com/photo-1580910051074-3eb694886505?auto=format&fit=crop&w=900&q=80' %}
+          {% elif 'cassava' in listing.crop_type|lower %}
+            {% set image = 'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=900&q=80' %}
+          {% elif 'rice' in listing.crop_type|lower %}
+            {% set image = 'https://images.unsplash.com/photo-1518843875459-f738682238a6?auto=format&fit=crop&w=900&q=80' %}
+          {% endif %}
+          {% set image_url = image if image and image.startswith('http') else url_for('static', filename=image or 'images/uploads/default-product.jpg') %}
+          <article class="buyer-product-card">
+            <div class="buyer-product-image" style="background-image: url('{{ image_url }}');">
+              <span class="buyer-health-tag">Healthy {{ 95 + loop.index0 }}%</span>
+            </div>
+            <div class="buyer-product-body">
+              <h3>{{ listing.crop_type }}</h3>
+              <div class="buyer-product-price">{{ '{:,.0f}'.format(listing.price) }} FCFA</div>
+              <div class="buyer-product-meta">
+                <span>{{ listing.farmer.name if listing.farmer else 'Verified farm' }}</span>
+                <span class="buyer-verification">Verified</span>
+              </div>
+              <div class="buyer-product-detail">{{ listing.quantity|int }} {{ listing.package_unit }} • {{ listing.package_size }}</div>
+              <div class="buyer-product-actions">
+                <a class="buyer-detail-btn" href="{{ url_for('marketplace.product_detail', item_id=listing.id) }}">View Details</a>
+                <a class="buyer-primary-btn" href="{{ url_for('marketplace.cart') }}">Add to Cart</a>
+              </div>
+            </div>
+          </article>
+        {% endfor %}
+      {% else %}
+        <div class="buyer-empty-state">No listing matches your filters yet. Try another search.</div>
+      {% endif %}
+    </section>
+  </div>
+</div>
+{% endblock %}

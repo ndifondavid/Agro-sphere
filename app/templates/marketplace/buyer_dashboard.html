@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}AgroSphere | Buyer Dashboard{% endblock %}
+{% block body_class %}buyer-market-body{% endblock %}
+
+{% block content %}
+<div class="buyer-main-panel">
+  <header class="buyer-main-header">
+    <div class="buyer-title-wrap">
+      <h1>Buyer Dashboard</h1>
+      <p>Welcome back, {{ current_user.name }}.</p>
+    </div>
+    <div class="buyer-toolbar">
+      <label class="buyer-search" aria-label="Search products">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11 4a7 7 0 1 1 0 14 7 7 0 0 1 0-14Zm9 20-5.5-5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <input type="search" placeholder="Search crops, farms, location..." />
+      </label>
+      <button class="buyer-mini-tool" type="button" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5m6 0a3 3 0 0 1-6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="buyer-mini-badge">3</span>
+      </button>
+      <button class="buyer-mini-tool buyer-mini-tool--help" type="button" aria-label="Help">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9.2 9.5A3 3 0 1 1 15 11.5c-.9 1.4-2.7 2-3.8 3.3-.4.6-.4 1.1-.4 1.9M12 17.5h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <section class="buyer-stats-grid">
+    {% for stat in stats %}
+    <article class="buyer-stat-card">
+      <div class="buyer-stat-top">
+        <span>{{ stat.label }}</span>
+        <span class="buyer-stat-trend">{{ stat.trend }}</span>
+      </div>
+      <h3>{{ stat.value }}</h3>
+    </article>
+    {% endfor %}
+  </section>
+
+  <section class="buyer-panel-grid">
+    <article class="buyer-panel buyer-panel--wide">
+      <div class="buyer-panel-header">
+        <h2>Recent orders</h2>
+        <a href="{{ url_for('marketplace.orders') }}">View all</a>
+      </div>
+      <div class="buyer-list">
+        {% for order in recent_orders %}
+        <div class="buyer-row">
+          <div>
+            <strong>{{ order.order }}</strong>
+            <p>{{ order.item }}</p>
+          </div>
+          <div class="buyer-row-meta">
+            <span class="buyer-status buyer-status--{{ order.status|lower|replace(' ', '-') }}">{{ order.status }}</span>
+            <small>{{ order.date }}</small>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="buyer-panel">
+      <div class="buyer-panel-header">
+        <h2>Quick actions</h2>
+      </div>
+      <div class="buyer-quick-actions">
+        <a href="{{ url_for('marketplace.browse') }}" class="buyer-quick-action">Browse market</a>
+        <a href="{{ url_for('marketplace.orders') }}" class="buyer-quick-action">Track orders</a>
+        <a href="{{ url_for('marketplace.wishlist') }}" class="buyer-quick-action">Wishlist</a>
+        <a href="{{ url_for('marketplace.notifications') }}" class="buyer-quick-action">Notifications</a>
+      </div>
+    </article>
+  </section>
+
+  <section class="buyer-panel-grid buyer-panel-grid--secondary">
+    <article class="buyer-panel buyer-panel--wide">
+      <div class="buyer-panel-header">
+        <h2>Recommended for you</h2>
+        <a href="{{ url_for('marketplace.browse') }}">See more</a>
+      </div>
+      <div class="buyer-product-inline">
+        {% for product in recommended %}
+        {% set product_image = product.image if product.image and product.image.startswith('http') else url_for('static', filename=product.image or 'images/uploads/default-product.jpg') %}
+        <article class="buyer-inline-card">
+          <div class="buyer-inline-image" style="background-image: url('{{ product_image }}');"></div>
+          <div class="buyer-inline-body">
+            <h3>{{ product.crop_type }}</h3>
+            <p>{{ product.farm_name }}</p>
+            <strong>{{ '{:,.0f}'.format(product.price) }} FCFA</strong>
+            <a href="{{ url_for('marketplace.product_detail', item_id=product.id) }}" class="buyer-link-btn">View</a>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="buyer-panel">
+      <div class="buyer-panel-header">
+        <h2>Marketplace shortcut</h2>
+      </div>
+      <div class="buyer-mini-spotlight">
+        <div class="buyer-spotlight-card">
+          <span>Healthy crops</span>
+          <strong>18 items</strong>
+        </div>
+        <div class="buyer-spotlight-card buyer-spotlight-card--light">
+          <span>Verified farms</span>
+          <strong>42 farms</strong>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="buyer-panel-grid buyer-panel-grid--secondary">
+    <article class="buyer-panel buyer-panel--wide">
+      <div class="buyer-panel-header">
+        <h2>Latest healthy crops</h2>
+      </div>
+      <div class="buyer-crop-row">
+        {% for product in healthy_crops %}
+        {% set crop_image = product.image if product.image and product.image.startswith('http') else url_for('static', filename=product.image or 'images/uploads/default-product.jpg') %}
+        <div class="buyer-crop-card">
+          <div class="buyer-crop-image" style="background-image: url('{{ crop_image }}');"></div>
+          <div class="buyer-crop-copy">
+            <strong>{{ product.crop_type }}</strong>
+            <span>{{ product.health_score }}% healthy</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="buyer-panel">
+      <div class="buyer-panel-header">
+        <h2>Recent messages</h2>
+      </div>
+      <div class="buyer-message-stack">
+        <div class="buyer-message-item">
+          <strong>Green Valley</strong>
+          <p>Can we deliver before noon?</p>
+        </div>
+        <div class="buyer-message-item">
+          <strong>Mbingo</strong>
+          <p>Your order is ready for pickup.</p>
+        </div>
+      </div>
+    </article>
+  </section>
+</div>
+{% endblock %}

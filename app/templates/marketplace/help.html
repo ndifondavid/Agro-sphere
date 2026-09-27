@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}AgroSphere | Help & Support{% endblock %}
+{% block body_class %}buyer-market-body{% endblock %}
+
+{% block content %}
+<div class="buyer-main-panel">
+  <div class="buyer-summary-header">
+    <div>
+      <h1>Help & support</h1>
+      <p>Find answers and get help from the AgroSphere team.</p>
+    </div>
+  </div>
+
+  <div class="buyer-help-layout">
+    <section class="buyer-panel buyer-panel--help">
+      <h3>Frequently asked questions</h3>
+      <div class="buyer-faq-list">
+        <div><strong>How quickly do orders arrive?</strong><p>Most orders are delivered within 2-5 days depending on location.</p></div>
+        <div><strong>Can I verify a farm?</strong><p>Yes, all listed farms in this market are verified and quality checked.</p></div>
+        <div><strong>What if a crop arrives damaged?</strong><p>Contact support within 24 hours and we will arrange a replacement or refund.</p></div>
+      </div>
+    </section>
+
+    <section class="buyer-panel buyer-panel--help">
+      <h3>Contact support</h3>
+      <div class="buyer-form-grid buyer-form-grid--profile">
+        <label><span>Name</span><input type="text" value="Alex Kengne" /></label>
+        <label><span>Email</span><input type="email" value="alex@agrosphere.com" /></label>
+        <label class="buyer-form-full"><span>Message</span><textarea rows="4">I need help tracking my recent order.</textarea></label>
+      </div>
+      <button class="buyer-primary-btn" type="button">Send message</button>
+    </section>
+  </div>
+</div>
+{% endblock %}

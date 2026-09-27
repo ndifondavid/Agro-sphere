@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}AgroSphere | Wishlist{% endblock %}
+{% block body_class %}buyer-market-body{% endblock %}
+
+{% block content %}
+<div class="buyer-main-panel">
+  <div class="buyer-summary-header">
+    <div>
+      <h1>Wishlist</h1>
+      <p>Saved products you may want to buy later.</p>
+    </div>
+  </div>
+
+  <div class="buyer-product-grid buyer-product-grid--wishlist">
+    {% for product in products %}
+    {% set wishlist_image = product.image if product.image and product.image.startswith('http') else url_for('static', filename=product.image or 'images/uploads/default-product.jpg') %}
+    <article class="buyer-product-card">
+      <div class="buyer-product-image" style="background-image: url('{{ wishlist_image }}');">
+        <span class="buyer-health-tag">Healthy {{ product.health_score }}%</span>
+      </div>
+      <div class="buyer-product-body">
+        <h3>{{ product.crop_type }}</h3>
+        <div class="buyer-product-price">{{ '{:,.0f}'.format(product.price) }} FCFA</div>
+        <div class="buyer-product-meta">
+          <span>{{ product.farm_name }}</span>
+          <span class="buyer-verification">Verified</span>
+        </div>
+        <div class="buyer-product-detail">{{ product.condition }}</div>
+        <div class="buyer-product-actions">
+          <a class="buyer-detail-btn" href="{{ url_for('marketplace.product_detail', item_id=product.id) }}">View details</a>
+          <a class="buyer-primary-btn" href="{{ url_for('marketplace.cart') }}">Move to cart</a>
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

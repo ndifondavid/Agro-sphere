@@ -3,41 +3,77 @@
     <svg class="sidebar-toggle-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     <svg class="sidebar-toggle-close" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
   </button>
-  <button class="icon-button notification-trigger" type="button" aria-label="Notifications" title="Notifications" aria-expanded="false" aria-controls="notificationPopover">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 10-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5m6 0a3 3 0 0 1-6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    {% if header_notifications %}<span class="notification-dot">{{ header_notifications|length }}</span>{% endif %}
-  </button>
-  <div class="notification-popover" id="notificationPopover" hidden>
-    <div class="notification-popover-header"><strong>Notifications</strong><a href="{{ url_for('dashboard.notifications') }}">Settings</a></div>
-    {% if header_notifications %}
-      <ul class="notification-list">
-        {% for notification in header_notifications %}
-          <li>
-            <span class="notification-status {{ notification.kind }}"></span>
-            <div><strong>{{ notification.title }}</strong><span>{{ notification.detail }}</span><small>{{ notification.timestamp.strftime('%b %d, %Y at %H:%M') }}</small></div>
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p class="notification-empty">No new notifications yet.</p>
-    {% endif %}
-  </div>
-  <a class="profile-pill" href="{{ url_for('dashboard.settings') if current_user.is_farmer() else url_for('marketplace.reservations') }}" aria-label="Profile">
-    <div class="profile-frame">
-      {% if current_user.profile_image_path %}
-        <img src="{{ url_for('static', filename=current_user.profile_image_path) }}" alt="Profile picture" />
+
+  {% if current_user.is_authenticated and current_user.is_buyer() %}
+    <button class="icon-button notification-trigger" type="button" aria-label="Notifications" title="Notifications" aria-expanded="false" aria-controls="notificationPopover">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 10-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5m6 0a3 3 0 0 1-6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      {% if header_notifications %}<span class="notification-dot">{{ header_notifications|length }}</span>{% endif %}
+    </button>
+    <div class="notification-popover" id="notificationPopover" hidden>
+      <div class="notification-popover-header"><strong>Notifications</strong><a href="{{ url_for('marketplace.notifications') }}">View all</a></div>
+      {% if header_notifications %}
+        <ul class="notification-list">
+          {% for notification in header_notifications %}
+            <li>
+              <span class="notification-status {{ notification.kind }}"></span>
+              <div><strong>{{ notification.title }}</strong><span>{{ notification.detail }}</span><small>{{ notification.timestamp.strftime('%b %d, %Y at %H:%M') }}</small></div>
+            </li>
+          {% endfor %}
+        </ul>
       {% else %}
-        <img src="{{ url_for('static', filename='images/profile-avatar.svg') }}" alt="Profile picture" />
+        <p class="notification-empty">No new notifications yet.</p>
       {% endif %}
     </div>
-    <span>{{ current_user.name }}</span>
-  </a>
-  <a class="community-nav-link" href="{{ url_for('community.index') }}">Community</a>
-  {% if current_user.is_farmer() %}
-    <a class="new-scan-btn" href="{{ url_for('scan.scan_leaf') }}">+ New Scan</a>
-  {% else %}
-    <a class="buyer-reservations-btn" href="{{ url_for('marketplace.reservations') }}">Reservations</a>
+    <a class="profile-pill" href="{{ url_for('marketplace.profile') }}" aria-label="Profile">
+      <div class="profile-frame">
+        {% if current_user.profile_image_path %}
+          <img src="{{ url_for('static', filename=current_user.profile_image_path) }}" alt="Profile picture" />
+        {% else %}
+          <img src="{{ url_for('static', filename='images/profile-avatar.svg') }}" alt="Profile picture" />
+        {% endif %}
+      </div>
+      <span>{{ current_user.name }}</span>
+    </a>
+    <a class="buyer-reservations-btn" href="{{ url_for('marketplace.cart') }}">Cart</a>
+    <a class="buyer-reservations-btn" href="{{ url_for('marketplace.orders') }}">Orders</a>
     <a class="buyer-logout-btn" href="{{ url_for('auth.logout') }}">Log out</a>
+  {% else %}
+    <button class="icon-button notification-trigger" type="button" aria-label="Notifications" title="Notifications" aria-expanded="false" aria-controls="notificationPopover">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 10-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5m6 0a3 3 0 0 1-6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      {% if header_notifications %}<span class="notification-dot">{{ header_notifications|length }}</span>{% endif %}
+    </button>
+    <div class="notification-popover" id="notificationPopover" hidden>
+      <div class="notification-popover-header"><strong>Notifications</strong><a href="{{ url_for('dashboard.notifications') }}">Settings</a></div>
+      {% if header_notifications %}
+        <ul class="notification-list">
+          {% for notification in header_notifications %}
+            <li>
+              <span class="notification-status {{ notification.kind }}"></span>
+              <div><strong>{{ notification.title }}</strong><span>{{ notification.detail }}</span><small>{{ notification.timestamp.strftime('%b %d, %Y at %H:%M') }}</small></div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="notification-empty">No new notifications yet.</p>
+      {% endif %}
+    </div>
+    <a class="profile-pill" href="{{ url_for('dashboard.settings') if current_user.is_farmer() else url_for('marketplace.profile') }}" aria-label="Profile">
+      <div class="profile-frame">
+        {% if current_user.profile_image_path %}
+          <img src="{{ url_for('static', filename=current_user.profile_image_path) }}" alt="Profile picture" />
+        {% else %}
+          <img src="{{ url_for('static', filename='images/profile-avatar.svg') }}" alt="Profile picture" />
+        {% endif %}
+      </div>
+      <span>{{ current_user.name }}</span>
+    </a>
+    <a class="community-nav-link" href="{{ url_for('community.index') }}">Community</a>
+    {% if current_user.is_farmer() %}
+      <a class="new-scan-btn" href="{{ url_for('scan.scan_leaf') }}">+ New Scan</a>
+    {% else %}
+      <a class="buyer-reservations-btn" href="{{ url_for('marketplace.reservations') }}">Reservations</a>
+      <a class="buyer-logout-btn" href="{{ url_for('auth.logout') }}">Log out</a>
+    {% endif %}
   {% endif %}
 </div>
 <div class="sidebar-backdrop" data-sidebar-backdrop hidden></div>

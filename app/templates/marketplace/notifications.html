@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}AgroSphere | Notifications{% endblock %}
+{% block body_class %}buyer-market-body{% endblock %}
+
+{% block content %}
+<div class="buyer-main-panel">
+  <div class="buyer-summary-header">
+    <div>
+      <h1>Notifications</h1>
+      <p>Stay on top of your order and marketplace updates.</p>
+    </div>
+    <button class="buyer-link-btn" type="button">Mark all as read</button>
+  </div>
+
+  <div class="buyer-notification-list">
+    {% for item in notifications %}
+    <article class="buyer-notification-item {% if item.unread %}unread{% endif %}">
+      <div class="buyer-notification-dot"></div>
+      <div>
+        <strong>{{ item.title }}</strong>
+        <p>{{ item.detail }}</p>
+      </div>
+      <small>{{ item.time }}</small>
+    </article>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

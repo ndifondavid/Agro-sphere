@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}AgroSphere | Messages{% endblock %}
+{% block body_class %}buyer-market-body{% endblock %}
+
+{% block content %}
+<div class="buyer-main-panel">
+  <div class="buyer-review-shell buyer-messages-layout">
+    <aside class="buyer-chat-sidebar">
+      <div class="buyer-chat-search">
+        <input type="search" placeholder="Search chats" />
+      </div>
+      <div class="buyer-chat-list">
+        {% for chat in chats %}
+        <div class="buyer-chat-item {% if loop.first %}active{% endif %}">
+          <div class="buyer-chat-avatar">F</div>
+          <div class="buyer-chat-copy">
+            <strong>{{ chat.name }}</strong>
+            <p>{{ chat.preview }}</p>
+          </div>
+          <div class="buyer-chat-meta">
+            <small>{{ chat.time }}</small>
+            {% if chat.unread %}<span>{{ chat.unread }}</span>{% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </aside>
+
+    <section class="buyer-chat-window">
+      <div class="buyer-chat-header">
+        <div>
+          <strong>Green Valley Farm</strong>
+          <small>Online now</small>
+        </div>
+      </div>
+      <div class="buyer-message-thread">
+        <div class="buyer-message buyer-message--incoming"><span>Hello Alex, your tomato crate is available for pickup tomorrow.</span><small>9:14 AM</small></div>
+        <div class="buyer-message buyer-message--outgoing"><span>Great, please confirm the delivery window.</span><small>9:17 AM</small></div>
+        <div class="buyer-message buyer-message--incoming"><span>We can deliver between 7-9 AM.</span><small>9:18 AM</small></div>
+      </div>
+      <div class="buyer-chat-input-row">
+        <button type="button" class="buyer-link-btn">📎</button>
+        <input type="text" placeholder="Type a message" />
+        <button type="button" class="buyer-primary-btn">Send</button>
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}

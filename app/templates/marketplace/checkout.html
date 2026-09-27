@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}AgroSphere | Checkout{% endblock %}
+{% block body_class %}buyer-market-body{% endblock %}
+
+{% block content %}
+<div class="buyer-main-panel">
+  <div class="buyer-checkout-shell">
+    <section class="buyer-checkout-form">
+      <h1>Checkout</h1>
+      <div class="buyer-form-block">
+        <h3>Shipping information</h3>
+        <div class="buyer-form-grid">
+          <label><span>Full name</span><input type="text" value="Alex Kengne" /></label>
+          <label><span>Phone</span><input type="text" value="+237 655 123 456" /></label>
+          <label class="buyer-form-full"><span>Delivery address</span><input type="text" value="12 Malingo Street, Bamenda" /></label>
+        </div>
+      </div>
+
+      <div class="buyer-form-block">
+        <h3>Payment method</h3>
+        <div class="buyer-payment-methods">
+          <label><input type="radio" name="payment" checked /> Mobile money</label>
+          <label><input type="radio" name="payment" /> Bank transfer</label>
+          <label><input type="radio" name="payment" /> Cash on delivery</label>
+        </div>
+      </div>
+
+      <label class="buyer-terms">
+        <input type="checkbox" checked /> I agree to the terms and delivery policy.
+      </label>
+
+      <button class="buyer-primary-btn buyer-primary-btn--full" type="button">Confirm order</button>
+    </section>
+
+    <aside class="buyer-order-summary">
+      <h2>Order summary</h2>
+      <div class="buyer-summary-line"><span>Tomato crate</span><strong>FCFA 150,000</strong></div>
+      <div class="buyer-summary-line"><span>Maize pack</span><strong>FCFA 110,000</strong></div>
+      <div class="buyer-summary-line"><span>Delivery</span><strong>FCFA 18,500</strong></div>
+      <div class="buyer-summary-line buyer-summary-line--total"><span>Total</span><strong>FCFA 278,500</strong></div>
+      <p class="buyer-delivery-estimate">Estimated delivery: 2-4 days</p>
+    </aside>
+  </div>
+</div>
+{% endblock %}
