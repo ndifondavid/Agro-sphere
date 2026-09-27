@@ -96,12 +96,19 @@ def scan_leaf():
             predicted_disease=result.predicted_disease,
             confidence_score=result.confidence_score,
             recommendation=result.recommendation,
+            is_demo_prediction=result.is_demo_prediction,
         )
         db.session.add(scan)
         db.session.commit()
         scan.image_path = normalize_image_path(scan.image_path)
 
-        return render_template("scan/scan.html", crops=crops, scan=scan, crop=crop)
+        return render_template(
+            "scan/scan.html",
+            crops=crops,
+            scan=scan,
+            crop=crop,
+            demo_mode=result.is_demo_prediction,
+        )
 
     return render_template("scan/scan.html", crops=crops, scan=None, crop=crops[0] if crops else None)
 
@@ -130,4 +137,5 @@ def scan_detail(scan_id):
         Crop.farm.has(owner_id=current_user.id),
     ).first_or_404()
     scan.image_path = normalize_image_path(scan.image_path)
-    return render_template("scan/scan_detail.html", scan=scan)
+    demo_mode = getattr(scan, "is_demo_prediction", False)
+    return render_template("scan/scan_detail.html", scan=scan, demo_mode=demo_mode)

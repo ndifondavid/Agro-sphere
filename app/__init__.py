@@ -12,6 +12,7 @@ AI model or the database directly, keeping access control centralized (FR-1.4, N
 """
 from flask import Flask, render_template
 from flask_login import current_user
+from sqlalchemy.orm.exc import DetachedInstanceError
 import json
 
 from app.extensions import db, login_manager, migrate
@@ -36,11 +37,18 @@ def create_app(config_object: str = "config.DevelopmentConfig") -> Flask:
     # Import models before create_all so SQLAlchemy knows every SDS table.
     from app import models  # noqa: F401
 
+    with app.app_context():
+        ensure_legacy_schema_compatibility()
+        db.create_all()
+
     register_blueprints(app)
 
     @app.context_processor
     def inject_header_notifications():
-        if not current_user.is_authenticated or not (current_user.is_farmer() or current_user.is_buyer()):
+        try:
+            if not current_user.is_authenticated or not (current_user.is_farmer() or current_user.is_buyer()):
+                return {"header_notifications": []}
+        except (AttributeError, DetachedInstanceError):
             return {"header_notifications": []}
 
         from app.models.crop import Crop
@@ -129,10 +137,39 @@ def create_app(config_object: str = "config.DevelopmentConfig") -> Flask:
     def request_entity_too_large(error):
         return render_template("errors/413.html"), 413
 
-    with app.app_context():
-        db.create_all()
-
     return app
+
+
+def ensure_legacy_schema_compatibility() -> None:
+    """Upgrade older SQLite databases created before the login/account fields existed."""
+    try:
+        from sqlalchemy import text
+
+        inspector = db.inspect(db.engine)
+        if not inspector.has_table("user"):
+            db.create_all()
+            return
+
+        columns = [column["name"] for column in inspector.get_columns("user")]
+        if "is_active" not in columns:
+            db.session.execute(text("ALTER TABLE user ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT 1"))
+            db.session.commit()
+
+        if "notification_preferences" not in columns:
+            db.session.execute(text("ALTER TABLE user ADD COLUMN notification_preferences TEXT"))
+            db.session.commit()
+
+        if "profile_image_path" not in columns:
+            db.session.execute(text("ALTER TABLE user ADD COLUMN profile_image_path TEXT"))
+            db.session.commit()
+
+        scan_columns = [column["name"] for column in db.inspect(db.engine).get_columns("scan")]
+        if "is_demo_prediction" not in scan_columns:
+            db.session.execute(text("ALTER TABLE scan ADD COLUMN is_demo_prediction BOOLEAN NOT NULL DEFAULT 0"))
+            db.session.commit()
+    except Exception:
+        db.session.rollback()
+        raise
 
 
 def register_blueprints(app: Flask) -> None:

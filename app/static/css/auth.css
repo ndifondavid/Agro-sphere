@@ -430,11 +430,32 @@ button, input { font: inherit; }
   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
+.auth-inline-link,
+.auth-footer-note a {
+  color: var(--green-800);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.auth-inline-link:hover,
+.auth-footer-note a:hover {
+  text-decoration: underline;
+}
+
+.auth-footer-note {
+  margin: 10px 0 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+}
+
 .field-row,
 .role-option,
 .tab,
 .back-link,
-.primary-btn {
+.primary-btn,
+.auth-inline-link,
+.auth-footer-note a {
   transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, color 0.2s ease;
 }
 

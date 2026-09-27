@@ -32,6 +32,7 @@ class PredictionResult:
     predicted_disease: str
     confidence_score: float
     recommendation: str
+    is_demo_prediction: bool = False
 
 
 def _load_model(model_path: str):
@@ -54,6 +55,7 @@ def _demo_prediction() -> PredictionResult:
         predicted_disease="Leaf Blight",
         confidence_score=0.924,
         recommendation="Remove infected leaves and dispose of them away from healthy plants. Apply a copper-based fungicide and improve airflow around the crop.",
+        is_demo_prediction=True,
     )
 
 
@@ -92,4 +94,5 @@ def predict_disease(image_path: str, model_path: str, confidence_threshold: floa
         predicted_disease=disease_name,
         confidence_score=round(confidence, 4),
         recommendation=DISEASE_RECOMMENDATIONS.get(disease_name, DISEASE_RECOMMENDATIONS["Unknown"]),
+        is_demo_prediction=False,
     )

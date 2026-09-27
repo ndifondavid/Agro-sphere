@@ -30,9 +30,9 @@
             </div>
           </nav>
 
-          <form class="auth-form" method="POST" action="{{ url_for('auth.register') }}">
+          <form class="auth-form" method="POST" action="{{ url_for('auth.register') }}" novalidate>
             {% with messages = get_flashed_messages(with_categories=true) %}
-              {% if messages %}<div class="auth-messages">{% for category, message in messages %}<div class="auth-message auth-message--{{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+              {% if messages %}<div class="auth-messages" aria-live="polite">{% for category, message in messages %}<div class="auth-message auth-message--{{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}
             {% endwith %}
             <h2 class="form-title">Sign up</h2>
             <div class="field-row">
@@ -44,7 +44,7 @@
               </span>
               <div class="field-box">
                 <label for="name">User name</label>
-                <input id="name" name="name" type="text" placeholder="Enter your name" required />
+                <input id="name" name="name" type="text" placeholder="Enter your name" minlength="2" autocomplete="name" required />
               </div>
             </div>
 
@@ -57,7 +57,7 @@
               </span>
               <div class="field-box">
                 <label for="email">Email</label>
-                <input id="email" name="email" type="email" placeholder="Enter your email" required />
+                <input id="email" name="email" type="email" placeholder="Enter your email" autocomplete="email" required />
               </div>
             </div>
 
@@ -70,7 +70,7 @@
               </span>
               <div class="field-box">
                 <label for="password">Password</label>
-                <input id="password" name="password" type="password" placeholder="Enter your password" required />
+                <input id="password" name="password" type="password" placeholder="Enter your password" minlength="8" autocomplete="new-password" required />
               </div>
             </div>
 
@@ -108,6 +108,11 @@
             <div class="form-actions">
               <button type="submit" class="primary-btn">Register</button>
             </div>
+
+            <p class="auth-footer-note">
+              Already have an account?
+              <a href="{{ url_for('auth.login') }}">Sign in</a>
+            </p>
           </form>
         </div>
       </section>

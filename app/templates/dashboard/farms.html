@@ -132,7 +132,7 @@
                   {% if item.farm.image_path %}
                     <img src="{{ url_for('static', filename=item.farm.image_path) }}" alt="{{ item.farm.name }}" style="width:100%;height:100%;object-fit:cover;display:block;" />
                   {% else %}
-                    <div style="width:100%;height:100%;background:linear-gradient(135deg,#dff7e9,#cfe8cf);display:flex;align-items:center;justify-content:center;color:#0f6a4e;font-size:2.2rem;">🌾</div>
+                    <div style="width:100%;height:100%;background:linear-gradient(135deg,#dff7e9,#cfe8cf);display:flex;align-items:center;justify-content:center;color:#0f6a4e;font-size:2.2rem;"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:38px;height:38px;"><path d="M11.5 5.5c2.6 0 4.8 2.1 4.8 4.9 0 2.8-1.9 5.1-4.6 5.7-.5 1.9-1.5 3.1-3.4 3.1-2.6 0-4.4-1.9-4.4-4.5 0-2.2 1.6-3.7 3.5-4.3.4-2.8 2.2-4.9 4.1-4.9Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M14.7 8.7c2.2 1 3.8 2.8 4.5 5.3M18.2 4.8v5.1M15.7 7.3h5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
                   {% endif %}
                   <span class="farm-status-badge {{ item.status_class }}">{{ item.status }}</span>
                 </div>
@@ -141,14 +141,14 @@
                   <div class="farm-card-header">
                     <div>
                       <h3>{{ item.farm.name }}</h3>
-                      <div class="farm-location"><span>📍</span> {{ item.location }}</div>
+                      <div class="farm-location"><span><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:16px;height:16px;vertical-align:middle;"><path d="M12 20.5s6-5.5 6-11a6 6 0 1 0-12 0c0 5.5 6 11 6 11Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="9.5" r="2.4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span> {{ item.location }}</div>
                     </div>
                   </div>
 
                   <div class="farm-meta-row">
-                    <span class="meta-item">📏 Size: {{ item.farm.farm_size or 'Not specified' }}</span>
-                    <span class="meta-item">🌾 Crop: {{ item.crop_name }}</span>
-                    <span class="meta-item">🕒 Farm record active</span>
+                    <span class="meta-item"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;"><path d="M4 17V6.5M8 17V4.5M12 17V8.5M16 17v-8M20 17v-11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M3 18.5h18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Size: {{ item.farm.farm_size or 'Not specified' }}</span>
+                    <span class="meta-item"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;"><path d="M11.5 5.5c2.6 0 4.8 2.1 4.8 4.9 0 2.8-1.9 5.1-4.6 5.7-.5 1.9-1.5 3.1-3.4 3.1-2.6 0-4.4-1.9-4.4-4.5 0-2.2 1.6-3.7 3.5-4.3.4-2.8 2.2-4.9 4.1-4.9Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M14.7 8.7c2.2 1 3.8 2.8 4.5 5.3M18.2 4.8v5.1M15.7 7.3h5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Crop: {{ item.crop_name }}</span>
+                    <span class="meta-item"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 4v8l5 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Farm record active</span>
                   </div>
 
                   <div class="health-block">

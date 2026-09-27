@@ -114,23 +114,34 @@
 
 * { box-sizing: border-box; }
 html, body { margin: 0; min-height: 100%; }
+html {
+  scroll-behavior: smooth;
+}
 body {
   min-height: 100vh;
-  font-family: "Times New Roman", Times, serif !important;
-  background: #ffffff;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  background: linear-gradient(180deg, #edf5f1 0%, #f8faf9 100%);
   color: var(--text);
+  line-height: 1.5;
+  letter-spacing: -0.01em;
 }
 
-h1, h2, h3, h4, .brand-title, .brand-text {
-  font-family: "Times New Roman", Times, serif;
+h1, h2, h3, h4, h5, .brand-title, .brand-text {
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
 }
 
 a {
   color: inherit;
   text-decoration: none;
-}
-button {
-  font: inherit;
 }
 
 a:focus-visible,
@@ -147,15 +158,54 @@ textarea:focus-visible {
   justify-content: center;
   align-items: flex-start;
   padding: 20px 18px;
+  background: linear-gradient(180deg, #edf5f1 0%, #f8faf9 100%);
 }
 
 .dashboard-shell {
   width: min(1420px, 100%);
   min-height: 100vh;
-  border-radius: 20px 20px 0 0;
+  border-radius: 22px 22px 0 0;
   background: #ffffff;
   overflow: hidden;
-  box-shadow: 0 18px 42px rgba(8, 49, 38, 0.18);
+  box-shadow: 0 18px 42px rgba(8, 49, 38, 0.16);
+  border: 1px solid rgba(18, 75, 57, 0.06);
+}
+
+.main-panel {
+  background: linear-gradient(180deg, rgba(242, 247, 244, 0.85) 0%, rgba(249, 251, 250, 1) 100%);
+}
+
+.stat-card,
+.card,
+.settings-card,
+.farm-card,
+.market-card,
+.help-panel,
+.notification-section-group,
+.delivery-option,
+.alert-row {
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.stat-card:hover,
+.card:hover,
+.farm-card:hover,
+.market-card:hover,
+.help-panel:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px rgba(10, 55, 42, 0.08);
+}
+
+@media (max-width: 900px) {
+  .dashboard-body {
+    padding: 12px 10px 20px;
+  }
+
+  .content-grid,
+  .persistent-layout,
+  .help-layout {
+    grid-template-columns: 1fr;
+  }
 }
 
 .buyer-market-body {
@@ -347,6 +397,31 @@ textarea:focus-visible {
   flex: 1;
   background: #f3f5f2;
   padding: 24px 30px 26px 30px;
+}
+
+.buyer-market-crumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 8px;
+  color: #5e706a;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.buyer-market-crumbs a {
+  color: #1d4b7d;
+}
+
+.buyer-market-brand {
+  margin: 0 0 12px;
+  font-size: 0.82rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #3d5f54;
+  font-weight: 800;
 }
 
 .buyer-main-header {

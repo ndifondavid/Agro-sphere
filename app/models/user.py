@@ -31,6 +31,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.Text, nullable=False, unique=True, index=True)
     password_hash = db.Column(db.Text, nullable=False)
     role = db.Column(db.Text, nullable=False)
+    is_active = db.Column(db.Boolean, nullable=False, default=True)
     phone = db.Column(db.Text, nullable=True)
     farm_location = db.Column(db.Text, nullable=True)
     language = db.Column(db.Text, nullable=True, default="English")
