@@ -1,4 +1,5 @@
 import io
+from datetime import date
 
 from app import create_app
 from app.extensions import db
@@ -84,3 +85,40 @@ def test_farmer_can_create_market_listing_visible_to_buyers():
         buyer_page = buyer_client.get("/marketplace/")
         assert buyer_page.status_code == 200
         assert b"Tomatoes" in buyer_page.data
+
+
+def test_marketplace_browse_does_not_use_fake_fallback_catalog():
+    app = make_app()
+    with app.app_context():
+        farmer = make_farmer(email="fakecheck-farmer@example.com")
+        buyer = make_buyer(email="fakecheck-buyer@example.com")
+        farm = Farm(owner_id=farmer.id, name="Highland Harvest Co", location="Bamenda")
+        db.session.add(farm)
+        db.session.commit()
+        crop = Crop(farm_id=farm.id, crop_type="Ghost Pepper")
+        db.session.add(crop)
+        db.session.commit()
+        listing = Listing(
+            farmer_id=farmer.id,
+            crop_type=crop.crop_type,
+            harvest_date=date(2025, 8, 15),
+            quantity=120,
+            price=2500,
+            image_path=None,
+        )
+        db.session.add(listing)
+        db.session.commit()
+
+    with app.test_client() as buyer_client:
+        login = buyer_client.post(
+            "/auth/login",
+            data={"email": "fakecheck-buyer@example.com", "password": "StrongPass1"},
+            follow_redirects=True,
+        )
+        assert login.status_code == 200
+
+        response = buyer_client.get("/marketplace/")
+        assert response.status_code == 200
+        assert b"Ghost Pepper" in response.data
+        assert b"Farmer One" in response.data
+        assert b"Green Valley Farm" not in response.data

@@ -1,3 +1,4 @@
+import sqlite3
 from io import BytesIO
 
 from app import create_app
@@ -19,6 +20,58 @@ def make_farmer(email="farmer@example.com", password="StrongPass1"):
     db.session.add(user)
     db.session.commit()
     return user
+
+
+def test_legacy_database_schema_is_upgraded_for_login(monkeypatch, tmp_path):
+    db_path = tmp_path / "legacy_agrosphere.db"
+    monkeypatch.setenv("DATABASE_URL", f"sqlite:///{db_path}")
+
+    conn = sqlite3.connect(db_path)
+    conn.execute(
+        """
+        CREATE TABLE user (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            password_hash TEXT NOT NULL,
+            role TEXT NOT NULL,
+            phone TEXT,
+            farm_location TEXT,
+            language TEXT DEFAULT 'English',
+            profile_image_path TEXT,
+            notification_preferences TEXT
+        )
+        """
+    )
+    conn.execute(
+        """
+        CREATE TABLE scan (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            crop_id INTEGER NOT NULL,
+            image_path TEXT NOT NULL,
+            predicted_disease TEXT NOT NULL,
+            confidence_score FLOAT NOT NULL,
+            recommendation TEXT,
+            timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+        )
+        """
+    )
+    conn.commit()
+    conn.close()
+
+    app = create_app("config.DevelopmentConfig")
+    with app.app_context():
+        user_columns = [column["name"] for column in db.inspect(db.engine).get_columns("user")]
+        scan_columns = [column["name"] for column in db.inspect(db.engine).get_columns("scan")]
+        assert "is_active" in user_columns
+        assert "is_demo_prediction" in scan_columns
+
+        user = User(name="Legacy User", email="legacy@example.com", role="farmer")
+        user.set_password("StrongPass1")
+        db.session.add(user)
+        db.session.commit()
+
+        assert User.query.filter_by(email="legacy@example.com").count() == 1
 
 
 def test_settings_page_loads_for_authenticated_farmer():

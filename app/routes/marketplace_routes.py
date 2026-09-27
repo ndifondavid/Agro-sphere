@@ -24,101 +24,6 @@ from app.utils.validators import allowed_image_file, is_within_max_size
 marketplace_bp = Blueprint("marketplace", __name__, url_prefix="/marketplace")
 
 
-def _sample_products():
-    return [
-        {
-            "id": 1,
-            "crop_type": "Tomato",
-            "farm_name": "Green Valley Farm",
-            "location": "Bamenda",
-            "price": 150000,
-            "health_score": 98,
-            "verified": True,
-            "quantity": 250,
-            "unit": "kg",
-            "condition": "Fresh • Grade A",
-            "delivery": "2-3 days",
-            "rating": 4.8,
-            "image": "https://images.unsplash.com/photo-1546094096-0df4bcaaa337?auto=format&fit=crop&w=900&q=80",
-        },
-        {
-            "id": 2,
-            "crop_type": "Maize",
-            "farm_name": "Mbingo Cooperative",
-            "location": "Bamenda",
-            "price": 110000,
-            "health_score": 94,
-            "verified": True,
-            "quantity": 180,
-            "unit": "kg",
-            "condition": "Dried • Grade A",
-            "delivery": "3-5 days",
-            "rating": 4.7,
-            "image": "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80",
-        },
-        {
-            "id": 3,
-            "crop_type": "Plantain",
-            "farm_name": "Bamenda Fields",
-            "location": "Bamenda",
-            "price": 90000,
-            "health_score": 95,
-            "verified": True,
-            "quantity": 220,
-            "unit": "bunches",
-            "condition": "Fresh • Ripe",
-            "delivery": "1-2 days",
-            "rating": 4.9,
-            "image": "https://images.unsplash.com/photo-1580910051074-3eb694886505?auto=format&fit=crop&w=900&q=80",
-        },
-        {
-            "id": 4,
-            "crop_type": "Cassava",
-            "farm_name": "Njikom Farm",
-            "location": "Buea",
-            "price": 80000,
-            "health_score": 92,
-            "verified": True,
-            "quantity": 160,
-            "unit": "kg",
-            "condition": "Fresh • Tubers",
-            "delivery": "2-4 days",
-            "rating": 4.6,
-            "image": "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=900&q=80",
-        },
-        {
-            "id": 5,
-            "crop_type": "Rice",
-            "farm_name": "Mile 17 Farmers Group",
-            "location": "Maroua",
-            "price": 60000,
-            "health_score": 96,
-            "verified": True,
-            "quantity": 300,
-            "unit": "kg",
-            "condition": "Premium • Clean",
-            "delivery": "4-6 days",
-            "rating": 4.9,
-            "image": "https://images.unsplash.com/photo-1518843875459-f738682238a6?auto=format&fit=crop&w=900&q=80",
-        },
-        {
-            "id": 6,
-            "crop_type": "Beans",
-            "farm_name": "Northwest Growers",
-            "location": "Bamenda",
-            "price": 95000,
-            "health_score": 91,
-            "verified": True,
-            "quantity": 120,
-            "unit": "kg",
-            "condition": "High protein",
-            "delivery": "2-3 days",
-            "rating": 4.7,
-            "image": "https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=900&q=80",
-        },
-    ]
-
-
 def _build_database_products():
     listing_products = []
     for listing in Listing.query.filter_by(availability_status=STATUS_AVAILABLE).order_by(Listing.harvest_date.desc()).all():
@@ -135,16 +40,13 @@ def _build_database_products():
             "condition": f"{listing.package_size.title()} • Available",
             "delivery": "2-4 days",
             "rating": 4.8,
-            "image": url_for("static", filename=listing.image_path) if listing.image_path else "https://images.unsplash.com/photo-1464226184884-fa52ac9a0d3c?auto=format&fit=crop&w=900&q=80",
+            "image": url_for("static", filename=listing.image_path) if listing.image_path else None,
         })
     return listing_products
 
 
 def _market_products():
-    products = _build_database_products()
-    if products:
-        return products
-    return _sample_products()
+    return _build_database_products()
 
 
 @marketplace_bp.route("/dashboard")
@@ -177,8 +79,12 @@ def buyer_dashboard():
 @login_required
 @roles_required("buyer")
 def product_detail(item_id):
-    product = next((product for product in _market_products() if product["id"] == item_id), _market_products()[0])
-    related = _market_products()[:3]
+    products = _market_products()
+    product = next((product for product in products if product["id"] == item_id), None)
+    if product is None:
+        flash("No listings are available yet. Run python database/seed.py to add realistic marketplace data.", "info")
+        return redirect(url_for("marketplace.browse"))
+    related = products[:3]
     return render_template("marketplace/product_detail.html", product=product, related=related)
 
 
@@ -288,6 +194,8 @@ def browse():
         query = query.filter(Listing.price <= max_price)
 
     listings = query.order_by(Listing.harvest_date.desc()).all()
+    if not listings:
+        flash("No listings are available yet. Run python database/seed.py to seed realistic crop listings for testing.", "info")
     return render_template(
         "marketplace/browse.html",
         listings=listings,

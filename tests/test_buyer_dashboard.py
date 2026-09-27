@@ -30,3 +30,4 @@ def test_buyer_dashboard_route_loads():
         dashboard = client.get("/marketplace/dashboard")
         assert dashboard.status_code == 200
         assert b"Buyer Dashboard" in dashboard.data
+        assert b"Sidebar navigation" in dashboard.data

@@ -36,7 +36,7 @@ def login(client, email):
     )
 
 
-def test_buyer_marketplace_does_not_show_farmer_sidebar_or_new_scan():
+def test_buyer_marketplace_keeps_buyer_sidebar_and_hides_farmer_scan_items():
     app = make_app()
     with app.app_context():
         make_user("buyer@example.com", "buyer")
@@ -48,7 +48,8 @@ def test_buyer_marketplace_does_not_show_farmer_sidebar_or_new_scan():
 
     assert response.status_code == 200
     assert "New Scan" not in html
-    assert "Sidebar navigation" not in html
+    assert "Sidebar navigation" in html
+    assert "Dashboard" in html
     assert "Reservations" in html
 
 

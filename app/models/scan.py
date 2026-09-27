@@ -26,6 +26,7 @@ class Scan(db.Model):
     predicted_disease = db.Column(db.Text, nullable=False)
     confidence_score = db.Column(db.Float, nullable=False)
     recommendation = db.Column(db.Text, nullable=True)
+    is_demo_prediction = db.Column(db.Boolean, nullable=False, default=False)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self) -> str:

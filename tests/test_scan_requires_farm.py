@@ -1,5 +1,9 @@
+import io
+
 from app import create_app
 from app.extensions import db
+from app.models.crop import Crop
+from app.models.farm import Farm
 from app.models.user import User
 
 
@@ -63,8 +67,6 @@ def test_scan_history_normalizes_windows_style_image_paths():
     app = make_app()
     with app.app_context():
         user = make_farmer(email="windowspath@example.com")
-        from app.models.farm import Farm
-        from app.models.crop import Crop
         from app.models.scan import Scan
 
         farm = Farm(owner_id=user.id, name="Sunrise Farm", location="Nairobi")
@@ -97,3 +99,36 @@ def test_scan_history_normalizes_windows_style_image_paths():
         html = response.get_data(as_text=True)
         assert "images/uploads/demo.jpg" in html
         assert "images\\uploads\\demo.jpg" not in html
+
+
+def test_scan_shows_demo_mode_banner_when_model_fallback_is_used():
+    app = make_app()
+    with app.app_context():
+        farmer = make_farmer(email="demo-mode@example.com")
+        farm = Farm(owner_id=farmer.id, name="Demo Valley Farm", location="Kigali")
+        db.session.add(farm)
+        db.session.commit()
+        crop = Crop(farm_id=farm.id, crop_type="Tomato")
+        db.session.add(crop)
+        db.session.commit()
+        crop_id = crop.id
+
+    with app.test_client() as client:
+        client.post(
+            "/auth/login",
+            data={"email": "demo-mode@example.com", "password": "StrongPass1"},
+            follow_redirects=True,
+        )
+
+        response = client.post(
+            "/scan/",
+            data={
+                "crop_id": str(crop_id),
+                "photo": (io.BytesIO(b"fake-image-data"), "leaf.png"),
+            },
+            follow_redirects=True,
+        )
+
+        assert response.status_code == 200
+        html = response.get_data(as_text=True)
+        assert "Demo Mode — no trained model loaded" in html

@@ -24,7 +24,9 @@
       </header>
 
       <div class="content-grid">
-        {% include 'partials/sidebar.html' %}
+        {% if current_user.is_authenticated %}
+          {% include 'partials/sidebar.html' %}
+        {% endif %}
         {% block content %}{% endblock %}
       </div>
     </div>

@@ -3,8 +3,12 @@
 <html lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta name="description" content="AgroSphere helps farmers detect plant disease early, manage fields, and access practical crop guidance with AI-powered insights."/>
 <title>AgroSphere - Modern Agricultural Intelligence</title>
-<!-- Tailwind CSS CDN with forms and container-queries -->
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script>
     tailwind.config = {
@@ -23,18 +27,17 @@
             }
           },
           fontFamily: {
-            sans: ['Times New Roman', 'Times', 'serif'],
-            display: ['Times New Roman', 'Times', 'serif'],
+            sans: ['DM Sans', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif'],
           }
         }
       }
     }
   </script>
-<!-- BEGIN: Custom Styles -->
 <style data-purpose="custom-animations">
     @keyframes pulseGlow {
-      0%, 100% { opacity: 0.6; transform: scale(1); }
-      50% { opacity: 0.9; transform: scale(1.03); }
+      0%, 100% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.04); }
     }
     .animate-pulse-subtle {
       animation: pulseGlow 4s ease-in-out infinite;
@@ -42,39 +45,59 @@
     .scan-reticle {
       box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.8), 0 0 20px rgba(34, 197, 94, 0.3);
     }
+    @keyframes floatSoft {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .animate-bounce-slow {
+      animation: floatSoft 5.5s ease-in-out infinite;
+    }
   </style>
-<!-- END: Custom Styles -->
 </head>
-<body class="bg-white text-slate-800 antialiased font-sans selection:bg-brand-100 selection:text-brand-900">
+<body class="landing-page bg-white text-slate-800 antialiased font-sans selection:bg-brand-100 selection:text-brand-900">
 <!-- BEGIN: MainHeader -->
-<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100 transition-all duration-200" data-purpose="navigation-header">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-<!-- Brand Logo -->
-<a aria-label="AgroSphere Home" class="flex items-center gap-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500 rounded-lg p-1" href="{{ url_for('public.landing') }}">
-<div class="brand-mark w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-md shadow-brand-500/20">
-<img class="w-8 h-8 object-contain" src="{{ url_for('static', filename='images/as-logo.svg') }}" alt="AgroSphere logo" />
-</div>
-<span class="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-1">
-          Agro<span class="text-brand-700">Sphere</span>
-</span>
-</a>
-<!-- Desktop Navigation Links -->
-<nav aria-label="Main Navigation" class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-<a class="text-brand-700 hover:text-brand-800 transition-colors" href="#home">Home</a>
-<a class="hover:text-slate-900 transition-colors" href="#how-it-works">How It Works</a>
-<a class="hover:text-slate-900 transition-colors" href="#features">Disease Detection</a>
-<a class="hover:text-slate-900 transition-colors" href="#tools">Farm Tools</a>
-</nav>
-<!-- CTA & Auth Buttons -->
-<div class="flex items-center gap-4">
-<a class="hidden sm:inline-block text-sm font-medium text-slate-600 hover:text-slate-900 px-3 py-2 transition-colors" href="{{ url_for('auth.login') }}">
-          Login
-        </a>
-<a class="inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-brand-700 hover:bg-brand-800 text-white font-medium text-sm transition-all duration-200 shadow-sm hover:shadow-md hover:shadow-brand-800/20 focus:ring-2 focus:ring-brand-700 focus:ring-offset-2" href="{{ url_for('auth.register') }}">
-          Get Started
-        </a>
-</div>
-</div>
+<header class="landing-header sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100 transition-all duration-200" data-purpose="navigation-header">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+    <a aria-label="AgroSphere Home" class="flex items-center gap-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500 rounded-lg p-1" href="{{ url_for('public.landing') }}">
+      <div class="brand-mark w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-md shadow-brand-500/20">
+        <img class="w-8 h-8 object-contain" src="{{ url_for('static', filename='images/as-logo.svg') }}" alt="AgroSphere logo" />
+      </div>
+      <span class="brand-title text-xl font-bold tracking-tight text-slate-900 flex items-center gap-1">
+        Agro<span class="text-brand-700">Sphere</span>
+      </span>
+    </a>
+
+    <nav aria-label="Main Navigation" class="desktop-nav hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+      <a class="nav-link text-brand-700 hover:text-brand-800 transition-colors" href="#home">Home</a>
+      <a class="nav-link hover:text-slate-900 transition-colors" href="#how-it-works">How It Works</a>
+      <a class="nav-link hover:text-slate-900 transition-colors" href="#features">Disease Detection</a>
+      <a class="nav-link hover:text-slate-900 transition-colors" href="#tools">Farm Tools</a>
+    </nav>
+
+    <div class="flex items-center gap-4">
+      <a class="hidden sm:inline-block text-sm font-medium text-slate-600 hover:text-slate-900 px-3 py-2 transition-colors" href="{{ url_for('auth.login') }}">
+        Login
+      </a>
+      <a class="inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-brand-700 hover:bg-brand-800 text-white font-medium text-sm transition-all duration-200 shadow-sm hover:shadow-md hover:shadow-brand-800/20 focus:ring-2 focus:ring-brand-700 focus:ring-offset-2" href="{{ url_for('auth.register') }}">
+        Get Started
+      </a>
+      <button class="mobile-nav-toggle md:hidden inline-flex items-center justify-center h-10 w-10 rounded-full border border-slate-200 text-slate-700 hover:border-brand-200 hover:text-brand-700 transition-colors" type="button" aria-label="Toggle navigation" aria-controls="mobileNav" aria-expanded="false">
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <path d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <nav id="mobileNav" class="mobile-nav-panel md:hidden hidden border-t border-slate-100 bg-white/95 backdrop-blur-md" aria-label="Mobile Navigation">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 space-y-2">
+      <a class="nav-link block rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-brand-50 hover:text-brand-700" href="#home">Home</a>
+      <a class="nav-link block rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-brand-50 hover:text-brand-700" href="#how-it-works">How It Works</a>
+      <a class="nav-link block rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-brand-50 hover:text-brand-700" href="#features">Disease Detection</a>
+      <a class="nav-link block rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-brand-50 hover:text-brand-700" href="#tools">Farm Tools</a>
+      <a class="nav-link block rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-brand-50 hover:text-brand-700" href="{{ url_for('auth.login') }}">Login</a>
+    </div>
+  </nav>
 </header>
 <!-- END: MainHeader -->
 <main>

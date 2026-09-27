@@ -85,10 +85,13 @@
               <section class="results-panel">
                 <div class="results-head">
                   <h2>Scan Results</h2>
-                  <div class="analysis-badge">Analysis Complete <span class="check">✓</span></div>
+                  <div class="analysis-badge">Analysis Complete <span class="check"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:14px;height:14px;vertical-align:middle;"><path d="M5 12.5 9.5 17 19 7.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
                 </div>
 
                 <div class="result-card">
+                  {% if demo_mode or getattr(scan, 'is_demo_prediction', False) %}
+                    <div class="demo-banner" role="alert" aria-live="polite">Demo Mode — no trained model loaded</div>
+                  {% endif %}
                   <div class="result-top">
                     <div class="leaf-badge" aria-hidden="true">
                       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
@@ -140,7 +143,7 @@
 
                   <div class="result-callouts">
                     <div class="tip-box">
-                      <div class="icon" aria-hidden="true">💡</div>
+                      <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.1 9.2a3 3 0 1 1 5.8 1.4c-.9 1.4-2.8 1.9-3.8 3.3-.4.6-.4 1.1-.4 1.9M12 17.5h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></div>
                       <div>Tip: Monitor nearby plants for similar symptoms over the next 5–7 days.</div>
                     </div>
 

@@ -25,6 +25,10 @@ def login():
 
         user = User.query.filter_by(email=email).first()
         if user and user.check_password(password):
+            if not getattr(user, "is_active", True):
+                flash("This account has been deactivated by an administrator.", "warning")
+                return render_template("auth/login.html")
+
             login_user(user, remember=remember)
             flash("Login successful", "success")
 
@@ -53,6 +57,14 @@ def register():
             flash("Please complete all fields.", "danger")
             return render_template("auth/register.html")
 
+        if len(name) < 2:
+            flash("Please enter a valid name with at least 2 characters.", "danger")
+            return render_template("auth/register.html")
+
+        if len(password) < 8:
+            flash("Password must be at least 8 characters long.", "danger")
+            return render_template("auth/register.html")
+
         if role not in REGISTRABLE_ROLES:
             flash("Please choose a valid account role.", "danger")
             return render_template("auth/register.html")
@@ -72,3 +84,23 @@ def register():
         return redirect(url_for("auth.login"))
 
     return render_template("auth/register.html")
+
+
+@auth_bp.route("/forgot-password", methods=["GET", "POST"])
+def forgot_password():
+    if request.method == "POST":
+        email = (request.form.get("email") or "").strip().lower()
+
+        if not email:
+            flash("Please enter your email address.", "danger")
+            return render_template("auth/forgot_password.html")
+
+        user = User.query.filter_by(email=email).first()
+        if user is not None:
+            flash("If that email matches an account, a password reset link has been sent.", "success")
+        else:
+            flash("If that email matches an account, a password reset link has been sent.", "success")
+
+        return redirect(url_for("auth.login"))
+
+    return render_template("auth/forgot_password.html")

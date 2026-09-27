@@ -4,7 +4,22 @@
 {% block body_class %}buyer-market-body{% endblock %}
 
 {% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="marketplace-alerts" aria-live="polite">
+      {% for category, message in messages %}
+        <div class="marketplace-alert{% if category == 'danger' %} marketplace-alert--danger{% elif category == 'warning' %} marketplace-alert--warning{% endif %}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
 <div class="buyer-main-panel">
+  <div class="buyer-market-crumbs" aria-label="Breadcrumb">
+    <a href="{{ url_for('public.landing') }}">Home</a>
+    <span>/</span>
+    <span>Market</span>
+  </div>
+  <div class="buyer-market-brand">AgroMarket</div>
   <header class="buyer-main-header">
     <div class="buyer-title-wrap">
       <h1>Market</h1>
