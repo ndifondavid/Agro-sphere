@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}AgroSphere | Buyer Profile{% endblock %}
+{% block body_class %}buyer-market-body{% endblock %}
+
+{% block content %}
+<div class="buyer-main-panel">
+  <div class="buyer-summary-header">
+    <div>
+      <h1>Buyer profile</h1>
+      <p>Manage your account and preferences.</p>
+    </div>
+  </div>
+
+  <div class="buyer-profile-layout">
+    <section class="buyer-panel buyer-panel--profile">
+      <div class="buyer-profile-identity">
+        <div class="buyer-profile-photo">AK</div>
+        <div>
+          <h3>{{ current_user.name }}</h3>
+          <p>Buyer account</p>
+        </div>
+      </div>
+      <div class="buyer-form-grid buyer-form-grid--profile">
+        <label><span>Full name</span><input type="text" value="{{ current_user.name }}" /></label>
+        <label><span>Email</span><input type="email" value="{{ current_user.email }}" /></label>
+        <label><span>Phone</span><input type="text" value="{{ current_user.phone or '+237 655 123 456' }}" /></label>
+        <label><span>Location</span><input type="text" value="Bamenda, Cameroon" /></label>
+      </div>
+    </section>
+
+    <section class="buyer-panel buyer-panel--profile">
+      <h3>Security & settings</h3>
+      <div class="buyer-form-grid buyer-form-grid--profile">
+        <label><span>Current password</span><input type="password" value="password" /></label>
+        <label><span>New password</span><input type="password" value="newpassword" /></label>
+        <label><span>Language</span><input type="text" value="English" /></label>
+        <label><span>Theme</span><input type="text" value="Light" /></label>
+      </div>
+      <button class="buyer-primary-btn" type="button">Save changes</button>
+    </section>
+  </div>
+</div>
+{% endblock %}

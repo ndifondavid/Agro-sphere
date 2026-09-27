@@ -24,6 +24,239 @@ from app.utils.validators import allowed_image_file, is_within_max_size
 marketplace_bp = Blueprint("marketplace", __name__, url_prefix="/marketplace")
 
 
+def _sample_products():
+    return [
+        {
+            "id": 1,
+            "crop_type": "Tomato",
+            "farm_name": "Green Valley Farm",
+            "location": "Bamenda",
+            "price": 150000,
+            "health_score": 98,
+            "verified": True,
+            "quantity": 250,
+            "unit": "kg",
+            "condition": "Fresh • Grade A",
+            "delivery": "2-3 days",
+            "rating": 4.8,
+            "image": "https://images.unsplash.com/photo-1546094096-0df4bcaaa337?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            "id": 2,
+            "crop_type": "Maize",
+            "farm_name": "Mbingo Cooperative",
+            "location": "Bamenda",
+            "price": 110000,
+            "health_score": 94,
+            "verified": True,
+            "quantity": 180,
+            "unit": "kg",
+            "condition": "Dried • Grade A",
+            "delivery": "3-5 days",
+            "rating": 4.7,
+            "image": "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            "id": 3,
+            "crop_type": "Plantain",
+            "farm_name": "Bamenda Fields",
+            "location": "Bamenda",
+            "price": 90000,
+            "health_score": 95,
+            "verified": True,
+            "quantity": 220,
+            "unit": "bunches",
+            "condition": "Fresh • Ripe",
+            "delivery": "1-2 days",
+            "rating": 4.9,
+            "image": "https://images.unsplash.com/photo-1580910051074-3eb694886505?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            "id": 4,
+            "crop_type": "Cassava",
+            "farm_name": "Njikom Farm",
+            "location": "Buea",
+            "price": 80000,
+            "health_score": 92,
+            "verified": True,
+            "quantity": 160,
+            "unit": "kg",
+            "condition": "Fresh • Tubers",
+            "delivery": "2-4 days",
+            "rating": 4.6,
+            "image": "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            "id": 5,
+            "crop_type": "Rice",
+            "farm_name": "Mile 17 Farmers Group",
+            "location": "Maroua",
+            "price": 60000,
+            "health_score": 96,
+            "verified": True,
+            "quantity": 300,
+            "unit": "kg",
+            "condition": "Premium • Clean",
+            "delivery": "4-6 days",
+            "rating": 4.9,
+            "image": "https://images.unsplash.com/photo-1518843875459-f738682238a6?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            "id": 6,
+            "crop_type": "Beans",
+            "farm_name": "Northwest Growers",
+            "location": "Bamenda",
+            "price": 95000,
+            "health_score": 91,
+            "verified": True,
+            "quantity": 120,
+            "unit": "kg",
+            "condition": "High protein",
+            "delivery": "2-3 days",
+            "rating": 4.7,
+            "image": "https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=900&q=80",
+        },
+    ]
+
+
+def _build_database_products():
+    listing_products = []
+    for listing in Listing.query.filter_by(availability_status=STATUS_AVAILABLE).order_by(Listing.harvest_date.desc()).all():
+        listing_products.append({
+            "id": listing.id,
+            "crop_type": listing.crop_type,
+            "farm_name": listing.farmer.name if listing.farmer else "Local Farm",
+            "location": (listing.farmer.farms[0].location if listing.farmer and listing.farmer.farms else "Cameroon"),
+            "price": float(listing.price or 0),
+            "health_score": 96,
+            "verified": True,
+            "quantity": int(listing.quantity or 0),
+            "unit": listing.package_unit or "kg",
+            "condition": f"{listing.package_size.title()} • Available",
+            "delivery": "2-4 days",
+            "rating": 4.8,
+            "image": url_for("static", filename=listing.image_path) if listing.image_path else "https://images.unsplash.com/photo-1464226184884-fa52ac9a0d3c?auto=format&fit=crop&w=900&q=80",
+        })
+    return listing_products
+
+
+def _market_products():
+    products = _build_database_products()
+    if products:
+        return products
+    return _sample_products()
+
+
+@marketplace_bp.route("/dashboard")
+@login_required
+@roles_required("buyer")
+def buyer_dashboard():
+    stats = [
+        {"label": "Total Orders", "value": "24", "trend": "+12%"},
+        {"label": "Saved Items", "value": "08", "trend": "+3"},
+        {"label": "Total Spend", "value": "FCFA 1.2M", "trend": "+8%"},
+        {"label": "Farm Visits", "value": "6", "trend": "+2"},
+    ]
+    recent_orders = [
+        {"order": "AG-2048", "item": "Tomato crate", "status": "In transit", "date": "Today"},
+        {"order": "AG-2021", "item": "Cassava tubers", "status": "Delivered", "date": "Yesterday"},
+        {"order": "AG-1989", "item": "Rice harvest", "status": "Processing", "date": "2 days ago"},
+    ]
+    recommended = _market_products()[:3]
+    healthy_crops = _market_products()[:4]
+    return render_template(
+        "marketplace/buyer_dashboard.html",
+        stats=stats,
+        recent_orders=recent_orders,
+        recommended=recommended,
+        healthy_crops=healthy_crops,
+    )
+
+
+@marketplace_bp.route("/product/<int:item_id>")
+@login_required
+@roles_required("buyer")
+def product_detail(item_id):
+    product = next((product for product in _market_products() if product["id"] == item_id), _market_products()[0])
+    related = _market_products()[:3]
+    return render_template("marketplace/product_detail.html", product=product, related=related)
+
+
+@marketplace_bp.route("/cart")
+@login_required
+@roles_required("buyer")
+def cart():
+    cart_items = [
+        {"id": 1, "crop_type": "Tomato", "farm_name": "Green Valley Farm", "location": "Bamenda", "price": 150000, "quantity": 2, "image": "https://images.unsplash.com/photo-1546094096-0df4bcaaa337?auto=format&fit=crop&w=900&q=80"},
+        {"id": 2, "crop_type": "Maize", "farm_name": "Mbingo Cooperative", "location": "Bamenda", "price": 110000, "quantity": 1, "image": "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80"},
+    ]
+    return render_template("marketplace/cart.html", cart_items=cart_items)
+
+
+@marketplace_bp.route("/checkout")
+@login_required
+@roles_required("buyer")
+def checkout():
+    return render_template("marketplace/checkout.html")
+
+
+@marketplace_bp.route("/orders")
+@login_required
+@roles_required("buyer")
+def orders():
+    orders = [
+        {"id": "AG-2048", "item": "Tomato crate", "status": "Active", "total": "FCFA 255,000", "eta": "3 days"},
+        {"id": "AG-2021", "item": "Cassava tubers", "status": "Completed", "total": "FCFA 80,000", "eta": "Delivered"},
+        {"id": "AG-1989", "item": "Rice harvest", "status": "Cancelled", "total": "FCFA 65,000", "eta": "Cancelled"},
+    ]
+    return render_template("marketplace/orders.html", orders=orders)
+
+
+@marketplace_bp.route("/messages")
+@login_required
+@roles_required("buyer")
+def messages():
+    chats = [
+        {"name": "Green Valley Farm", "preview": "We can deliver tomorrow morning.", "time": "2m ago", "unread": 2},
+        {"name": "Mbingo Cooperative", "preview": "Your maize batch is ready.", "time": "18m ago", "unread": 0},
+    ]
+    return render_template("marketplace/messages.html", chats=chats)
+
+
+@marketplace_bp.route("/wishlist")
+@login_required
+@roles_required("buyer")
+def wishlist():
+    products = _market_products()[:4]
+    return render_template("marketplace/wishlist.html", products=products)
+
+
+@marketplace_bp.route("/notifications")
+@login_required
+@roles_required("buyer")
+def notifications():
+    notifications = [
+        {"title": "Order update", "detail": "Tomato crate is now in transit.", "time": "5 mins ago", "unread": True},
+        {"title": "Marketplace alert", "detail": "Maize prices dropped by 8%.", "time": "1 hour ago", "unread": True},
+        {"title": "Message", "detail": "Mbingo Cooperative responded to your inquiry.", "time": "Today", "unread": False},
+    ]
+    return render_template("marketplace/notifications.html", notifications=notifications)
+
+
+@marketplace_bp.route("/profile")
+@login_required
+@roles_required("buyer")
+def profile():
+    return render_template("marketplace/profile.html")
+
+
+@marketplace_bp.route("/help")
+@login_required
+@roles_required("buyer")
+def buyer_help():
+    return render_template("marketplace/help.html")
+
+
 @marketplace_bp.route("/")
 @login_required
 @roles_required("buyer")

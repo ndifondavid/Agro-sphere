@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}AgroSphere | Orders{% endblock %}
+{% block body_class %}buyer-market-body{% endblock %}
+
+{% block content %}
+<div class="buyer-main-panel">
+  <div class="buyer-summary-header">
+    <div>
+      <h1>Orders</h1>
+      <p>Track every purchase and delivery update.</p>
+    </div>
+  </div>
+
+  <div class="buyer-order-filters">
+    <button class="buyer-filter-pill active" type="button">Active</button>
+    <button class="buyer-filter-pill" type="button">Completed</button>
+    <button class="buyer-filter-pill" type="button">Cancelled</button>
+  </div>
+
+  <div class="buyer-order-list">
+    {% for order in orders %}
+    <article class="buyer-order-item">
+      <div class="buyer-order-main">
+        <div>
+          <h3>{{ order.item }}</h3>
+          <p>Order {{ order.id }}</p>
+        </div>
+        <span class="buyer-status buyer-status--{{ order.status|lower }}">{{ order.status }}</span>
+      </div>
+      <div class="buyer-order-meta">
+        <span>Total: {{ order.total }}</span>
+        <span>ETA: {{ order.eta }}</span>
+      </div>
+      <div class="buyer-order-actions">
+        <button class="buyer-detail-btn" type="button">Track order</button>
+        <button class="buyer-link-btn" type="button">Download invoice</button>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

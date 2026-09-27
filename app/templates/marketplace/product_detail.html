@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}AgroSphere | Product Details{% endblock %}
+{% block body_class %}buyer-market-body{% endblock %}
+
+{% block content %}
+<div class="buyer-main-panel">
+  {% set detail_image = product.image if product.image and product.image.startswith('http') else url_for('static', filename=product.image or 'images/uploads/default-product.jpg') %}
+  <div class="buyer-detail-shell">
+    <div class="buyer-detail-gallery">
+      <div class="buyer-detail-main" style="background-image: url('{{ detail_image }}');"></div>
+      <div class="buyer-detail-thumbs">
+        <span style="background-image: url('{{ detail_image }}');"></span>
+        <span style="background-image: url('{{ detail_image }}');"></span>
+        <span style="background-image: url('{{ detail_image }}');"></span>
+      </div>
+    </div>
+
+    <div class="buyer-detail-body">
+      <div class="buyer-breadcrumbs"><a href="{{ url_for('marketplace.browse') }}">Marketplace</a> / <span>Product detail</span></div>
+      <div class="buyer-detail-heading-row">
+        <div>
+          <h1>{{ product.crop_type }}</h1>
+          <p>{{ product.condition }}</p>
+        </div>
+        <button class="icon-btn" type="button">♡</button>
+      </div>
+      <div class="buyer-detail-price-row">
+        <strong>{{ '{:,.0f}'.format(product.price) }} FCFA</strong>
+        <span class="buyer-verification">Verified farm</span>
+      </div>
+      <div class="buyer-detail-meta">
+        <span>Health score: {{ product.health_score }}%</span>
+        <span>Available: {{ product.quantity }} {{ product.unit }}</span>
+        <span>Delivery: {{ product.delivery }}</span>
+      </div>
+      <p class="buyer-detail-text">
+        Freshly harvested {{ product.crop_type|lower }} sourced from {{ product.farm_name }} in {{ product.location }}. Each batch is inspected for quality, sorted for grading, and packaged for reliable delivery.
+      </p>
+
+      <div class="buyer-detail-actions">
+        <a class="buyer-primary-btn" href="{{ url_for('marketplace.cart') }}">Add to cart</a>
+        <button class="buyer-detail-btn" type="button">Buy now</button>
+      </div>
+
+      <div class="buyer-info-grid">
+        <div><span>Harvest date</span><strong>12 Aug 2026</strong></div>
+        <div><span>Seller</span><strong>{{ product.farm_name }}</strong></div>
+        <div><span>Location</span><strong>{{ product.location }}</strong></div>
+        <div><span>Rating</span><strong>{{ product.rating }} / 5</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="buyer-detail-tabs">
+    <div class="buyer-tab active">Health report</div>
+    <div class="buyer-tab">Disease inspection</div>
+    <div class="buyer-tab">Reviews</div>
+  </div>
+
+  <div class="buyer-detail-panel-grid">
+    <article class="buyer-panel">
+      <h3>Crop information</h3>
+      <p>{{ product.crop_type }} from a verified farm with nutritional quality checks and traceable harvest records.</p>
+    </article>
+    <article class="buyer-panel">
+      <h3>Health report</h3>
+      <p>Condition: {{ product.condition }}. Health score: {{ product.health_score }}% with no visible signs of disease.</p>
+    </article>
+  </div>
+
+  <div class="buyer-panel buyer-panel--related">
+    <div class="buyer-panel-header">
+      <h2>Related products</h2>
+    </div>
+    <div class="buyer-related-grid">
+      {% for related_product in related %}
+      {% set related_image = related_product.image if related_product.image and related_product.image.startswith('http') else url_for('static', filename=related_product.image or 'images/uploads/default-product.jpg') %}
+      <article class="buyer-related-item">
+        <div class="buyer-related-image" style="background-image: url('{{ related_image }}');"></div>
+        <div>
+          <strong>{{ related_product.crop_type }}</strong>
+          <p>{{ '{:,.0f}'.format(related_product.price) }} FCFA</p>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
