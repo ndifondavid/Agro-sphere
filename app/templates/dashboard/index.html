@@ -154,7 +154,7 @@
             <article class="card chart-card">
               <h2>Healthy vs Diseased Plants</h2>
               <div class="donut-layout">
-                <div class="donut-ring" aria-label="Healthy vs diseased percentage">
+                <div class="donut-ring" aria-label="Healthy {{ healthy_percentage }} percent, diseased {{ diseased_percentage }} percent" style="--healthy-rate: {{ healthy_percentage }}%; --diseased-rate: {{ diseased_percentage }}%;">
                   <div class="donut-center">
                     <span>{{ healthy_percentage if total_crops else 0 }}%</span>
                   </div>
@@ -219,13 +219,20 @@
                     {% for scan in recent_scans[:4] %}
                       <li>
                         <div class="scan-item">
-                          <span class="scan-icon scan-icon--green">🌱</span>
+                          {% if scan.image_path %}
+                            <img class="scan-thumb" src="{{ url_for('static', filename=scan.image_path) }}" alt="{{ scan.crop.crop_type }} image" />
+                          {% else %}
+                            <span class="scan-icon scan-icon--green">🌱</span>
+                          {% endif %}
                           <div class="scan-copy">
                             <strong>{{ scan.crop.crop_type }} • {{ scan.crop.farm.name }}</strong>
                             <span>{{ scan.predicted_disease }} • {{ scan.timestamp.strftime('%b %d, %Y') }}</span>
                           </div>
                         </div>
-                        <span class="scan-tag {{ 'warning' if 'disease' in scan.predicted_disease.lower() else 'success' }}">{{ 'Diseased' if 'disease' in scan.predicted_disease.lower() else 'Healthy' }}</span>
+                        <div class="scan-actions">
+                          <span class="scan-tag {{ 'warning' if 'healthy' not in scan.predicted_disease.lower() else 'success' }}">{{ 'Diseased' if 'healthy' not in scan.predicted_disease.lower() else 'Healthy' }}</span>
+                          <a class="scan-view-link" href="{{ url_for('scan.scan_detail', scan_id=scan.id) }}">View details</a>
+                        </div>
                       </li>
                     {% endfor %}
                   </ul>

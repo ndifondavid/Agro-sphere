@@ -40,7 +40,7 @@ def _build_database_products():
             "condition": f"{listing.package_size.title()} • Available",
             "delivery": "2-4 days",
             "rating": 4.8,
-            "image": url_for("static", filename=listing.image_path) if listing.image_path else None,
+            "image": listing.image_path,
         })
     return listing_products
 

@@ -42,6 +42,8 @@ def index():
         else []
     )
     recent_scans = all_scans[:10]
+    for scan in recent_scans:
+        scan.image_path = (scan.image_path or "").replace("\\", "/")
     disease_scans = [scan for scan in all_scans if "healthy" not in scan.predicted_disease.lower()]
     healthy_scans = [scan for scan in all_scans if "healthy" in scan.predicted_disease.lower()]
     disease_count = len(disease_scans)

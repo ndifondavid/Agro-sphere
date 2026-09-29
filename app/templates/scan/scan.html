@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PlantScan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shared.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/scan.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
   </head>
@@ -89,7 +93,7 @@
                 </div>
 
                 <div class="result-card">
-                  {% if demo_mode or getattr(scan, 'is_demo_prediction', False) %}
+                  {% if demo_mode or (scan and scan.is_demo_prediction) %}
                     <div class="demo-banner" role="alert" aria-live="polite">Demo Mode — no trained model loaded</div>
                   {% endif %}
                   <div class="result-top">

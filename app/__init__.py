@@ -10,6 +10,8 @@ Architecture (per AgroSphere_SDS.docx, Section 2 - System Architecture Design):
 All client requests pass through this Application Tier; the browser never talks to the
 AI model or the database directly, keeping access control centralized (FR-1.4, NFR-2.2).
 """
+import os
+
 from flask import Flask, render_template
 from flask_login import current_user
 from sqlalchemy.orm.exc import DetachedInstanceError
@@ -22,6 +24,13 @@ def create_app(config_object: str = "config.DevelopmentConfig") -> Flask:
     """Application factory used by run.py / wsgi entry points and tests."""
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(config_object)
+    if config_object in {"config.DevelopmentConfig", "config.ProductionConfig"}:
+        database_url = os.environ.get("DATABASE_URL")
+        if database_url:
+            app.config["SQLALCHEMY_DATABASE_URI"] = database_url
+        secret_key = os.environ.get("SECRET_KEY")
+        if secret_key:
+            app.config["SECRET_KEY"] = secret_key
     if config_object == "config.ProductionConfig":
         if not app.config.get("SECRET_KEY") or app.config["SECRET_KEY"] == "dev-secret-key-change-me":
             raise RuntimeError("SECRET_KEY must be set in production.")
