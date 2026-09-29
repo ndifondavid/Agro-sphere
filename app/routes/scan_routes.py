@@ -83,11 +83,15 @@ def scan_leaf():
         photo.save(stored_path)
 
         # --- AI Tier inference (FR-3.2) ---
-        result = predict_disease(
-            image_path=stored_path,
-            model_path=current_app.config["AI_MODEL_PATH"],
-            confidence_threshold=current_app.config["AI_CONFIDENCE_THRESHOLD"],
-        )
+        try:
+            result = predict_disease(
+                image_path=stored_path,
+                model_path=current_app.config["AI_MODEL_PATH"],
+                confidence_threshold=current_app.config["AI_CONFIDENCE_THRESHOLD"],
+            )
+        except Exception:
+            flash("Please upload a valid crop image file (JPG, PNG, or WebP).", "danger")
+            return render_template("scan/scan.html", crops=crops, crop=crop)
 
         # --- Persist Scan record (FR-3.6) ---
         scan = Scan(

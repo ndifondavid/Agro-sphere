@@ -22,7 +22,9 @@ class BaseConfig:
     ALLOWED_IMAGE_EXTENSIONS = {"png", "jpg", "jpeg", "webp"}
 
     # AI Tier model location (SDS Section 2 - AI Tier)
-    AI_MODEL_PATH = os.path.join(BASE_DIR, "ai_model", "disease_model.h5")
+    # This app supports both legacy H5/Keras models and the Colab-produced
+    # PyTorch artifact set (leafnet_resnet50.pth + label encoders).
+    AI_MODEL_PATH = os.path.join(BASE_DIR, "ai_model")
     AI_CONFIDENCE_THRESHOLD = 0.60
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = "Lax"

@@ -1,0 +1,193 @@
+:root {
+  --agro-green-900: #073b2b;
+  --agro-green-800: #0a5a42;
+  --agro-green-700: #0f6a4e;
+  --agro-green-600: #20845f;
+  --agro-green-500: #5bb889;
+  --agro-green-200: #d9f0e2;
+  --agro-green-100: #edf6ee;
+  --agro-ink: #18332b;
+  --agro-muted: #5d726a;
+  --agro-slate-100: #f5faf6;
+  --agro-slate-200: #eaeff0;
+  --agro-shadow: rgba(7, 59, 43, 0.14);
+  --agro-border: rgba(18, 75, 57, 0.12);
+  --agro-success: #2f9967;
+  --agro-warning: #c9822d;
+  --agro-danger: #b8474d;
+  --agro-background: linear-gradient(180deg, #edf5f1 0%, #f8faf9 100%);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--agro-background);
+  color: var(--agro-ink);
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+}
+
+h1, h2, h3, h4, h5, .brand-title,
+.brand-text, .intro-brand-name, .form-title {
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  letter-spacing: -0.04em;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button, input, select, textarea {
+  font: inherit;
+}
+
+.btn-primary,
+.primary-btn,
+.buyer-primary-btn,
+.buyer-apply-btn,
+.auth-form .primary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0.8rem 1.35rem;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--agro-green-700), var(--agro-green-800));
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  box-shadow: 0 12px 22px rgba(15, 106, 78, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.btn-primary:hover,
+.primary-btn:hover,
+.buyer-primary-btn:hover,
+.buyer-apply-btn:hover,
+.auth-form .primary-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 26px rgba(15, 106, 78, 0.22);
+}
+
+.btn-secondary,
+.buyer-action-btn--ghost,
+.buyer-action-btn--outline,
+.back-link,
+.auth-inline-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0.7rem 1.15rem;
+  border-radius: 999px;
+  border: 1px solid var(--agro-border);
+  background: #ffffff;
+  color: var(--agro-ink);
+  font-weight: 600;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.btn-secondary:hover,
+.buyer-action-btn--ghost:hover,
+.buyer-action-btn--outline:hover,
+.back-link:hover,
+.auth-inline-link:hover {
+  border-color: rgba(15, 106, 78, 0.28);
+  background: var(--agro-green-100);
+}
+
+.panel-card,
+.card,
+.farm-card,
+.market-card,
+.settings-card,
+.help-panel,
+.notification-section-group,
+.delivery-option,
+.alert-row,
+.auth-card {
+  background: #ffffff;
+  border: 1px solid var(--agro-border);
+  border-radius: 20px;
+  box-shadow: 0 12px 28px var(--agro-shadow);
+}
+
+.input-control,
+.field-box input,
+.field-box select,
+.field-box textarea,
+.buyer-select-box,
+.search-input {
+  width: 100%;
+  min-height: 46px;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid rgba(18, 75, 57, 0.12);
+  border-radius: 14px;
+  background: #ffffff;
+  color: var(--agro-ink);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-control:focus,
+.field-box input:focus,
+.field-box select:focus,
+.field-box textarea:focus,
+.buyer-select-box:focus,
+.search-input:focus {
+  border-color: rgba(15, 106, 78, 0.5);
+  box-shadow: 0 0 0 4px rgba(91, 184, 137, 0.1);
+  outline: none;
+}
+
+.section-header,
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.status-pill,
+.buyer-health-tag,
+.marketplace-alert {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.status-pill--success,
+.buyer-health-tag {
+  background: rgba(47, 153, 103, 0.12);
+  color: var(--agro-success);
+}
+
+.status-pill--warning {
+  background: rgba(201, 130, 45, 0.12);
+  color: var(--agro-warning);
+}
+
+.status-pill--danger {
+  background: rgba(184, 71, 77, 0.12);
+  color: var(--agro-danger);
+}
+
+@media (max-width: 720px) {
+  .section-header,
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

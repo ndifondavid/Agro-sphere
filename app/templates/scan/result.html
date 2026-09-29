@@ -1,7 +1,7 @@
 {% extends "scan/scan.html" %}
 
 {% block content %}
-  {% if demo_mode or getattr(scan, 'is_demo_prediction', False) %}
+  {% if demo_mode or scan.is_demo_prediction %}
     <div class="demo-banner" role="alert" aria-live="polite">Demo Mode — no trained model loaded</div>
   {% endif %}
 {% endblock %}
